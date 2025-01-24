@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // Définition du schema
 const recipeSchema = new mongoose.Schema({

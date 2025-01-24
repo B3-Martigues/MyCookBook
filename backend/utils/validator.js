@@ -19,7 +19,7 @@ const validateLength = (text, minLength) => {
 //Fonction pour vérifier la présence et la complexité du mot de passe
 const validatePassword = (password) => {
   const regexPassword =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 
   if (!password || !regexPassword.test(password)) {
     return false;

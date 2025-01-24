@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 //Connexion a la base de données MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/mycookbook", {
+  .connect("mongodb://localhost:27017/MyCookBook", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
