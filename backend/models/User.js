@@ -1,30 +1,25 @@
-const mongoose = require("mongoose");
-const AutoIncrement = require('mongoose-sequence')(mongoose);
+const mongoose = require("../config/db");
 
-// Définition du schema
-const userSchema = new mongoose.Schema({
-  username: {
+const UserSchema = new mongoose.Schema({
+  name: {
     type: String,
-    required: true, // Obligatoire
-    trim: true, // Supprime les espaces en trop
+    required: true,
   },
   email: {
     type: String,
-    required: true, // Obligatoire
+    required: true,
+    unique: true,
   },
   password: {
     type: String,
-    required: true, // Obligatoire
+    required: true,
   },
-  favorites_recipes: [
-    {
-      type: mongoose.Schema.Types.ObjectId, // Référence à une recette
-      ref: "Recipe", // Modèle Recipe (collection recipes)
-    },
-  ],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-// Modèle Mongoose
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
