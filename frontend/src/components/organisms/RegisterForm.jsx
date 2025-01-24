@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+
 const RegisterForm = ({ formik }) => (
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de saisir ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
@@ -61,9 +62,7 @@ const RegisterForm = ({ formik }) => (
       ) : null}
     </label>
 
-    {formik.errors.api && (
-      <div style={{ color: "red", fontSize: "12px" }}>{formik.errors.api}</div>
-    )}
+    {formik.errors.api && <div>{formik.errors.api}</div>}
     <button type="submit" disabled={formik.isSubmitting}>
       S'inscrire
     </button>
