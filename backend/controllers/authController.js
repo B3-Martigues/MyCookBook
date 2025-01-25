@@ -81,6 +81,49 @@ class AuthController {
       });
     }
   };
+  //Méthode pour la connexion de l'utilisateur
+  static login = async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+      //Vérifie si l'utilisateur existe dans la base de données
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({
+          error: "Email ou mot de passe incorrect",
+        });
+      }
+      //Vérification du mot de passe
+      const isPasswordValid = await bcryptjs.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({
+          error: "Email ou mot de passe incorrect",
+        });
+      }
+      //Stockage des tokens dans des variables
+      const accessToken = AuthController.generateAccessToken(user);
+      const refreshToken = AuthController.generateRefreshToken(user);
+
+      //Envoi du refreshToken sous forme de cookie sécurisé avec la réponse
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "Strict",
+        // secure: process.env.NODE_ENV === "production" Prevu pour la production
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+      //Envoi du accessToken dans les en-têtes
+      res.setHeader("Authorization", `Bearer ${accessToken}`);
+      res.status(200).json({
+        success: "Utilisateur connecté",
+      });
+    } catch (err) {
+      res.status(500).json({
+        error: "Erreur interne du serveur",
+        error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
+      });
+    }
+  };
+
   //Méthode pour rafraîchir le tokens d'accès
   static refreshToken = async (req, res) => {
     const { refreshToken } = req.cookies;
