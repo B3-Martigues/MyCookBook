@@ -1,6 +1,6 @@
-//Fonction qui envoie les données d'inscription à l'API pour l'enregistrement de l'utilisateur
-const registerUser = async (values) => {
-  const request = await fetch("http://localhost:8080/register", {
+//Fonction qui envoie les données de l'utilisateur à l'API pour la connexion
+const loginUser = async (values) => {
+  const request = await fetch("http://localhost:8080/login", {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -12,4 +12,4 @@ const registerUser = async (values) => {
   return response;
 };
 //Export de la fonction pour qu'elle soit utilisée dans le Register.jsx
-export default registerUser;
+export default loginUser;
