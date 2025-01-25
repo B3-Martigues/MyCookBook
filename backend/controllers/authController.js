@@ -1,4 +1,4 @@
-//Importation du modèle User et des bibliothèques necessaires
+//Importation du modèle User et des bibliothèques nécessaires
 const User = require("../models/User");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -23,12 +23,12 @@ class AuthController {
     }
 
     if (!validateEmail(email)) {
-      errors.push("Le format d'email incorrect");
+      errors.push("Le format de l'email est incorrect");
     }
 
     if (!validatePassword(password)) {
       errors.push(
-        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, une chiffre, "
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial "
       );
     }
     //Si des erreurs sont présentes, renvoyer une réponse avec un code 400
@@ -56,34 +56,86 @@ class AuthController {
       //Enregistrement d'utilisateur dans la base de données
       await user.save();
 
-      //Génération du token JWT
-      const token = jwt.sign(
-        { id: user._id, name: user.name },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
-      );
-      //Envoi du token sous forme de cookie sécurisé avec la réponse
-      res.cookie("token", token, {
+      //Stockage des tokens dans des variables
+      const accessToken = AuthController.generateAccessToken(user);
+      const refreshToken = AuthController.generateRefreshToken(user);
+
+      //Envoi du refreshToken sous forme de cookie sécurisé avec la réponse
+      res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         // secure: process.env.NODE_ENV === "production", //Pour la production, activer le cookie sécurisé(HTTPS)
         samesite: "Strict",
-        maxAge: 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       //Réponse de succès avec le token d'authentification
-      res.status(200).json({
+      res.setHeader("Authorisation", `Bearer ${accessToken}`);
+      res.status(201).json({
         success: "Utilisateur inscrit!",
-        token,
       });
     } catch (err) {
-      console.error(err);
-      //Géstion des erreurs internes du serveur et renvoi d'un message approprié
+      //Gestion des erreurs internes du serveur et renvoi d'un message approprié
       res.status(500).json({
         error: "Erreur interne du serveur",
         error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
       });
     }
   };
+  //Méthode pour rafraîchir le tokens d'accès
+  static refreshToken = async (req, res) => {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      res.status(401).json({
+        error: "Aucun refresh token trouvé",
+      });
+    }
+    try {
+      //Vérification et décryptage du refreshToken
+      const payload = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      );
+
+      //Récupération de l'utilisateur correspondant à l'ID stocké dans token
+      const user = await User.findById(payload.id);
+      if (!user) {
+        res.status(401).json({
+          error: "L'utilisateur non trouvé",
+        });
+      }
+
+      //Génération d'un nouveau token d'accès
+      const newAccessToken = AuthController.generateAccessToken(user);
+
+      //Envoi du nouveau token d'accès dans les en-têtes
+      res.setHeader("Authorisation", `Bearer ${newAccessToken}`);
+      res.status(200).json({
+        success: "",
+      });
+    } catch (error) {
+      res.status(401).json({
+        error: "Token invalide ou expiré",
+      });
+    }
+  };
+  //Méthode pour générer un nouveau token d'accès
+  static generateAccessToken(user) {
+    return jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+  }
+
+  //Méthode pour générer un nouveau refreshToken
+  static generateRefreshToken(user) {
+    return jwt.sign(
+      { id: user._id, name: user.name },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
+  }
 }
 
 module.exports = AuthController;

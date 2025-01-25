@@ -25,7 +25,7 @@ const registerValidationsSchema = () => {
           )
           .matches(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
           .matches(
-            /[@$!%*?&]/,
+            /[\W_]/,
             "Le mot de passe doit contenir au moins un caractère spécial"
           )
           .required("Ce champ est requis")

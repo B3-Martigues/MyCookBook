@@ -4,6 +4,7 @@ const AuthController = require("../controllers/AuthController");
 
 //Section dédiée à la définition des routes
 router.post("/register", AuthController.register);
+router.post("/refresh-token", AuthController.refreshToken);
 
 //Exportation du routeur pour l'utiliser dans le fichier server.js
 module.exports = router;
