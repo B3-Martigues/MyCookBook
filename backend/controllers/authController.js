@@ -119,7 +119,7 @@ class AuthController {
     } catch (err) {
       res.status(500).json({
         error: "Erreur interne du serveur",
-        error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
+        message: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
       });
     }
   };

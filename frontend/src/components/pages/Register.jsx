@@ -33,12 +33,12 @@ const Register = () => {
           setErrors({ email: apiResponse.error });
         }
       } catch (error) {
-        console.error("Caught error: ", error);
+        console.error("Erreur capturée: ", error);
         setErrors({ api: error.message || "Une erreur est survenue" });
       }
     },
   });
-  //Retourne le formulaire d'inscription avec le props du formik
+  //Retourne le formulaire d'inscription avec le prop du formik
   return <RegisterForm formik={formik} />;
 };
 
