@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoginUser from "../../api/loginApi";
 import LoginForm from "../organisms/LoginForm";
+import useAuthStore from "../../store/AuthStore";
 
 const Login = () => {
   const navigate = useNavigate();
+  // Récupération de la fonction login depuis le 'AuthStore' pour mettre à jour l'état de connexion après la connexion
+  const login = useAuthStore((state) => state.login);
   //Initialisation du formulaire avec Formik
   const formik = useFormik({
     initialValues: {
@@ -25,6 +28,7 @@ const Login = () => {
         const apiResponse = await LoginUser(values);
         //Si la connexion est réussie l'utilisateur est informé et rédirigé vers la page d'accueil
         if (apiResponse.success) {
+          login();  // L'état sera actualisé
           toast.success("La connexion a réussie");
           navigate("/");
           //Si la connexion est échouée, l'utilisateur est informé des erreurs et reste sur la page de connexion

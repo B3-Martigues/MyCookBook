@@ -1,7 +1,7 @@
 //Fonction qui envoie les données d'inscription à l'API pour l'enregistrement de l'utilisateur
 const registerUser = async (values) => {
   const request = await fetch("http://localhost:8080/register", {
-    method: "post",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
