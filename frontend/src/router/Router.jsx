@@ -5,6 +5,7 @@ import Home from "../components/pages/Home";
 import Login from "../components/pages/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Logout from "../components/organisms/Logout";
 
 // Ce composant gère toutes les routes d'application
 // Unlogged et ProtectedRoute sont destinés à la gestion de l'affichage( layout ),
@@ -18,6 +19,7 @@ const Router = () => {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
       </Routes>
     </BrowserRouter>

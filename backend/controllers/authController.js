@@ -88,6 +88,7 @@ class AuthController {
       });
     }
   };
+
   //Méthode pour la connexion de l'utilisateur
   static login = async (req, res) => {
     const { email, password } = req.body;
@@ -182,6 +183,7 @@ class AuthController {
       });
     }
   };
+
   //Méthode pour générer un nouveau token d'accès
   static generateAccessToken(user) {
     return jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET, {
