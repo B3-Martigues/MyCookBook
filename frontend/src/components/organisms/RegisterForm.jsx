@@ -4,6 +4,7 @@ const RegisterForm = ({ formik }) => (
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de saisir ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
   <form onSubmit={formik.handleSubmit}>
+    {/* htmlFor associe un label à un champ de formulaire */}
     <label htmlFor="name">
       Nom:
       <input

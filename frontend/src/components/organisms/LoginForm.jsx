@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const LoginForm = ({ formik }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
+      {/* htmlFor associe un label à un champ de formulaire */}
       <label htmlFor="email">
         Email:
         <input
@@ -38,7 +39,7 @@ const LoginForm = ({ formik }) => {
       <button type="submit" disabled={formik.isSubmitting}>
         Connexion
       </button>
-      {/* Lien de l'inscription pour un utilisateur non connecté  */}
+      {/* Lien de l'inscription pour un utilisateur non inscrit  */}
       <p>
         Pas encore inscrit?<Link to="/register">Créer un compte</Link>
       </p>

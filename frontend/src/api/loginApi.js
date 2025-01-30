@@ -1,7 +1,7 @@
-//Fonction qui envoie les données de l'utilisateur à l'API pour la connexion
+// Fonction qui envoie les données de connexion à l'API et retourne la réponse du backend
 const loginUser = async (values) => {
   const request = await fetch("http://localhost:8080/login", {
-    method: "post",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -11,5 +11,5 @@ const loginUser = async (values) => {
   const response = await request.json();
   return response;
 };
-//Export de la fonction pour qu'elle soit utilisée dans le Register.jsx
+//Export de la fonction afin qu'elle soit utilisée dans le Login.jsx
 export default loginUser;

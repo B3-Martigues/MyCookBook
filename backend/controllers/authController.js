@@ -64,12 +64,19 @@ class AuthController {
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         // secure: process.env.NODE_ENV === "production", //Pour la production, activer le cookie sécurisé(HTTPS)
-        samesite: "Strict",
+        sameSite: "Strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
-      //Réponse de succès avec le token d'authentification
-      res.setHeader("Authorisation", `Bearer ${accessToken}`);
+      //Envoi du accessToken sous forme de cookie sécurisé avec la réponse
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production", //Pour la production, activer le cookie sécurisé(HTTPS)
+        sameSite: "Strict",
+        maxAge: 15 * 60 * 1000,
+      });
+
+      //Réponse de succès
       res.status(201).json({
         success: "Utilisateur inscrit!",
       });
@@ -111,12 +118,18 @@ class AuthController {
         // secure: process.env.NODE_ENV === "production" Prevu pour la production
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
-      //Envoi du accessToken dans les en-têtes
-      res.setHeader("Authorization", `Bearer ${accessToken}`);
+      //Envoi du accessToken sous forme de cookie sécurisé avec la réponse
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production", //Pour la production, activer le cookie sécurisé(HTTPS)
+        sameSite: "Strict",
+        maxAge: 15 * 60 * 1000,
+      });
       res.status(200).json({
         success: "Utilisateur connecté",
       });
     } catch (err) {
+      console.error("Login error:", err);
       res.status(500).json({
         error: "Erreur interne du serveur",
         message: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
@@ -126,11 +139,11 @@ class AuthController {
 
   //Méthode pour rafraîchir le tokens d'accès
   static refreshToken = async (req, res) => {
-    const { refreshToken } = req.cookies;
-
+    const refreshToken = req.cookies.refreshToken;
+    //Vérification si refreshToken existe
     if (!refreshToken) {
-      res.status(401).json({
-        error: "Aucun refresh token trouvé",
+      return res.status(401).json({
+        error: "Aucun refresh token trouvé!!!",
       });
     }
     try {
@@ -143,20 +156,27 @@ class AuthController {
       //Récupération de l'utilisateur correspondant à l'ID stocké dans token
       const user = await User.findById(payload.id);
       if (!user) {
-        res.status(401).json({
+        return res.status(401).json({
           error: "L'utilisateur non trouvé",
         });
       }
 
       //Génération d'un nouveau token d'accès
-      const newAccessToken = AuthController.generateAccessToken(user);
-
-      //Envoi du nouveau token d'accès dans les en-têtes
-      res.setHeader("Authorisation", `Bearer ${newAccessToken}`);
-      res.status(200).json({
-        success: "",
+      const accessToken = AuthController.generateAccessToken(user);
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        // secure: process.env.NODE_ENV === "production", //Pour la production, activer le cookie sécurisé(HTTPS)
+        sameSite: "Strict",
+        maxAge: 15 * 60 * 1000,
       });
+
+      res.status(200).json({
+        success: "Token d'accès mis à jour",
+      });
+      //Suppression des cookies en cas des erreurs
     } catch (error) {
+      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken");
       res.status(401).json({
         error: "Token invalide ou expiré",
       });
@@ -169,7 +189,7 @@ class AuthController {
     });
   }
 
-  //Méthode pour générer un nouveau refreshToken
+  //Méthode pour générer un nouveau token de rafraîchement
   static generateRefreshToken(user) {
     return jwt.sign(
       { id: user._id, name: user.name },
@@ -178,6 +198,36 @@ class AuthController {
         expiresIn: "7d",
       }
     );
+  }
+
+  //Méthode pour la déconnexion de l'utilisateur
+  static logout(req, res) {
+    try {
+      //La suppression du cookie refreshToken
+      res.clearCookie("refreshToken", {
+        httpOnly: true,
+        sameSite: "Strict",
+        // secure: process.env.NODE_ENV === "production"  prevu pour la production
+        expires: new Date(0),
+      });
+
+      //La suppression du cookie accessToken
+      res.clearCookie("accessToken", {
+        httpOnly: true,
+        sameSite: "Strict",
+        // secure: process.env.NODE_ENV === "production"  prevu pour la production
+        expires: new Date(0),
+      });
+      //Réponse de succès après la déconnexion
+      res.status(200).json({
+        success: "Utilisateur déconnecté avec succès",
+      });
+    } catch (err) {
+      res.status(500).json({
+        error: "Erreur interne du serveur",
+        message: err.message,
+      });
+    }
   }
 }
 

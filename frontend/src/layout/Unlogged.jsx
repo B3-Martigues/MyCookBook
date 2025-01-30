@@ -11,4 +11,4 @@ const Unlogged = () => {
   );
 };
 
-export default Outlet;
+export default Unlogged;

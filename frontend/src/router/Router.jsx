@@ -6,7 +6,9 @@ import Login from "../components/pages/Login";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Ce component gère tout les routes d'application
+// Ce composant gère toutes les routes d'application
+// Unlogged et ProtectedRoute sont destinés à la gestion de l'affichage( layout ),
+// et PrivateRoute est destiné à la gestion de l'autorisation
 const Router = () => {
   return (
     <BrowserRouter>

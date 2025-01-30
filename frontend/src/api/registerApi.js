@@ -11,5 +11,5 @@ const registerUser = async (values) => {
   const response = await request.json();
   return response;
 };
-//Export de la fonction pour qu'elle soit utilisée dans le Register.jsx
+//Export de la fonction afin qu'elle soit utilisée dans le Register.jsx
 export default registerUser;
