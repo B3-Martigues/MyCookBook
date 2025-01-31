@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import registerUser from "../../api/registerApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAuthStore from "../store/AuthStore";
+import useAuthStore from "../../store/AuthStore";
 
 const Register = () => {
   const navigate = useNavigate();
