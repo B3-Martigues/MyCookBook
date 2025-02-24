@@ -2,7 +2,8 @@ import logoutUser from "../../api/logoutApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuthStore from "../../store/AuthStore";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 // Après avoir cliqué sur le boutton Déconnexion, fonction Logout met à jour l'etat isAuthenticated( stocké dans auth-storage) à false
 // Envoie une requête pour supprimer les cookies, puis l'utilisateur est informé et redirigé vers la page non protégée 'Home'
 const Logout = () => {
@@ -25,7 +26,11 @@ const Logout = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Déconnexion</button>;
+  return (
+    <button className="logout-button" onClick={handleLogout}>
+      <FontAwesomeIcon icon={faSignOut} />
+    </button>
+  );
 };
 
 export default Logout;

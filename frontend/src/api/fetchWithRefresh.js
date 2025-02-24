@@ -1,4 +1,4 @@
-import useAuthStore from "../components/store/AuthStore";
+import useAuthStore from "../store/AuthStore";
 
 // Fonction fetchWithRefresh collabore étroitement avec toutes les réquêtes nécessitant l'autorisation.
 // Elle vérifie la réponse de la fonction du backend 'verifyToken', en cas de réponse avec le status 401 : 'TOKEN_EXPIRED' elle

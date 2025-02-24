@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-//Ce composant sert de structure de base pour les pages nécessitant une authentification
-const ProtectedRoute = () => {
+//Ce composant sert de structure de base pour les pages ne nécessitant pas d'authentification
+const PublicLayout = () => {
   return (
     <>
       {/* <Header />          à ajouter  */}
@@ -11,4 +11,4 @@ const ProtectedRoute = () => {
   );
 };
 
-export default ProtectedRoute;
+export default PublicLayout;
