@@ -1,0 +1,68 @@
+/* Styles for Login component */
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
+
+h1 {
+  font-family: "Bree Serif", serif;
+  letter-spacing: 4px;
+}
+form {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column !important;
+  padding: 50px;
+  background-color: rgb(253, 253, 253);
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  min-width: 500px;
+  min-height: 700px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  width: 40% !important;
+  font-size: 18px;
+  font-family: monospace;
+  font-weight: lighter;
+  color: rgb(6, 74, 74);
+  margin-top: 40px;
+}
+input {
+  margin-top: 10px;
+}
+input::placeholder {
+  font-style: italic;
+  font-weight: 200 !important;
+  font-size: 14px;
+  color: rgb(187, 184, 184);
+  font-family: "Times New Roman", Times, serif;
+}
+.login-btn {
+  width: 240px;
+  background-color: rgb(79, 214, 117);
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin: 50px 0;
+}
+
+.register-icon {
+  color: rgb(79, 214, 117);
+  font-size: 25px;
+  margin-top: 20px;
+}
+
+.register-icon:hover {
+  transform: scale(1.1) !important;
+}
+.error {
+  color: rgb(235, 63, 6) !important;
+  font-size: 15px !important;
+  margin-top: -10px;
+  font-family: monospace;
+}

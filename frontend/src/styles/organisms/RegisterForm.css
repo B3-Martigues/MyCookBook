@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
+
+h1 {
+  font-family: "Bree Serif", serif;
+  letter-spacing: 4px;
+}
+form {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column !important;
+  padding: 50px;
+  background-color: rgb(253, 253, 253);
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  min-width: 700px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  width: 40% !important;
+  font-size: 20px;
+  margin-top: 40px;
+}
+
+input {
+  padding: 12px !important;
+}
+
+input::placeholder {
+  font-style: italic;
+  font-weight: 200 !important;
+  font-size: 16px !important;
+  color: rgb(187, 184, 184);
+  font-family: "Times New Roman", Times, serif;
+}
+
+.login-btn {
+  width: 200px;
+  background-color: rgb(79, 214, 117) !important;
+  color: white !important;
+  font-weight: bold;
+  font-size: 25px;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  margin-top: 50px;
+}

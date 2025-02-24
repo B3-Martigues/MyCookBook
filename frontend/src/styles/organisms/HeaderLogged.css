@@ -1,0 +1,78 @@
+/* Styles for Navbar component */
+.header-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  position: relative;
+}
+
+.header-container ul {
+  list-style: none;
+  display: flex;
+  gap: 70px;
+}
+.header-container ul li {
+  font-family: monospace;
+}
+.header-container ul a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  font-size: x-large;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.3 ease;
+}
+.header-container ul a:hover {
+  color: rgb(79, 214, 117);
+}
+.header-container ul a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: rgb(79, 214, 117);
+  bottom: 0;
+  left: 50%;
+  transition: all 0.3s ease;
+}
+
+.header-container ul a:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.logo {
+  font-family: "Bree Serif", serif;
+  background: linear-gradient(to right, #4fd675, #217040, #4fd675);
+  font-size: 22px;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  max-height: 32px;
+}
+.search-bar input {
+  background: none;
+  border: none;
+  border-bottom: 2px solid #0f0f0f;
+  border-radius: 0;
+  outline: none;
+  text-align: start;
+  transition: border-bottom 0.3s ease, box-shadow 0.3s ease;
+}
+.search-bar input:focus {
+  border-bottom: 2px solid #4fd675;
+}
+.search-bar button {
+  background: none;
+  cursor: pointer;
+  position: relative;
+  right: 30px;
+}
+
+.search-bar button:hover {
+  border: none;
+  background: none;
+}
