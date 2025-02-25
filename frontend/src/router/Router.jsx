@@ -6,8 +6,8 @@ import Logout from "../components/organisms/Logout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PublicLayout from "../layout/PublicLayout";
-import PrivateLayout from "../layout/PrivateLayout";
-import PrivateRoute from "../utils/PrivateRoute";
+// import PrivateLayout from "../layout/PrivateLayout";
+// import PrivateRoute from "../utils/PrivateRoute";
 
 // Ce composant gère toutes les routes d'application
 // PublicLayout et PrivatLayout sont destinés à la gestion de l'affichage( layout ),
