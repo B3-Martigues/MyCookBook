@@ -1,6 +1,6 @@
 // Importation des Hooks et des fichiers
 import { useState, useEffect } from "react";
-import getAllRecipes from "../../../api/recipesApi";
+import getAllRecipes from "../../api/recipesApi";
 
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle

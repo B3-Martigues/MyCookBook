@@ -2,7 +2,6 @@
 const router = require("express").Router();
 const AuthController = require("../controllers/AuthController");
 const RecipeController = require("../controllers/RecipeController");
-const upload = require("../middlewares/upload");
 const verifyToken = require("../middlewares/verifyToken");
 
 //Section dédiée à la définition des routes
