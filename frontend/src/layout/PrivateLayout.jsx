@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-import HeaderUnlogged from "../components/organisms/HeaderLogged";
-//Ce composant sert de structure de base pour les pages ne nécessitant pas d'authentification
-const Unlogged = () => {
+import HeaderLogged from "../components/organisms/HeaderLogged";
+//Ce composant sert de structure de base pour les pages nécessitant une authentification
+const PrivateLayout = () => {
   return (
     <>
-      <HeaderUnlogged />
+      <HeaderLogged />
       <Outlet />
       {/* <Footer /> */}
     </>
   );
 };
 
-export default Unlogged;
+export default PrivateLayout;
