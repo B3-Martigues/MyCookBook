@@ -8,7 +8,6 @@ class RecipeController {
     // Recherche tout les recettes dans la base de données
     try {
       const recipes = await Recipe.find();
-
       //Réponse réussie avec un statut HTTP 200 et les recettes récupérées
       res.status(200).json({
         success: "Succès lors de la récupération des recettes", // Message de succès

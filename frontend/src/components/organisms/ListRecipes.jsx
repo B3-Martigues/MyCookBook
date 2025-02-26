@@ -1,13 +1,14 @@
 // Importation des Hooks et des fichiers
 import { useState, useEffect } from "react";
 import getAllRecipes from "../../api/recipesApi";
-
+import DetailsRecipe from "../pages/DetailsRecipe";
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
   const [error, setError] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   const recipePerPage = 8;
 
@@ -50,7 +51,11 @@ const ListRecipes = () => {
       <h1>Recettes</h1>
       <div>
         {currentRecipes.map((recipe) => (
-          <div key={recipe._id}>
+          <div
+            className="img-container"
+            key={recipe._id}
+            onClick={() => setSelectedRecipe(recipe)}
+          >
             <img
               className="img-items"
               src={`http://localhost:8080/${recipe.picture}`}
@@ -62,12 +67,27 @@ const ListRecipes = () => {
       </div>
       {/* Pagination - boutons pour changer de page */}
       {Array.from(
+        // la proprieté length définit le nombre de boutons de pagination
         { length: Math.ceil(recipes.length / recipePerPage) },
-        (_, i) => (
-          <button key={i + 1} onClick={() => paginate(i + 1)}>
-            {i + 1}
+        (
+          _,
+          i //L'index sera pris en compte pour générer les boutons
+        ) => (
+          <button
+            className="page-btn"
+            key={i + 1}
+            onClick={() => paginate(i + 1)}
+          >
+            {i + 1} {/* Affichage des nombres de pages */}
           </button>
         )
+      )}
+      {/* Une condition qui affiche les détails après un click sur l'image  */}
+      {selectedRecipe && (
+        <DetailsRecipe
+          recipe={selectedRecipe}
+          onClose={() => setSelectedRecipe(null)}
+        />
       )}
     </div>
   );

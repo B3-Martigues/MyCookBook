@@ -1,14 +1,14 @@
 import { Outlet } from "react-router-dom";
-
+import HeaderLogged from "../components/organisms/HeaderLogged";
 //Ce composant sert de structure de base pour les pages nécessitant une authentification
-const PrivatLayout = () => {
+const PrivateLayout = () => {
   return (
     <>
-      {/* <Header />          à ajouter  */}
+      <HeaderLogged />
       <Outlet />
       {/* <Footer /> */}
     </>
   );
 };
 
-export default PrivatLayout;
+export default PrivateLayout;

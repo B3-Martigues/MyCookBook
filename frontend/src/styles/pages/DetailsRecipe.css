@@ -1,1 +1,8 @@
 /* Styles for DetailsRecipe component */
+.img-ingredient {
+  width: 100px;
+  height: auto;
+}
+li {
+  list-style: none;
+}
