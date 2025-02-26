@@ -7,7 +7,7 @@ class RecipeController {
   static getAllRecipes = async (req, res) => {
     // Recherche tout les recettes dans la base de données
     try {
-      const recipes = await Recipe.find();
+      const recipes = await Recipe.find().populate("user_id", "name");
 
       //Réponse réussie avec un statut HTTP 200 et les recettes récupérées
       res.status(200).json({

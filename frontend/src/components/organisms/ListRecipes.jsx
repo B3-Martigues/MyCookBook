@@ -57,6 +57,7 @@ const ListRecipes = () => {
               alt={recipe.name}
             />
             <h3>{recipe.name}</h3>
+            <p>Ajouté par: {recipe.user_id?.name || "Notre équipe"}</p>
           </div>
         ))}
       </div>
