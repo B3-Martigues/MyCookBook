@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/organisms/RecipeCard.css';
+import ingredients from "../../../public/ingredients.json"; // Import des ingrédients depuis un fichier JSON
 
 const RecipeCard = ({ recipe, onEdit, onDelete, onClick }) => {
   const formatTime = (time) => {
@@ -18,7 +19,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, onClick }) => {
         <img
           src={imageUrl}
           alt={recipe.name}
-          onError={(e) => { e.target.src = '/img/recipes/default.jpg'; }}
+          onError={(e) => { e.target.src = '/images/placeholder.jpg'; }}
         />
       </div>
       <div className="recipe-content">

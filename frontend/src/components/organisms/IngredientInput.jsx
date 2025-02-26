@@ -101,31 +101,25 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
 
   // Ajout ou mise à jour d'un ingrédient
   const handleAdd = () => {
+    console.log("Ajout local de l'ingrédient");
     if (inputValue && quantity) {
-      // Cherche si l'ingrédient existe déjà dans la base
       const existingIngredient = ingredients.find(
         (ing) => ing.name.toLowerCase() === inputValue.toLowerCase()
       );
-
-      // Formate l'unité au pluriel si nécessaire
       const pluralUnit = unit ? getPluralUnit(quantity, unit) : "";
-
-      // Création de l'objet ingrédient
+  
       const newIngredient = {
         name: inputValue,
         quantity: `${quantity} ${pluralUnit}`.trim(),
-        image: existingIngredient ? existingIngredient.image : "./backend/img/icons", // Utilise une image par défaut si l'ingrédient n'a pas d'image
+        image: existingIngredient ? existingIngredient.image : "/images/placeholder.jpg",
       };
-
-      // Si on est en mode édition, ajouter l'index
-      if (isEditing) {
-        newIngredient.index = editIndex;
-      }
-
-      onAddIngredient(newIngredient); // Appelle la fonction pour ajouter ou mettre à jour l'ingrédient
-      resetForm();
+  
+      onAddIngredient(newIngredient); // Callback local uniquement
     }
   };
+  
+  
+  
 
   // Annuler l'édition
   const handleCancel = () => {
@@ -181,12 +175,12 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
       </div>
       <div className="button-container">
         {/* Bouton pour ajouter/modifier l'ingrédient */}
-        <button className="add-btn" onClick={handleAdd}>
+        <button className="add-btn" onClick={handleAdd} type="button">
           <h2>{isEditing ? "✓" : "✚"}</h2>
         </button>
         {/* Bouton pour annuler l'édition si en mode édition */}
         {isEditing && (
-          <button className="cancel-btn" onClick={handleCancel}>
+          <button className="cancel-btn" onClick={handleCancel} type="button">
             <h2>✕</h2>
           </button>
         )}

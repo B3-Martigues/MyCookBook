@@ -12,6 +12,7 @@
 .recipe-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
 }
 
 .recipe-image {
@@ -97,18 +98,19 @@
 
 .edit-button {
   background-color: #e3f2fd;
-  color: #1976d2;
+  border-radius: 15px !important;
 }
 
 .edit-button:hover {
-  background-color: #bbdefb;
+  background-color: hsla(106, 100%, 85%, 0.453) !important;
 }
 
 .delete-button {
   background-color: #ffebee;
   color: #c62828 !important;
+  border-radius: 15px !important;
 }
 
 .delete-button:hover {
-  background-color: #ffcdd2;
+  background-color: hsla(0, 100%, 85%, 0.453) !important;
 }

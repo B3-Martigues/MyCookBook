@@ -24,11 +24,14 @@ const addRecipe = async (formData) => {
 // Récupérer une recette par son ID
 export const getRecipeById = async (recipeId) => {
   try {
-    const response = await fetchWithRefresh(`http://localhost:8080/recipes/${recipeId}`, {
+    const response = await fetch(`http://localhost:8080/recipes/${recipeId}`, {
       method: 'GET',
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
     });
+    
     
     const data = await response.json();
     
@@ -46,7 +49,7 @@ export const getRecipeById = async (recipeId) => {
 // Mettre à jour une recette
 export const updateRecipe = async (recipeId, formData) => {
   try {
-    const response = await fetch(`/api/recipes/${recipeId}`, {
+    const response = await fetchWithRefresh(`http://localhost:8080/recipes/${recipeId}`, {
       method: 'PUT',
       body: formData,
       headers: {
@@ -91,7 +94,7 @@ export const getUserRecipes = async () => {
   }
 };
 
-// Supprimer une recette de l'utilisateur connecté
+// Supprimer une recette de l'utilisateur
 
 const deleteRecipe = async (recipeId) => {
   try {

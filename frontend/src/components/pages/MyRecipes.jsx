@@ -14,6 +14,7 @@ const MyRecipes = () => {
   const [error, setError] = useState(null);
   const [editingRecipeId, setEditingRecipeId] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null); // Nouvel état pour la recette sélectionnée
+  const [isEditingIngredients, setIsEditingIngredients] = useState(false); // Nouvel état
 
   // Fonction pour charger les recettes de l'utilisateur
   const loadUserRecipes = async () => {
@@ -57,11 +58,16 @@ const MyRecipes = () => {
     setShowForm(true);
   };
 
+  const handleIngredientEditStart = () => {
+    setIsEditingIngredients(true); // Indique qu'on est en train de modifier des ingrédients
+  };
+
   // Fonction appelée après l'ajout ou l'édition d'une recette
   const handleRecipeFormSuccess = () => {
-    setShowForm(false);
-    setEditingRecipeId(null);
-    loadUserRecipes(); // Recharger les recettes
+    if (!isEditingIngredients) {
+      setShowForm(false); // Ferme la modal uniquement si pas en édition d'ingrédients
+    }
+    setIsEditingIngredients(false); // Reset après sauvegarde
   };
 
   // Nouvelle fonction pour gérer le clic sur une recette
@@ -116,7 +122,9 @@ const MyRecipes = () => {
           <RecipeForm 
             recipeId={editingRecipeId} 
             onSuccess={handleRecipeFormSuccess} 
+            onIngredientChange={() => {}} // Pas de fermeture ici
           />
+
         </div>
       )}
 
