@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import Modal from "react-modal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,6 +8,7 @@ import {
   faSquarePollVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
+import "../../styles/pages/DetailsRecipe.css";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
@@ -77,13 +79,45 @@ const DetailsRecipe = ({ recipe, onClose }) => {
           <div className="ingredients-container">
             <h4>Ingrédients: </h4>
             <ul>
-              {recipe.ingredients_and_quantities.map((ingredient) => (
-                <li key={ingredient._id} />
-              ))}
+              {recipe.ingredients_and_quantities.map((ingredient) => {
+                const imgUrl = `/images/${ingredient.name.toLowerCase()}.jpg`;
+                const defaultImage = "images/default.jpg";
+                return (
+                  <li key={ingredient._id}>
+                    <div className="item-container">
+                      <img
+                        className="img-ingredient"
+                        src={imgUrl}
+                        onError={(e) => (e.target.src = defaultImage)}
+                        alt={ingredient.name}
+                      />
+                      {ingredient.name} - {ingredient.quantity}
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           </div>
+          <hr />
+          {/* Étapes */}
+          <div className="steps-container">
+            <h4>Étapes: </h4>
+            <ol>
+              {recipe.steps.map((step) => (
+                <li className="steps" key={step._id}>
+                  <strong className="step-numbers"> {step.step_number} </strong>{" "}
+                  <p className="step-description">{step.description}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <button className="closing-button" onClick={onClose}>
+            Fermer
+          </button>
         </div>
       </div>
     </Modal>
   );
 };
+
+export default DetailsRecipe;
