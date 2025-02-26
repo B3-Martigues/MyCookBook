@@ -1,0 +1,114 @@
+/* styles/molecules/RecipeCard.css */
+.recipe-card {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  background-color: white;
+  transition: transform 0.2s ease;
+}
+
+.recipe-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.recipe-image {
+  width: 150px;
+  min-width: 150px;
+  height: 150px;
+}
+
+.recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-content {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.recipe-content h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.recipe-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.recipe-category,
+.recipe-time,
+.recipe-difficulty {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.recipe-category {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+.recipe-time {
+  background-color: #e8f5e9;
+  color: #a6a600;
+}
+
+.difficulty-facile {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+.difficulty-moyen {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.difficulty-difficile {
+  background-color: #ffebee;
+  color: #b71c1c;
+}
+
+.recipe-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.recipe-actions button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.edit-button {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.edit-button:hover {
+  background-color: #bbdefb;
+}
+
+.delete-button {
+  background-color: #ffebee;
+  color: #c62828 !important;
+}
+
+.delete-button:hover {
+  background-color: #ffcdd2;
+}

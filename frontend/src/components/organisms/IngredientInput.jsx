@@ -1,163 +1,203 @@
-import { useState } from "react";
-import ingredients from "../../../public/ingredients.json"; // Import des ingrédients
+import { useState, useEffect } from "react";
+import ingredients from "../../../public/ingredients.json"; // Import des ingrédients depuis un fichier JSON
 
-const IngredientInput = ({ onAddIngredient }) => {
+const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) => {
+  // États pour gérer les valeurs et suggestions
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [quantity, setQuantity] = useState("");
-  const [unit, setUnit] = useState(""); // État pour l'unité
-  const [unitSuggestions, setUnitSuggestions] = useState([]); // Suggestions d'unités
+  const [unit, setUnit] = useState("");
+  const [unitSuggestions, setUnitSuggestions] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
+  // Liste des unités disponibles
   const units = [
-    "gramme",
-    "kilogramme",
-    "millilitre",
-    "litre",
-    "cuillère à café",
-    "cuillère à soupe",
-    "verre",
-    "tasse",
-    "pincée",
-    "boîte",
-    "morceau",
-    "tranche",
-    "barquette",
-    "sachet",
-    "gousse",
-    "brin",
-    "bouquet",
-    "rouleau",
-    "filet",
-    "pot",
-    "brique",
-    "bocal"
+    "gramme", "kilogramme", "millilitre", "litre",
+    "cuillère à café", "cuillère à soupe", "verre",
+    "tasse", "pincée", "boîte", "morceau", "tranche",
+    "barquette", "sachet", "gousse", "brin", "bouquet",
+    "rouleau", "filet", "pot", "brique", "bocal"
   ];
+
+  // Effect pour charger les valeurs de l'ingrédient à éditer
+  useEffect(() => {
+    if (editingIngredient) {
+      setIsEditing(true);
+      setEditIndex(editingIngredient.index);
+      setInputValue(editingIngredient.name);
+      
+      // Extraire la quantité et l'unité de la chaîne quantity
+      const quantityString = editingIngredient.quantity;
+      if (quantityString) {
+        const parts = quantityString.trim().split(" ");
+        if (parts.length >= 1) {
+          setQuantity(parts[0]);
+          // Joindre le reste pour l'unité (au cas où l'unité contient des espaces)
+          if (parts.length > 1) {
+            setUnit(parts.slice(1).join(" "));
+          }
+        }
+      }
+    }
+  }, [editingIngredient]);
 
   // Fonction pour mettre l'unité au pluriel si nécessaire
   const getPluralUnit = (quantity, unit) => {
     if (parseFloat(quantity) > 1) {
-      // Règles de pluriel pour certaines unités
-      if (unit === "cuillère à café") return "cuillères à café";
-      if (unit === "cuillère à soupe") return "cuillères à soupe";
-      if (unit === "verre") return "verres";
-      if (unit === "tasse") return "tasses";
-      if (unit === "morceau") return "morceaux";
-      if (unit === "tranche") return "tranches";
-      if (unit === "barquette") return "barquettes";
-      if (unit === "sachet") return "sachets";
-      if (unit === "gousse") return "gousses";
-      if (unit === "brin") return "brins";
-      if (unit === "bouquet") return "bouquets";
-      if (unit === "rouleau") return "rouleaux";
-      if (unit === "filet") return "filets";
-      if (unit === "pot") return "pots";
-      if (unit === "brique") return "briques";
-      if (unit === "bocal") return "bocaux";
-      // Par défaut, ajouter un "s" à la fin
-      return unit + "s";
+      const plurals = {
+        "cuillère à café": "cuillères à café",
+        "cuillère à soupe": "cuillères à soupe",
+        verre: "verres", tasse: "tasses",
+        morceau: "morceaux", tranche: "tranches",
+        barquette: "barquettes", sachet: "sachets",
+        gousse: "gousses", brin: "brins",
+        bouquet: "bouquets", rouleau: "rouleaux",
+        filet: "filets", pot: "pots",
+        brique: "briques", bocal: "bocaux",
+      };
+      return plurals[unit] || `${unit}s`; // Par défaut, ajoute "s" si l'unité n'est pas dans les cas spécifiques
     }
-    return unit;
+    return unit; // Retourne l'unité au singulier
   };
 
+  // Gère les changements dans le champ de recherche d'ingrédients
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
 
-    if (value.length > 0) {
-      const filteredIngredients = ingredients.filter((ingredient) =>
-        ingredient.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setSuggestions(filteredIngredients);
-    } else {
-      setSuggestions([]);
-    }
+    // Filtre les ingrédients en fonction de la recherche
+    setSuggestions(
+      value ? ingredients.filter((ing) =>
+        ing.name.toLowerCase().includes(value.toLowerCase())
+      ) : []
+    );
   };
 
+  // Sélection d'un ingrédient parmi les suggestions
   const handleSelectIngredient = (ingredient) => {
     setInputValue(ingredient.name);
-    setSuggestions([]);
+    setSuggestions([]); // Vide les suggestions après sélection
   };
 
+  // Gère les changements dans le champ de recherche d'unités
   const handleUnitChange = (e) => {
     const value = e.target.value;
     setUnit(value);
 
-    if (value.length > 0) {
-      const filteredUnits = units.filter((unitOption) =>
-        unitOption.toLowerCase().includes(value.toLowerCase())
-      );
-      setUnitSuggestions(filteredUnits);
-    } else {
-      setUnitSuggestions([]);
-    }
+    // Filtre les unités en fonction de la recherche
+    setUnitSuggestions(
+      value ? units.filter((u) =>
+        u.toLowerCase().includes(value.toLowerCase())
+      ) : []
+    );
   };
 
+  // Sélection d'une unité parmi les suggestions
   const handleSelectUnit = (selectedUnit) => {
     setUnit(selectedUnit);
-    setUnitSuggestions([]);
+    setUnitSuggestions([]); // Vide les suggestions après sélection
   };
 
+  // Ajout ou mise à jour d'un ingrédient
   const handleAdd = () => {
     if (inputValue && quantity) {
+      // Cherche si l'ingrédient existe déjà dans la base
       const existingIngredient = ingredients.find(
         (ing) => ing.name.toLowerCase() === inputValue.toLowerCase()
       );
-      const pluralUnit = getPluralUnit(quantity, unit); // Appliquer le pluriel si nécessaire
+
+      // Formate l'unité au pluriel si nécessaire
+      const pluralUnit = unit ? getPluralUnit(quantity, unit) : "";
+
+      // Création de l'objet ingrédient
       const newIngredient = {
         name: inputValue,
-        quantity: `${quantity} ${pluralUnit}`, // Combinaison de la quantité et de l'unité (au pluriel si nécessaire)
-        image: existingIngredient ? existingIngredient.image : "./backend/img/icons",
+        quantity: `${quantity} ${pluralUnit}`.trim(),
+        image: existingIngredient ? existingIngredient.image : "./backend/img/icons", // Utilise une image par défaut si l'ingrédient n'a pas d'image
       };
-      onAddIngredient(newIngredient);
-      setInputValue("");
-      setQuantity("");
-      setUnit(""); // Réinitialiser l'unité
+
+      // Si on est en mode édition, ajouter l'index
+      if (isEditing) {
+        newIngredient.index = editIndex;
+      }
+
+      onAddIngredient(newIngredient); // Appelle la fonction pour ajouter ou mettre à jour l'ingrédient
+      resetForm();
     }
+  };
+
+  // Annuler l'édition
+  const handleCancel = () => {
+    resetForm();
+    if (onCancelEdit) {
+      onCancelEdit();
+    }
+  };
+
+  // Réinitialiser le formulaire
+  const resetForm = () => {
+    setInputValue("");
+    setQuantity("");
+    setUnit("");
+    setIsEditing(false);
+    setEditIndex(null);
   };
 
   return (
     <div className="ingred-container">
       <div className="ingred-container-child">
+        {/* Champ pour entrer la quantité */}
         <input
           type="number"
-          name="quantity"
           placeholder="Quantité"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
         />
+        {/* Champ pour entrer l'unité */}
         <input
           type="text"
-          name="unit"
           placeholder="Unité"
           value={unit}
           onChange={handleUnitChange}
         />
-        <input
-          type="text"
-          name="name"
-          placeholder="Nom de l'ingrédient"
-          value={inputValue}
-          onChange={handleInputChange}
-        />
+        {/* Liste des suggestions d'unités */}
         {unitSuggestions.length > 0 && (
           <ul className="suggestions-list">
-            {unitSuggestions.map((unitOption, index) => (
-              <li key={index} onClick={() => handleSelectUnit(unitOption)}>
-                {unitOption}
+            {unitSuggestions.map((u, idx) => (
+              <li key={idx} onClick={() => handleSelectUnit(u)}>
+                {u}
               </li>
             ))}
           </ul>
         )}
+        {/* Champ pour entrer le nom de l'ingrédient */}
+        <input
+          type="text"
+          placeholder="Nom de l'ingrédient"
+          value={inputValue}
+          onChange={handleInputChange}
+        />
       </div>
-      <button className="add-btn" type="button" onClick={handleAdd}>
-        <h2>✚</h2>
-      </button>
+      <div className="button-container">
+        {/* Bouton pour ajouter/modifier l'ingrédient */}
+        <button className="add-btn" onClick={handleAdd}>
+          <h2>{isEditing ? "✓" : "✚"}</h2>
+        </button>
+        {/* Bouton pour annuler l'édition si en mode édition */}
+        {isEditing && (
+          <button className="cancel-btn" onClick={handleCancel}>
+            <h2>✕</h2>
+          </button>
+        )}
+      </div>
+      {/* Liste des suggestions d'ingrédients */}
       {suggestions.length > 0 && (
         <ul className="suggestions-list">
-          {suggestions.map((ingredient, index) => (
-            <li key={index} onClick={() => handleSelectIngredient(ingredient)}>
-              <img src={ingredient.image} alt={ingredient.name} style={{ width: "50px" }} />
-              {ingredient.name}
+          {suggestions.map((ing, idx) => (
+            <li key={idx} onClick={() => handleSelectIngredient(ing)}>
+              <img src={ing.image} alt={ing.name} style={{ width: "50px" }} />
+              {ing.name}
             </li>
           ))}
         </ul>

@@ -1,6 +1,8 @@
 const Recipe = require("../models/Recipe");
 const mongoose = require("mongoose");
+
 class RecipeController {
+  // Méthode pour récupérer toutes les recettes
   static getAllRecipes = async (req, res) => {
     try {
       const recipes = await Recipe.find();
@@ -16,37 +18,62 @@ class RecipeController {
     }
   };
 
-  // const Recipe = require("../models/Recipe");
+  // Méthode pour récupérer les recettes de l'utilisateur connecté
+  static getUserRecipes = async (req, res) => {
+    try {
+      // Récupération de l'ID de l'utilisateur depuis le middleware d'authentification
+      const user_id = req.user.id;
 
-  // class RecipeController {
-  //   static getRecipes = async (req, res) => {
-  //     try {
-  //       const recipes = await Recipe.find();
-  //       res.json(recipes);
-  //     } catch (err) {
-  //       res.status(500).json({
-  //         message: "Erreur lors du chargement des recettes",
-  //         error: err,
-  //       });
-  //     }
-  //   };
+      // Recherche des recettes associées à cet utilisateur
+      const recipes = await Recipe.find({ user_id });
 
-  // static getUserRecipes = async (req, res) => {
-  //   try {
-  //     const userId = req.user.id;
-  //     const recipes = await Recipe.find({ userId });
-  //     res.json(recipes);
-  //   } catch (err) {
-  //     res.status(500).json({
-  //       message: "Erreur lors du chargement des recettes",
-  //       error: err,
-  //     });
-  //   }
-  // };
+      res.status(200).json({
+        success: "Recettes de l'utilisateur récupérées avec succès",
+        recipes,
+      });
+    } catch (err) {
+      res.status(500).json({
+        error: "Erreur lors de la récupération des recettes de l'utilisateur",
+        details: err.message,
+      });
+    }
+  };
 
+  // Méthode pour supprimer une recette
+  static deleteRecipe = async (req, res) => {
+    try {
+      const { id } = req.params; // ID de la recette à supprimer
+      const user_id = req.user.id; // ID de l'utilisateur connecté
+  
+      // Vérifier que la recette existe et appartient à l'utilisateur
+      const recipe = await Recipe.findOne({ _id: id, user_id });
+  
+      if (!recipe) {
+        return res.status(404).json({
+          error: "Recette non trouvée ou vous n'êtes pas autorisé à la supprimer",
+        });
+      }
+  
+      // Supprimer la recette
+      await Recipe.findByIdAndDelete(id);
+  
+      res.status(200).json({
+        success: "Recette supprimée avec succès",
+      });
+    } catch (err) {
+      console.error("Erreur lors de la suppression de la recette:", err);
+      res.status(500).json({
+        error: "Erreur lors de la suppression de la recette",
+        details: err.message,
+      });
+    }
+  };
+
+  // Méthode pour ajouter une recette
   static addRecipe = async (req, res) => {
     try {
-      const {
+      // Récupération des données du formulaire
+      let {
         name,
         difficulty,
         cost,
@@ -56,34 +83,82 @@ class RecipeController {
         steps,
       } = req.body;
 
-      const parsedPreparationTime = JSON.parse(preparation_time);
-      const parsedIngredients = JSON.parse(ingredients_and_quantities);
-      const parsedSteps = JSON.parse(steps);
+      // Ajout de logs pour débogage
+      console.log("Corps de la requête:", req.body);
+      console.log("Préparation time (brut):", preparation_time);
+      console.log("Ingrédients (brut):", ingredients_and_quantities);
+      console.log("Étapes (brut):", steps);
 
+      // Vérification et parsing des données JSON
+      try {
+        // Parsing des données qui devraient être en JSON
+        preparation_time = JSON.parse(preparation_time);
+        ingredients_and_quantities = JSON.parse(ingredients_and_quantities);
+        steps = JSON.parse(steps);
+
+        // Vérification que les données sont bien formées
+        if (!Array.isArray(ingredients_and_quantities)) {
+          throw new Error("Les ingrédients doivent être un tableau");
+        }
+
+        if (!Array.isArray(steps)) {
+          throw new Error("Les étapes doivent être un tableau");
+        }
+
+        // Logs après parsing
+        console.log("Temps de préparation (parsé):", preparation_time);
+        console.log("Ingrédients (parsés):", ingredients_and_quantities);
+        console.log("Étapes (parsées):", steps);
+      } catch (parseError) {
+        console.error("Erreur de parsing:", parseError);
+        return res.status(400).json({
+          error: "Format des données invalide",
+          details: parseError.message,
+        });
+      }
+
+      // Vérification de la présence des données nécessaires
+      if (!name || !category || !difficulty || !cost) {
+        return res.status(400).json({
+          error: "Données manquantes",
+          details: "Tous les champs obligatoires doivent être remplis",
+        });
+      }
+
+      // Récupération de l'ID utilisateur depuis la requête
       const user_id = req.user.id;
-      const picture = req.file ? `img/recipes/${req.file.filename}` : "";
+
+      // Gestion de l'image
+      const picture = req.file ? `img/recipes/${req.file.filename}` : "img/recipes/default.jpg";
+
+      // Création et sauvegarde de la recette
       const newRecipe = new Recipe({
         user_id,
         name,
         difficulty,
         cost,
         picture,
-        preparation_time: parsedPreparationTime,
+        preparation_time,
         category,
-        ingredients_and_quantities: parsedIngredients,
-        steps: parsedSteps,
+        ingredients_and_quantities,
+        steps,
       });
-      await newRecipe.save();
-      res
-        .status(201)
-        .json({ success: "Reccete ajouté avec succès", recipe: newRecipe });
+
+      // Sauvegarde dans la base de données
+      const savedRecipe = await newRecipe.save();
+      console.log("Recette sauvegardée:", savedRecipe);
+
+      // Réponse avec succès
+      res.status(201).json({
+        success: "Recette ajoutée avec succès",
+        recipe: savedRecipe,
+      });
     } catch (err) {
-      res
-        .status(500)
-        .json({
-          error: "Erreur lors de l'ajout du recette",
-          details: err.message,
-        });
+      console.error("Erreur serveur:", err);
+      res.status(500).json({
+        error: "Erreur lors de l'ajout de la recette",
+        details: err.message,
+      });
     }
   };
 }
