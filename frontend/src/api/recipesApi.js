@@ -6,7 +6,7 @@ const getAllRecipes = async () => {
     headers: { "Content-Type": "application/json" },
     credentials: "include",
   });
-
+  // Conversion de la réponse en format JSON
   const response = await request.json();
   return response;
 };

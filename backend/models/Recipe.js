@@ -2,60 +2,64 @@ const mongoose = require("../config/db");
 
 const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-// Définition du schema
+//Definition du schema
 const RecipeSchema = new mongoose.Schema({
   user_id: {
-    type: mongoose.Schema.Types.ObjectId, // Référence à un utilisateur
+    type: mongoose.Schema.Types.ObjectId, // Réferance à un utilisateur
     ref: "User", // Modèle User (collection users)
     required: true, // Obligatoire
   },
+
   picture: {
     type: String,
-    required: true, // Obligatoire
+    required: true,
   },
   name: {
     type: String,
-    required: true, // Obligatoire
+    required: true,
     trim: true, // Supprime les espaces en trop
+    maxlength: 25, // Limite de caractères
   },
   category: {
     type: String,
-    required: true, // Obligatoire
+    required: true,
+    trim: true,
+    maxlength: 50,
   },
   difficulty: {
     type: String,
     enum: ["Facile", "Moyen", "Difficile"], // Valeurs autorisées
-    required: true, // Obligatoire
+    required: true,
   },
   cost: {
     type: String,
-    enum: ["Faible", "Moyen", "Élevé"], // Valeurs autorisées
-    required: true, // Obligatoire
+    enum: ["Faible", "Moyen", "Élevé"],
+    required: true,
   },
   preparation_time: {
     hours: {
       type: Number,
-      required: true, // Obligatoire
-      max: 23, // Maximum 23 heures
-      trim: true,
+      max: 23, // Maximum d'heures
+      required: true,
     },
     minutes: {
       type: Number,
-      required: true, // Obligatoire
-      max: 59, // Maximum 59 minutes
-      trim: true,
+      max: 59, // Maximum de minutes
+      required: true,
     },
   },
   steps: [
     {
       step_number: {
         type: Number,
-        required: true, // Obligatoire
+        required: true,
+        min: 1, // Empêche les valeurs négatives ou 0
       },
+
       description: {
         type: String,
-        required: true, // Obligatoire
-        trim: true, // Supprime les espaces en trop
+        trim: true,
+        required: true,
       },
     },
   ],
@@ -63,14 +67,13 @@ const RecipeSchema = new mongoose.Schema({
     {
       name: {
         type: String,
-        required: true, // Obligatoire
         trim: true,
+        required: true,
       },
-
       quantity: {
-        type: String, // Quantité au format texte
-        required: true, // Obligatoire
-        trim: true, // Supprime les espaces en trop
+        type: String,
+        trim: true,
+        required: true,
       },
     },
   ],
