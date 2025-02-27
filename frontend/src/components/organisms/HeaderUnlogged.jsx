@@ -4,7 +4,9 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignIn, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
-import "../../styles/organisms/HeaderUnlogged.css";
+// import "../../styles/organisms/HeaderUnlogged.css";
+
+// Header prévu pour les utilisateurs non connectés
 const HeaderUnlogged = () => {
   const [searchTerm, setSearchTerm] = useState("");
   return (
