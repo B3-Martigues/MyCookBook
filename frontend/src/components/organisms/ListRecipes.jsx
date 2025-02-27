@@ -58,7 +58,11 @@ const ListRecipes = () => {
           >
             <img
               className="img-items"
-              src={`http://localhost:8080/${recipe.picture}`}
+              src={
+                recipe.picture
+                  ? `http://localhost:8080/${recipe.picture}`
+                  : "/images/default.jpg"
+              }
               alt={recipe.name}
             />
             <h3>{recipe.name}</h3>
