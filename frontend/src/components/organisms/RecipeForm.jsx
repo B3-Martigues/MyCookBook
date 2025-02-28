@@ -44,6 +44,9 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   // État pour indiquer si on est en mode édition
   const [isEditing, setIsEditing] = useState(recipeId !== null);
 
+  // État pour stocker l'url de la photo de la recette choisit
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+
   // On n'utilise plus de localIngredients séparés, tous les ingrédients sont dans recipe.ingredients_and_quantities
   // pour éviter la confusion et les problèmes de synchronisation
 
@@ -332,7 +335,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
     formData.append("cost", recipe.cost);
     formData.append("preparation_time", JSON.stringify({
     hours: Number(recipe.preparation_time.hours) || 0, // Convertir en nombre ou initialiser à 0
-    minutes: Math.max(1, Number(recipe.preparation_time.minutes)), // Forcer un minimum de 1 minute
+    minutes: Math.max(0, Number(recipe.preparation_time.minutes)), // Forcer un minimum de 1 minute
     }));
     formData.append("ingredients_and_quantities", JSON.stringify(enrichedIngredients));
     formData.append("steps", JSON.stringify(recipe.steps));
@@ -465,42 +468,65 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           {/* Temps de préparation */}
           <h3>Temps de préparation</h3>
           <div className="prep-time">
-            <input
-              type="number"
-              name="hours"
-              placeholder="Heures"
-              value={recipe.preparation_time.hours}
-              onChange={(e) =>
-                setRecipe({
-                  ...recipe,
-                  preparation_time: {
-                    ...recipe.preparation_time,
-                    hours: e.target.value === "" ? "0" : e.target.value, // Initialiser à "0" si vide
-                  },
-                })
-              }
-              min="0"
-              max="23"
-            />
-            <input
-              type="number"
-              name="minutes"
-              placeholder="Minutes"
-              value={recipe.preparation_time.minutes}
-              onChange={(e) =>
-                setRecipe({
-                  ...recipe,
-                  preparation_time: {
-                    ...recipe.preparation_time,
-                    minutes: e.target.value === "" ? "0" : e.target.value, // Initialiser à "0" si vide
-                  },
-                })
-              }
-              min="0"
-              max="59"
-            />
-          </div>
+          {/* Champ des heures */}
+          <input
+            type="number"
+            name="hours"
+            placeholder="Heures"
+            value={recipe.preparation_time.hours === "0" ? "" : recipe.preparation_time.hours} // Afficher une chaîne vide si les heures sont à 0
+            onChange={(e) => {
+              const value = e.target.value;
+              setRecipe({
+                ...recipe,
+                preparation_time: {
+                  ...recipe.preparation_time,
+                  hours: value === "" ? "0" : value, // Garder "0" dans l'état interne si le champ est vide
+                },
+              });
+            }}
+            min="0" // Heures peuvent être 0
+            max="23"
+          />
 
+          {/* Champ des minutes */}
+          <input
+            type="number"
+            name="minutes"
+            placeholder="Minutes"
+            value={recipe.preparation_time.minutes === "0" ? "" : recipe.preparation_time.minutes}
+            onChange={(e) => {
+              const value = e.target.value;
+              const hours = Number(recipe.preparation_time.hours);
+              const minutes = Number(value);
+
+              if (hours > 0 && minutes < 1) {
+                setRecipe({
+                  ...recipe,
+                  preparation_time: {
+                    ...recipe.preparation_time,
+                    minutes: "0", // Mets les minutes à 0 si elles sont inférieures à 1 et les heures > 0
+                  },
+                });
+              } else {
+                setRecipe({
+                  ...recipe,
+                  preparation_time: {
+                    ...recipe.preparation_time,
+                    minutes: value === "" ? "0" : value,
+                  },
+                });
+              }
+            }}
+            min="0"
+            max="59"
+          />
+
+
+          {/* Avertissement visuel (optionnel) */}
+          <p style={{ color: "gray", fontSize: "0.8em", marginTop: "5px" }}>
+          </p>
+        </div>
+          <h3>Ajout d'une image {isEditing ? "(facultatif pour la modification)" : ""}</h3>
           {/* Affichage de l'image actuelle si elle existe */}
           {isEditing && currentImageUrl && (
             <div className="current-image">
@@ -513,15 +539,35 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
             </div>
           )}
 
+          {/* Aperçu de l'image sélectionnée */}
+          {previewImageUrl && (
+            <div className="image-preview">
+              <img
+                src={previewImageUrl}
+                alt="Aperçu de l'image sélectionnée"
+                style={{ maxWidth: "200px", maxHeight: "200px", marginBottom: "10px" }}
+              />
+            </div>
+          )}
+
           {/* Ajout d'une image */}
           <input
             type="file"
             className="file-input"
             id="file"
             accept="image/*"
-            onChange={(e) => setRecipe({ ...recipe, picture: e.target.files[0] })}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                setPreviewImageUrl(imageUrl);
+                setRecipe({ ...recipe, picture: file });
+              } else {
+                setPreviewImageUrl("");
+                setRecipe({ ...recipe, picture: "" });
+              }
+            }}
           />
-          <h3>Ajout d'une image {isEditing ? "(facultatif pour la modification)" : ""}</h3>
           <label htmlFor="file" className="file-label">
             <i className="fas fa-camera"></i> Choisir un fichier
           </label>
