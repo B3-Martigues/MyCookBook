@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import RecipeForm from "../organisms/RecipeForm";
 import RecipeCard from "../organisms/RecipeCard";
-import DetailsRecipe from "../pages/DetailsRecipe"; // Importez le composant DetailsRecipe
+import DetailsRecipe from "../pages/DetailsRecipe";
 import { getUserRecipes, deleteRecipe } from "../../api/recipesApi";
 import "../../styles/pages/MyRecipes.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,9 +12,10 @@ const MyRecipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null); // Nouveau state pour les messages de succès
   const [editingRecipeId, setEditingRecipeId] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // Nouvel état pour la recette sélectionnée
-  const [isEditingIngredients, setIsEditingIngredients] = useState(false); // Nouvel état
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [isEditingIngredients, setIsEditingIngredients] = useState(false);
 
   // Fonction pour charger les recettes de l'utilisateur
   const loadUserRecipes = async () => {
@@ -36,6 +37,16 @@ const MyRecipes = () => {
     loadUserRecipes();
   }, []);
 
+  // Effet pour effacer le message après 5 secondes
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
   // Fonction pour gérer la suppression d'une recette
   const handleDeleteRecipe = async (recipeId) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette recette ?")) {
@@ -45,6 +56,7 @@ const MyRecipes = () => {
         
         // Si la suppression est réussie, mettez à jour la liste des recettes
         setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
+        setMessage("Recette supprimée avec succès");
       } catch (err) {
         setError("Erreur lors de la suppression de la recette");
         console.error("Erreur de suppression:", err);
@@ -58,19 +70,39 @@ const MyRecipes = () => {
     setShowForm(true);
   };
 
+  // Fonction pour gérer l'ajout d'une nouvelle recette
+  const handleAddRecipe = () => {
+    setEditingRecipeId(null);
+    setShowForm(true);
+  };
+
   const handleIngredientEditStart = () => {
-    setIsEditingIngredients(true); // Indique qu'on est en train de modifier des ingrédients
+    setIsEditingIngredients(true);
   };
 
   // Fonction appelée après l'ajout ou l'édition d'une recette
-  const handleRecipeFormSuccess = () => {
-    if (!isEditingIngredients) {
-      setShowForm(false); // Ferme la modal uniquement si pas en édition d'ingrédients
+  const handleRecipeFormSuccess = (updatedRecipe, isEdit) => {
+    // Fermer la modale après l'ajout ou la modification
+    setShowForm(false);
+    setIsEditingIngredients(false);
+  
+    // Mettre à jour les recettes sans appel API
+    if (isEdit) {
+      // Mise à jour de la recette existante
+      setRecipes(prevRecipes =>
+        prevRecipes.map(recipe =>
+          recipe._id === updatedRecipe._id ? updatedRecipe : recipe
+        )
+      );
+      setMessage("Recette modifiée avec succès");
+    } else {
+      // Ajout de la nouvelle recette en haut de la liste
+      setRecipes(prevRecipes => [updatedRecipe, ...prevRecipes]);
+      setMessage("Nouvelle recette ajoutée avec succès");
     }
-    setIsEditingIngredients(false); // Reset après sauvegarde
   };
 
-  // Nouvelle fonction pour gérer le clic sur une recette
+  // Fonction pour gérer le clic sur une recette
   const handleRecipeClick = (recipe) => {
     setSelectedRecipe(recipe);
   };
@@ -82,9 +114,26 @@ const MyRecipes = () => {
 
   return (
     <div className="my-recipes-container">
+      {/* Affichage du message de succès */}
+      {message && (
+        <div className="success-message" style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          padding: "10px 20px",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          borderRadius: "5px",
+          zIndex: 1000,
+          boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+        }}>
+          {message}
+        </div>
+      )}
+
       {!showForm ? (
         <>
-          <button className="add-recipe-button" onClick={() => setShowForm(true)}>
+          <button className="add-recipe-button" onClick={handleAddRecipe}>
             <FontAwesomeIcon icon={faPlus} className="plus-icon" /> Ajouter une recette
           </button>
           <h1 className="page-title">Mes recettes</h1>
@@ -105,7 +154,7 @@ const MyRecipes = () => {
                   recipe={recipe}
                   onEdit={handleEditRecipe}
                   onDelete={handleDeleteRecipe}
-                  onClick={handleRecipeClick} // Ajout de la prop onClick
+                  onClick={handleRecipeClick}
                 />
               ))}
             </div>
@@ -122,13 +171,11 @@ const MyRecipes = () => {
           <RecipeForm 
             recipeId={editingRecipeId} 
             onSuccess={handleRecipeFormSuccess} 
-            onIngredientChange={() => {}} // Pas de fermeture ici
+            onIngredientChange={handleIngredientEditStart}
           />
-
         </div>
       )}
 
-      {/* Ajout du composant DetailsRecipe */}
       {selectedRecipe && (
         <DetailsRecipe
           recipe={selectedRecipe}
