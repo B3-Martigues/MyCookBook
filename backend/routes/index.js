@@ -16,7 +16,7 @@ router.get("/recipes", RecipeController.getAllRecipes);
 router.get("/recipes/:id", RecipeController.getRecipeById);
 router.get("/user-recipes", verifyToken, RecipeController.getUserRecipes);
 router.put("/recipes/:id", verifyToken, upload.single("picture"), RecipeController.updateRecipe);
-
+router.post("/search-recipes", RecipeController.searchRecipes);
 
 
 router.post(

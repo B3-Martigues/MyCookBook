@@ -119,4 +119,30 @@ const deleteRecipe = async (recipeId) => {
   }
 };
 
+export const searchRecipes = async (query, filters = {}, sort = {}) => {
+  try {
+    console.log("Envoi de la recherche:", { query, filters, sort });
+    
+    const request = await fetch("http://localhost:8080/search-recipes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query, filters, sort }),
+      credentials: "include", // Ajout pour maintenir les cookies de session
+    });
+
+    if (!request.ok) {
+      throw new Error(`Erreur HTTP: ${request.status}`);
+    }
+
+    const response = await request.json();
+    console.log("Résultats de recherche reçus:", response);
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la recherche:", error);
+    throw error;
+  }
+};
+
 export { getAllRecipes, addRecipe, deleteRecipe };

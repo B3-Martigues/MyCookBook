@@ -153,6 +153,58 @@ static updateRecipe = async (req, res) => {
     }
   };
 
+  // Méthode pour rechercher des recettes avec filtre
+  static searchRecipes = async (req, res) => {
+    try {
+      const { query, filters, sort } = req.body;
+
+      // Construire la requête de recherche
+      const searchQuery = query
+        ? { name: { $regex: query, $options: "i" } }
+        : {};
+
+      // Construire la requête de filtre
+      let filterQuery = {};
+      if (filters) {
+        // Ajouter uniquement les filtres qui ont une valeur
+        if (filters.category && filters.category !== "") {
+          filterQuery.category = filters.category;
+        }
+        if (filters.difficulty && filters.difficulty !== "") {
+          filterQuery.difficulty = filters.difficulty;
+        }
+        // Ajouter d'autres filtres au besoin
+      }
+
+      // Combiner les requêtes
+      const finalQuery = {
+        ...searchQuery,
+        ...filterQuery
+      };
+
+      console.log("Requête de recherche:", finalQuery);
+      console.log("Tri:", sort || { name: 1 });
+
+      // Exécuter la requête avec les filtres et le tri
+      const recipes = await Recipe.find(finalQuery).sort(sort || { name: 1 });
+
+      console.log(`${recipes.length} recettes trouvées`);
+
+      res.status(200).json({ 
+        success: true, 
+        recipes,
+        query: finalQuery,
+        sortUsed: sort || { name: 1 }
+      });
+    } catch (err) {
+      console.error("Erreur de recherche:", err);
+      res.status(500).json({
+        error: "Erreur lors de la recherche de recettes",
+        details: err.message,
+      });
+    }
+  };
+
   // Méthode pour ajouter une recette
   static addRecipe = async (req, res) => {
     try {

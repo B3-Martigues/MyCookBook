@@ -10,6 +10,7 @@ import PublicLayout from "../layout/PublicLayout";
 import PrivateRoute from "../utils/PrivateRoute";
 import MyRecipes from "../components/pages/MyRecipes";
 import useAuthStore from "../store/AuthStore";
+import SearchResults from "../components/pages/SearchResults";
 
 // Ce composant gère toutes les routes d'application
 // Unlogged et ProtectedRoute sont destinés à la gestion de l'affichage( layout ),
@@ -25,6 +26,8 @@ const Router = () => {
           element={isAuthenticated ? <PrivateLayout /> : <PublicLayout />}
         >
           <Route index element={<Home />} />
+          {/* Déplacé SearchResults dans le layout conditionnel pour avoir le header approprié */}
+          <Route path="/search" element={<SearchResults />} />
         </Route>
 
         <Route path="/" element={<PublicLayout />}>
