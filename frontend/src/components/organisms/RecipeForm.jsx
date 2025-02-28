@@ -67,7 +67,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
               if (typeof recipeData.preparation_time === "object") {
                 prepTime = {
                   hours: recipeData.preparation_time.hours?.toString() || "0", // Initialiser à "0" si vide
-                  minutes: Math.max(1, Number(recipeData.preparation_time.minutes)).toString(), // Forcer un minimum de 1 minute
+                  minutes: Math.max(0, Number(recipeData.preparation_time.minutes)).toString(), // Forcer un minimum de 1 minute
                 };
               }
               // Si preparation_time est une chaîne JSON
@@ -309,7 +309,15 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   // Soumettre le formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
+      const { hours, minutes } = recipe.preparation_time;
+    
+      if (Number(hours) === 0 && Number(minutes) === 0) {
+        setError("Le temps de préparation doit être d'au moins 1 minute.");
+        setTimeout(() => setError(null), 3000); // Cacher l'erreur après 3 secondes
+        return;
+      }
+    
     // Récupération des ingrédients avec les images correctes
     const enrichedIngredients = recipe.ingredients_and_quantities.map(
       (ing) => {
