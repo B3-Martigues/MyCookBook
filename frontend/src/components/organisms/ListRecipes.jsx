@@ -49,7 +49,7 @@ const ListRecipes = () => {
   return (
     <div>
       <h1>Recettes</h1>
-      <div>
+      <div className="main-container">
         {currentRecipes.map((recipe) => (
           <div
             className="img-container"
