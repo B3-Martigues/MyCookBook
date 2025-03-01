@@ -12,7 +12,6 @@ const RecipeSchema = new mongoose.Schema({
 
   picture: {
     type: String,
-    required: true,
   },
   name: {
     type: String,

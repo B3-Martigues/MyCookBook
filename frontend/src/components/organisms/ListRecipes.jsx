@@ -1,6 +1,6 @@
 // Importation des Hooks et des fichiers
 import { useState, useEffect } from "react";
-import {getAllRecipes} from "../../api/recipesApi";
+import { getAllRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
@@ -49,7 +49,7 @@ const ListRecipes = () => {
   return (
     <div>
       <h1>Recettes</h1>
-      <div>
+      <div className="main-container">
         {currentRecipes.map((recipe) => (
           <div
             className="img-container"
@@ -58,7 +58,11 @@ const ListRecipes = () => {
           >
             <img
               className="img-items"
-              src={`http://localhost:8080/${recipe.picture}`}
+              src={
+                recipe.picture
+                  ? `http://localhost:8080/${recipe.picture}`
+                  : "/images/placeholder.jpg"
+              }
               alt={recipe.name}
             />
             <h3>{recipe.name}</h3>
