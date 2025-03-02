@@ -16,7 +16,7 @@ router.post("/logout", AuthController.logout);
 
 // Routes pour le profil
 router.get("/get-profile", verifyToken, UserController.getUserProfile);
-router.update("/update-profile", verifyToken, UserController.updateUserProfile);
+router.put("/update-profile", verifyToken, UserController.updateUserProfile);
 router.delete("/delete-profile", verifyToken, UserController.deleteUserProfile);
 
 // Routes pour les recettes
