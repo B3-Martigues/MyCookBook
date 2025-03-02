@@ -2,22 +2,33 @@
 const router = require("express").Router();
 const AuthController = require("../controllers/AuthController");
 const RecipeController = require("../controllers/RecipeController");
+const UserController = require("../controllers/UserController");
 const upload = require("../middlewares/upload");
 const verifyToken = require("../middlewares/verifyToken");
 
 // Section dédiée à la définition des routes
+
+// Routes pour l'autorisation et l'authentification
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 router.post("/refresh-token", AuthController.refreshToken);
 router.post("/logout", AuthController.logout);
 
+// Routes pour le profil
+router.get("/get-profile", verifyToken, UserController.getUserProfile);
+router.update("/update-profile", verifyToken, UserController.updateUserProfile);
+router.delete("/delete-profile", verifyToken, UserController.deleteUserProfile);
+
 // Routes pour les recettes
 router.get("/recipes", RecipeController.getAllRecipes);
 router.get("/recipes/:id", RecipeController.getRecipeById);
 router.get("/user-recipes", verifyToken, RecipeController.getUserRecipes);
-router.put("/recipes/:id", verifyToken, upload.single("picture"), RecipeController.updateRecipe);
-
-
+router.put(
+  "/recipes/:id",
+  verifyToken,
+  upload.single("picture"),
+  RecipeController.updateRecipe
+);
 
 router.post(
   "/add-recipe",
