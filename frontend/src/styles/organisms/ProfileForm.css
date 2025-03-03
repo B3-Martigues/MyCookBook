@@ -1,0 +1,11 @@
+.profile-form {
+  display: flex;
+  justify-content: center;
+}
+.profile-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
+}

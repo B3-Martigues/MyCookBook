@@ -10,6 +10,7 @@ import PublicLayout from "../layout/PublicLayout";
 import PrivateRoute from "../utils/PrivateRoute";
 import MyRecipes from "../components/pages/MyRecipes";
 import useAuthStore from "../store/AuthStore";
+import Profile from "../components/pages/Profile";
 
 // Ce composant gère toutes les routes d'application
 // Unlogged et ProtectedRoute sont destinés à la gestion de l'affichage( layout ),
@@ -39,6 +40,7 @@ const Router = () => {
             path="/my-recipes"
             element={<PrivateRoute element={MyRecipes} />}
           />
+          <Route path="/profile" element={<PrivateRoute element={Profile} />} />
         </Route>
 
         {/* L'exemple d'utilisation de PrivateRoute */}

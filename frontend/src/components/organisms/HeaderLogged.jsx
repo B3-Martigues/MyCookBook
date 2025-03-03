@@ -22,7 +22,7 @@ const HeaderLogged = () => {
             <Link to="/favorits">Mes favoris</Link>
           </li>
           <li>
-            <Link to="/profil">Profil</Link>
+            <Link to="/profile">Profil</Link>
           </li>
           <div className="search-bar">
             <input

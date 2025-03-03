@@ -19,7 +19,8 @@ class UserController {
       });
     } catch (error) {
       res.status(500).json({
-        error: "Erreur serveur",
+        error: "Erreur interne du serveur",
+        error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
       });
     }
   };
@@ -54,16 +55,15 @@ class UserController {
           error: "Utilisateur non trouvé",
         });
       }
-      res
-        .status(200)
-        .json({
-          success: "Mis à jour réussi",
-          user: updatedUser,
-        })
-        .select("-password"); // Le mot de passe ne sera pas afficher dans l'input
+      updatedUser.password = undefined; // Le mot de passe ne sera pas afficher dans l'input
+      res.status(200).json({
+        success: "Mis à jour réussi",
+        user: updatedUser,
+      });
     } catch (error) {
       res.status(500).json({
-        error: "Erreur serveur",
+        error: "Erreur interne du serveur",
+        error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
       });
     }
   };
@@ -83,7 +83,8 @@ class UserController {
       });
     } catch (error) {
       res.status(500).json({
-        error: "Erreur serveur",
+        error: "Erreur interne du serveur",
+        error: err.message, //Détails de l'erreur pour aider au diagnostic dans le développement
       });
     }
   };
