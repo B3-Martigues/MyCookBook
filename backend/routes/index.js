@@ -1,6 +1,7 @@
 // Importation du router Express et des contrôleurs nécessaires
 const router = require("express").Router();
 const AuthController = require("../controllers/AuthController");
+const FavoriteController = require("../controllers/FavoriteController");
 const RecipeController = require("../controllers/RecipeController");
 const UserController = require("../controllers/UserController");
 const upload = require("../middlewares/upload");
@@ -18,6 +19,19 @@ router.post("/logout", AuthController.logout);
 router.get("/get-profile", verifyToken, UserController.getUserProfile);
 router.put("/update-profile", verifyToken, UserController.updateUserProfile);
 router.delete("/delete-profile", verifyToken, UserController.deleteUserProfile);
+
+// Routes pour les favoris
+router.post(
+  "/add-favorites",
+  verifyToken,
+  FavoriteController.addFavoriteRecipe
+);
+router.get("/favorites", verifyToken, FavoriteController.getUserFavorites);
+router.delete(
+  "/recipes/:id",
+  verifyToken,
+  FavoriteController.deleteFavoriteRecipe
+);
 
 // Routes pour les recettes
 router.get("/recipes", RecipeController.getAllRecipes);
