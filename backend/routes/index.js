@@ -21,14 +21,10 @@ router.put("/update-profile", verifyToken, UserController.updateUserProfile);
 router.delete("/delete-profile", verifyToken, UserController.deleteUserProfile);
 
 // Routes pour les favoris
-router.post(
-  "/add-favorites",
-  verifyToken,
-  FavoriteController.addFavoriteRecipe
-);
+router.post("/add-favorite", verifyToken, FavoriteController.addFavoriteRecipe);
 router.get("/favorites", verifyToken, FavoriteController.getUserFavorites);
 router.delete(
-  "/recipes/:id",
+  "/delete-favorite",
   verifyToken,
   FavoriteController.deleteFavoriteRecipe
 );
