@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { getAllRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
 import ManageMyFavorites from "./ManageMyFavorites";
+import { getUserFavoriteRecipes } from "../../api/favoritesApi";
+import useAuthStore from "../../store/AuthStore";
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
   const [error, setError] = useState(null);
@@ -10,6 +12,8 @@ const ListRecipes = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [favorites, setFavorites] = useState([]);
+  const { isAuthenticated } = useAuthStore();
 
   const recipePerPage = 8;
 
@@ -33,8 +37,26 @@ const ListRecipes = () => {
     };
     fetchRecipes();
   }, []);
+  // Effet pour récupérer les recettes favoris lorsque l'utilisateur est authentifié
+  useEffect(() => {
+    if (isAuthenticated) {
+      const fetchFavorites = async () => {
+        try {
+          const response = await getUserFavoriteRecipes();
+          if (response.error) {
+            setError(response.error);
+            return;
+          }
+          setFavorites(response.favorites);
+        } catch (err) {
+          setError(err.message);
+        }
+      };
+      fetchFavorites();
+    }
+  }, [isAuthenticated]);
 
-  // Affichage du message de chargement si les données ne sont pas encore récupérées
+  // Affichage d'un message de chargement tant que les données ne sont pas disponibles
   if (loading) return <div>Chargement...</div>;
   // Affichage du message d'erreur en cas de problème
   if (error) return <div>Erreur: {error}</div>;
@@ -52,18 +74,17 @@ const ListRecipes = () => {
       <h1>Recettes</h1>
       <div className="main-container">
         {currentRecipes.map((recipe) => (
-          <div
-            className="img-container"
-            key={recipe._id}
-            onClick={() => setSelectedRecipe(recipe)}
-          >
+          <div className="img-container" key={recipe._id}>
             {/* Gestion des favoris avec un bouton d'action */}
-            <div>
-              <ManageMyFavorites recipeId={recipe._id} />
-            </div>
-
+            <ManageMyFavorites
+              // Les props permettent l'echange des données
+              recipeId={recipe._id}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
             <img
               className="img-items"
+              onClick={() => setSelectedRecipe(recipe)}
               src={
                 recipe.picture
                   ? `http://localhost:8080/${recipe.picture}`
@@ -98,6 +119,8 @@ const ListRecipes = () => {
         <DetailsRecipe
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
+          favorites={favorites}
+          setFavorites={setFavorites}
         />
       )}
     </div>

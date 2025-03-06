@@ -59,7 +59,7 @@ const Profile = () => {
       try {
         const apiResponse = await updateUserProfile(values); // Récupération des donneés du backend
         if (apiResponse.error) {
-          setErrorMessage(`Une erreur est survenu : "${apiResponse.error}`);
+          setErrorMessage(apiResponse.error);
           return;
         } else {
           toast("Le profil mis à jour avec succès !");

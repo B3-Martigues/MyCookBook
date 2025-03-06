@@ -151,3 +151,7 @@ hr {
 li {
   list-style: none;
 }
+
+.detail-fav-btn {
+  font-size: 40px!important;
+}

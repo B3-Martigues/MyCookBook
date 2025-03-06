@@ -52,7 +52,7 @@ const MyFavorites = () => {
         <div className="favorites-container">
           {favorites.map((recipe) => (
             <div
-              className="img-container"
+              className="image-container"
               key={recipe._id}
               onClick={() => setSelectedRecipe(recipe)}
             >
@@ -86,6 +86,8 @@ const MyFavorites = () => {
         <DetailsRecipe
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
+          favorites={favorites}
+          setFavorites={setFavorites}
         />
       )}
     </div>

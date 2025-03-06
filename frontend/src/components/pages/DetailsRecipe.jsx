@@ -16,7 +16,7 @@ import ManageMyFavorites from "../organisms/ManageMyFavorites";
 Modal.setAppElement("#root");
 
 // Le composant DetailsRecipe permet d'afficher les détails des recettes dans le modal
-const DetailsRecipe = ({ recipe, onClose }) => {
+const DetailsRecipe = ({ recipe, onClose, favorites, setFavorites }) => {
   const [ingredientsData, setIngredientsData] = useState(null);
 
   // Hook useEffect récupère les données des ingrédients au chargement du composant
@@ -106,8 +106,14 @@ const DetailsRecipe = ({ recipe, onClose }) => {
               Durée de la préparation
             </Tooltip>
           </div>
-          {/* Gestion des favoris avec un bouton d'action */}
-          <ManageMyFavorites recipeId={recipe._id} />
+          <div className="detail-fav-btn">
+            {/* Gestion des favoris avec un bouton d'action */}
+            <ManageMyFavorites
+              recipeId={recipe._id}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
+          </div>
 
           <hr />
           {/* Ingrédients */}
