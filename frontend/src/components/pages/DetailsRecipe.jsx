@@ -10,6 +10,7 @@ import {
 import { Tooltip } from "react-tooltip";
 import "../../styles/pages/DetailsRecipe.css";
 import { useState, useEffect } from "react";
+import ManageMyFavorites from "../organisms/ManageMyFavorites";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
@@ -46,6 +47,7 @@ const DetailsRecipe = ({ recipe, onClose }) => {
         <div className="modal-children">
           {/* Affichage des information sur la recette courante */}
           <h2>{recipe.name}</h2>
+
           <img
             className="modal-img"
             src={
@@ -55,6 +57,7 @@ const DetailsRecipe = ({ recipe, onClose }) => {
             } //L'image est stockée dans le backend
             alt={recipe.name}
           />
+
           <div className="description-container">
             {/* Catégorie */}
             <div>
@@ -103,6 +106,9 @@ const DetailsRecipe = ({ recipe, onClose }) => {
               Durée de la préparation
             </Tooltip>
           </div>
+          {/* Gestion des favoris avec un bouton d'action */}
+          <ManageMyFavorites recipeId={recipe._id} />
+
           <hr />
           {/* Ingrédients */}
           <div className="ingredients-container">

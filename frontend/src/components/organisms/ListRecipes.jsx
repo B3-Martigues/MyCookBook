@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { getAllRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
+import ManageMyFavorites from "./ManageMyFavorites";
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
   const [error, setError] = useState(null);
@@ -56,6 +57,11 @@ const ListRecipes = () => {
             key={recipe._id}
             onClick={() => setSelectedRecipe(recipe)}
           >
+            {/* Gestion des favoris avec un bouton d'action */}
+            <div>
+              <ManageMyFavorites recipeId={recipe._id} />
+            </div>
+
             <img
               className="img-items"
               src={

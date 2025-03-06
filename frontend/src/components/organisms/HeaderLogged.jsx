@@ -19,7 +19,7 @@ const HeaderLogged = () => {
             <Link to="/my-recipes">Mes recettes</Link>
           </li>
           <li>
-            <Link to="/favorits">Mes favoris</Link>
+            <Link to="/my-favorites">Mes favoris</Link>
           </li>
           <li>
             <Link to="/profile">Profil</Link>

@@ -1,1 +1,8 @@
 /* Styles for ManageMyFavorites component */
+.favorite-button {
+  position: relative;
+  font-size: 20px;
+  border-radius: 10%;
+  align-items: center;
+  left: 40%;
+}
