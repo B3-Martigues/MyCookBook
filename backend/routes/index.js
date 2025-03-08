@@ -4,6 +4,7 @@ const AuthController = require("../controllers/AuthController");
 const FavoriteController = require("../controllers/FavoriteController");
 const RecipeController = require("../controllers/RecipeController");
 const UserController = require("../controllers/UserController");
+const RatingController = require("../controllers/RatingController");
 const upload = require("../middlewares/upload");
 const verifyToken = require("../middlewares/verifyToken");
 
@@ -49,6 +50,9 @@ router.post(
 
 // Nouvelle route pour supprimer une recette
 router.delete("/recipes/:id", verifyToken, RecipeController.deleteRecipe);
+
+// Routes pour la gestion des notes des recettes
+router.post("/add-rating", verifyToken, RatingController.addRecipe);
 
 // Exportation du routeur pour l'utiliser dans le fichier server.js
 module.exports = router;

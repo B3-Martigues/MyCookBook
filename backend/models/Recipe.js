@@ -80,6 +80,10 @@ const RecipeSchema = new mongoose.Schema({
     type: Date,
     default: Date.now, // Date par défaut
   },
+  average_rating: {
+    type: Number,
+    default: 0,
+  }
 });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

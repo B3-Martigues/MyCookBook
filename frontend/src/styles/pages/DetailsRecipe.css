@@ -148,10 +148,11 @@
 
 .img-ingredient {
   width: 70px;
-  height: auto;
-  border: 2px solid rgb(67, 190, 102);
-  border-radius: 10px;
+  height: 60px;
+  border: 1px solid rgb(151, 236, 175);
+  border-radius: 6px;
   margin-right: 20px;
+  padding: 0 20px;
 }
 li {
   list-style: none;
