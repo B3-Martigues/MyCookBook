@@ -84,6 +84,13 @@
   width: auto;
 }
 
+.item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 15px;
+}
+
 .steps-container {
   display: flex;
   justify-content: center;
@@ -139,19 +146,17 @@
   background-color: rgb(67, 190, 102) !important;
 }
 
-hr {
-  width: 70%;
-  color: #cbf4d6;
-}
-
 .img-ingredient {
-  width: 100px;
+  width: 70px;
   height: auto;
+  border: 2px solid rgb(67, 190, 102);
+  border-radius: 10px;
+  margin-right: 20px;
 }
 li {
   list-style: none;
 }
 
 .detail-fav-btn {
-  font-size: 40px!important;
+  font-size: 40px !important;
 }

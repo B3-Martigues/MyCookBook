@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   addRecipeToFavorites,
   deleteFavoriteRecipe,
@@ -14,10 +14,13 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
   // Récupère l'état de l'authentification de l'utilisateur depuis le store
   const { isAuthenticated } = useAuthStore();
   // État pour vérifier si la recette est dans les favoris
-  const [isFavorite, setIsFavorite] = useState(
-    favorites.some((fav) => fav._id === recipeId)
-  );
+  const [isFavorite, setIsFavorite] = useState(false);
   const [error, setError] = useState(null);
+
+  // useEffect permet de mettre à jour l'état du favori lorsqu'une recette est ajoutée ou supprimée
+  useEffect(() => {
+    setIsFavorite(favorites.some((fav) => fav._id === recipeId));
+  }, [recipeId, favorites]);
 
   // Fonction pour ajouter et supprimer une recette des favoris
   const toggleFavorite = async () => {
