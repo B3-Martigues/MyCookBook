@@ -13,8 +13,8 @@ const addRating = async (recipeId, rating) => {
 };
 
 // Cette requête permet de récupérer les notes existantes
-const getRatings = async (recipeId) => {
-  const request = await fetch(`http://localhost:8080/ratings/${recipeId}`, {
+const getRatings = async () => {
+  const request = await fetch("http://localhost:8080/ratings", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   });

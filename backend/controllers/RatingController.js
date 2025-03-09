@@ -54,19 +54,25 @@ class RatingController {
       });
     }
   };
-  // La gestion de la récupération des notes
+  // Gestion de la récupération des moyennes de notes pour tout les recettes
   static getRatings = async (req, res) => {
-    const { recipeId } = req.params; // Récupérer l'ID depuis l'URL
     try {
-      const recipe = await Recipe.findById(recipeId, "average_rating"); // Récupérer uniquement la moyenne des notes
-      if (!recipe) {
+      // Récupération des recettes avec leurs ID et leur moyenne de notes
+      const recipes = await Recipe.find({}, "_id average_rating");
+      if (!recipes || recipes.length === 0) {
         return res.status(404).json({
-          error: "Cette recette n'existe pas ou n'a pas encore des notes",
+          error: "Aucune recette trouvée ou aucune note disponible ",
         });
       }
+      // Création d'une map {recipe_id : average_rating}
+      const ratingsMap = recipes.reduce((acc, recipe) => {
+        acc[recipe._id] = recipe.average_rating ?? 0;
+        return acc;
+      }, {}); // Un objet vide préparer pour les données
+
       res.status(200).json({
         success: true,
-        averageRating: recipe.average_rating,
+        ratings: ratingsMap, // Envoi un objet contenant les moyennes des recettes {recipe_id : moyenne}
       });
     } catch (err) {
       return res.status(500).json({
