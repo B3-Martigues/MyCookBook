@@ -53,6 +53,7 @@ router.delete("/recipes/:id", verifyToken, RecipeController.deleteRecipe);
 
 // Routes pour la gestion des notes des recettes
 router.post("/add-rating", verifyToken, RatingController.addRecipe);
+router.get("/ratings/:recipeId", RatingController.getRatings);
 
 // Exportation du routeur pour l'utiliser dans le fichier server.js
 module.exports = router;
