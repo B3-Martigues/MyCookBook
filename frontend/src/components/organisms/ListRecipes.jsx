@@ -4,7 +4,10 @@ import { getAllRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
 import ManageMyFavorites from "./ManageMyFavorites";
 import { getUserFavoriteRecipes } from "../../api/favoritesApi";
+import { getRatings } from "../../api/ratingApi";
 import useAuthStore from "../../store/AuthStore";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
   const [error, setError] = useState(null);
@@ -14,6 +17,7 @@ const ListRecipes = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const { isAuthenticated } = useAuthStore();
+  const [ratingsData, setRatingsData] = useState({});
 
   const recipePerPage = 8;
 
@@ -37,6 +41,7 @@ const ListRecipes = () => {
     };
     fetchRecipes();
   }, []);
+
   // Effet pour récupérer les recettes favoris lorsque l'utilisateur est authentifié
   useEffect(() => {
     if (isAuthenticated) {
@@ -55,6 +60,42 @@ const ListRecipes = () => {
       fetchFavorites();
     }
   }, [isAuthenticated]);
+
+  // Récupération des notes et des IDs des toutes les recettes au chargement du composant
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const response = await getRatings();
+        if (response.error) {
+          console.error(response.error);
+          return;
+        }
+        setRatingsData(response.ratings);
+      } catch (err) {
+        console.error(
+          `Une erreur est survenue lors du chargement des notes: ${err}`
+        );
+      }
+    };
+    fetchRatings();
+  }, []);
+
+  // Calcul de la nombre des étoiles pour la note moyenne
+  const renderStars = (rating) => {
+    const fullStars = Math.round(rating);
+    return (
+      <div>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={`stars  ${star <= fullStars ? "green" : ""}`}
+          >
+            <FontAwesomeIcon icon={faStar} />
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   // Affichage d'un message de chargement tant que les données ne sont pas disponibles
   if (loading) return <div>Chargement...</div>;
@@ -75,6 +116,17 @@ const ListRecipes = () => {
       <div className="main-container">
         {currentRecipes.map((recipe) => (
           <div className="img-container" key={recipe._id}>
+            <div className="rating-label">
+              {ratingsData[recipe._id] ? (
+                <>
+                  {/* Affichage des étoiles selon la note moyenne */}
+                  {renderStars(ratingsData[recipe._id])}
+                  <span>{ratingsData[recipe._id].toFixed(1)}</span>
+                </>
+              ) : (
+                "Aucune note"
+              )}
+            </div>
             {/* Gestion des favoris avec un bouton d'action */}
             <ManageMyFavorites
               // Les props permettent l'echange des données

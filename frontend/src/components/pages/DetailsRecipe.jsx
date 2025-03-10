@@ -119,6 +119,7 @@ const DetailsRecipe = ({ recipe, onClose, favorites, setFavorites }) => {
                 Favoris: Ajouter/Retirer
               </Tooltip>
             </div>
+            {/* Gestion des notes */}
             <div>
               <Rating recipeId={recipe._id} />
             </div>

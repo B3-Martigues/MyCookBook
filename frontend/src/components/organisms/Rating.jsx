@@ -1,5 +1,5 @@
-import { getRatings, addRating } from "../../api/ratingApi";
-import { useState, useEffect } from "react";
+import { addRating } from "../../api/ratingApi";
+import { useState } from "react";
 import useAuthStore from "../../store/AuthStore";
 import { toast } from "react-toastify";
 import { Tooltip } from "react-tooltip";
@@ -12,25 +12,6 @@ const Rating = ({ recipeId }) => {
   const { isAuthenticated } = useAuthStore();
   const [hoverRating, setHoverRating] = useState(0); // Stocke la note temporaire lorsqu'on survole les étoiles
 
-  // Récupération des notes et des IDs des toutes les recettes au chargement du composant
-  useEffect(() => {
-    const fetchRatings = async () => {
-      try {
-        const response = await getRatings();
-        if (response.error) {
-          console.error(response.error);
-          return;
-        }
-        setRatingsData(response.ratings);
-      } catch (err) {
-        console.error(
-          `Une erreur est survenue lors du chargement des notes: ${err}`
-        );
-      }
-    };
-    fetchRatings();
-  }, []);
-
   // Mise à jour de la note sélectionné par l'utilisateur
   const handleRatingChange = (rating) => {
     setNewRating(rating);
@@ -39,8 +20,8 @@ const Rating = ({ recipeId }) => {
   // Envoi de la note au backend après confirmation
   const handleSubmitRating = async () => {
     try {
+      // Seul un utilisateur peut noter les recettes
       if (!isAuthenticated) {
-        // Seul un utilisateur peut noter les recettes
         toast("Vous devez être connecté pour noter une recette");
         return;
       }
@@ -50,10 +31,10 @@ const Rating = ({ recipeId }) => {
         toast("La note n'a pas été enregistrée");
         return;
       }
-      // Mise à jour des notes dans  l'état local
+      // Mise à jour des notes dans l'état local
       setRatingsData((prevRatings) => ({
         ...prevRatings,
-        [recipeId]: response.averageRatings,
+        [recipeId]: newRating,
       }));
       // Réinitialisation de la note sélectionnée
       setNewRating(0);
@@ -107,16 +88,6 @@ const Rating = ({ recipeId }) => {
       </div>
     </div>
   );
-
-  //         <h3></h3>
-  //         {/* {Object.entries(ratingsData).map(([id, rating]) => (
-  //           <div key={id}>
-  //             Recipe ID: {id} - Average Rating: {rating}
-  //           </div>
-  //         ))} */}
-  //       </div>
-  //     </div>
-  //   );
 };
 
 export default Rating;
