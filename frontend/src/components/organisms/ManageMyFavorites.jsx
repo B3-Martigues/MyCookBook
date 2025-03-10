@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faHeartCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/organisms/ManageMyFavorites.css";
 import useAuthStore from "../../store/AuthStore";
+import { Tooltip } from "react-tooltip";
 
 // Composant ManageMyFavorites permet d'ajouter et de supprimer des recettes des favoris en cliquant sur un bouton
 const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {

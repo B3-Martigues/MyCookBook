@@ -1,4 +1,4 @@
-const mongoose = require("../config.db");
+const mongoose = require("../config/db");
 //Definition du schéma
 const ratingSchema = new mongoose.Schema({
   // Référence à la collection "User"

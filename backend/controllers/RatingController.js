@@ -10,8 +10,8 @@ class RatingController {
     try {
       // Vérification dans la base de données si l'utilisateur a donné déjà une note pour cette recette
       let existingRating = await Rating.findOne({
-        recipe: recipeId,
-        user: userId,
+        recipe_id: recipeId,
+        user_id: userId,
       });
       // Si la note existe dans la base de données, la mise à jour de la note sera effectuée
       if (existingRating) {
@@ -20,14 +20,14 @@ class RatingController {
       } else {
         // Si l'utilisateur n'a pas encore noté cette recette, une nouvelle note sera enregistrée
         const newRating = new Rating({
-          user: userId,
-          recipe: recipeId,
+          user_id: userId,
+          recipe_id: recipeId,
           rating,
         });
         await newRating.save();
       }
       // Récupération des notes d'une recette
-      const ratings = await Rating.find({ recipe: recipeId });
+      const ratings = await Rating.find({ recipe_id: recipeId });
       // Calcul de la moyenne des notes si la recette en possède
       const averageRating =
         ratings.length > 0

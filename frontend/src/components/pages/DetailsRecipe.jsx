@@ -11,6 +11,7 @@ import { Tooltip } from "react-tooltip";
 import "../../styles/pages/DetailsRecipe.css";
 import { useState, useEffect } from "react";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
+import Rating from "../organisms/Rating";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
@@ -106,13 +107,21 @@ const DetailsRecipe = ({ recipe, onClose, favorites, setFavorites }) => {
               Durée de la préparation
             </Tooltip>
           </div>
-          <div className="detail-fav-btn">
-            {/* Gestion des favoris avec un bouton d'action */}
-            <ManageMyFavorites
-              recipeId={recipe._id}
-              favorites={favorites}
-              setFavorites={setFavorites}
-            />
+          <div className="fav-rating-container">
+            <div className="detail-fav-btn" data-tooltip-id="fav-tooltip">
+              {/* Gestion des favoris avec un bouton d'action */}
+              <ManageMyFavorites
+                recipeId={recipe._id}
+                favorites={favorites}
+                setFavorites={setFavorites}
+              />
+              <Tooltip id="fav-tooltip" place="bottom">
+                Favoris: Ajouter/Retirer
+              </Tooltip>
+            </div>
+            <div>
+              <Rating recipeId={recipe._id} />
+            </div>
           </div>
 
           <hr />

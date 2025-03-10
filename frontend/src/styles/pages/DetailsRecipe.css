@@ -33,6 +33,7 @@
   font-size: 18px;
   font-weight: lighter;
   color: rgb(6, 74, 74);
+  margin-top: 20px;
 }
 
 .description-container div {
@@ -45,6 +46,19 @@
 .icon {
   color: rgb(79, 214, 117);
   font-size: xx-large;
+}
+
+.fav-rating-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 250px;
+}
+#fav-tooltip {
+  font-size: medium;
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: lighter;
 }
 
 .ingredients-container {
@@ -156,8 +170,4 @@
 }
 li {
   list-style: none;
-}
-
-.detail-fav-btn {
-  font-size: 40px !important;
 }
