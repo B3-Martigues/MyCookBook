@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { searchRecipes } from "../../api/recipesApi";
+import DetailsRecipe from "./DetailsRecipe"; // Importation du composant DetailsRecipe
 import "../../styles/organisms/SearchResultRecipes.css";
 
 const SearchResults = () => {
@@ -8,7 +9,6 @@ const SearchResults = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [results, setResults] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     category: "",
@@ -16,7 +16,7 @@ const SearchResults = () => {
     cost: ""
   });
   const [sort, setSort] = useState({ name: 1 });
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // Nouvel état pour la recette sélectionnée
   
   // Référence pour contrôler le délai (debounce)
   const searchTimeoutRef = useRef(null);
@@ -47,40 +47,6 @@ const SearchResults = () => {
     }
   }, [location.search]);
 
-  // Fonction pour obtenir des suggestions d'autocomplétion
-  const getSuggestions = async (term) => {
-    if (term.length < 2) {
-      setSuggestions([]);
-      return;
-    }
-    
-    try {
-      const data = await searchRecipes(term, {}, { name: 1 });
-      
-      // Extraire des suggestions uniques basées sur les noms de recettes
-      const recipeSuggestions = data.recipes.map(recipe => recipe.name);
-      
-      // Extraire des suggestions uniques basées sur les ingrédients
-      const ingredientSuggestions = data.recipes
-        .flatMap(recipe => recipe.ingredients_and_quantities.map(ing => ing.name))
-        .filter((value, index, self) => self.indexOf(value) === index)
-        .map(ingredient => `Ingrédient: ${ingredient}`);
-      
-      // Combiner et limiter les suggestions
-      const combinedSuggestions = [...recipeSuggestions, ...ingredientSuggestions]
-        .filter(suggestion => 
-          suggestion.toLowerCase().includes(term.toLowerCase())
-        )
-        .slice(0, 8); // Limiter à 8 suggestions
-      
-      setSuggestions(combinedSuggestions);
-      setShowSuggestions(true);
-    } catch (err) {
-      console.error("Erreur lors de la récupération des suggestions:", err);
-      setSuggestions([]);
-    }
-  };
-
   // Gestionnaire pour le changement dans le champ de recherche
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -94,17 +60,8 @@ const SearchResults = () => {
     // Si la valeur est vide, on peut afficher les résultats vides immédiatement
     if (value.length === 0) {
       setResults([]);
-      setSuggestions([]);
       updateSearchParams({ q: "" });
       return;
-    }
-    
-    // Récupérer les suggestions immédiatement (autocomplétion)
-    if (value.length >= 2) {
-      getSuggestions(value);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
     }
     
     // Configurer un délai pour la recherche réelle (300ms)
@@ -128,7 +85,6 @@ const SearchResults = () => {
       setResults([]);
     } finally {
       setLoading(false);
-      setShowSuggestions(false);
     }
   };
 
@@ -152,20 +108,7 @@ const SearchResults = () => {
   // Le formulaire est toujours là pour permettre la soumission manuelle si nécessaire
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    setShowSuggestions(false);
     updateSearchParams({ q: searchTerm });
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    let term = suggestion;
-    // Si c'est un ingrédient, extraire le nom de l'ingrédient
-    if (suggestion.startsWith('Ingrédient: ')) {
-      term = suggestion.replace('Ingrédient: ', '');
-    }
-    
-    setSearchTerm(term);
-    setShowSuggestions(false);
-    updateSearchParams({ q: term });
   };
 
   const handleFilterChange = (filterName, value) => {
@@ -176,60 +119,61 @@ const SearchResults = () => {
     const field = e.target.value;
     updateSearchParams({ sort: field, order: "1" });
   };
-  
-  // Gestionnaire pour fermer les suggestions quand on clique ailleurs
-  const handleClickOutside = () => {
-    setShowSuggestions(false);
+
+  // Fonction pour gérer l'ouverture de la modale
+  const openModal = (recipe) => {
+    setSelectedRecipe(recipe);
+  };
+
+  // Fonction pour gérer la fermeture de la modale
+  const closeModal = () => {
+    setSelectedRecipe(null);
+  };
+
+  // Fonction pour générer le texte des filtres actifs
+  const getActiveFiltersText = () => {
+    const activeFilters = [];
+    
+    if (filters.category) activeFilters.push(`Catégorie: ${filters.category}`);
+    if (filters.difficulty) activeFilters.push(`Difficulté: ${filters.difficulty}`);
+    if (filters.cost) activeFilters.push(`Coût: ${filters.cost}`);
+    
+    return activeFilters.length > 0 ? ` (${activeFilters.join(', ')})` : '';
   };
 
   return (
     <div className="search-results-page">
-      {/* Barre de recherche avec autocomplétion */}
-      <div className="search-container" style={{ position: 'relative' }}>
+      {/* Barre de recherche simple sans autocomplétion */}
+      <div className="search-container">
         <form onSubmit={handleSearchSubmit} className="search-form">
           <input
             type="text"
             placeholder="Rechercher une recette ou un ingrédient"
             value={searchTerm}
             onChange={handleSearchChange}
-            onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
           />
           <button type="submit">Rechercher</button>
         </form>
-        
-        {/* Liste de suggestions */}
-        {showSuggestions && suggestions.length > 0 && (
-          <ul className="suggestions-list" style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            width: '100%',
-            maxHeight: '250px',
-            overflowY: 'auto',
-            background: 'white',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-            zIndex: 10,
-            listStyle: 'none',
-            padding: '0',
-            margin: '0',
-            borderRadius: '0 0 4px 4px'
-          }}>
-            {suggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                onClick={() => handleSuggestionClick(suggestion)}
-                style={{
-                  padding: '10px 15px',
-                  borderBottom: '1px solid #eee',
-                  cursor: 'pointer'
-                }}
-              >
-                {suggestion}
-              </li>
-            ))}
-          </ul>
-        )}
       </div>
+
+      {/* Affichage du terme de recherche en cours */}
+      {searchTerm && (
+        <div className="current-search-term" style={{
+          margin: '20px 0',
+          padding: '10px 15px',
+          backgroundColor: '#7fb584',
+          borderRadius: '4px',
+          borderLeft: '4px solidrgb(70, 180, 92)',
+          fontSize: '16px',
+          fontWeight: 'bold'
+        }}>
+          Résultats pour : <span style={{ color: 'white' }}>{searchTerm}</span>
+          {getActiveFiltersText()}
+          <div style={{ fontSize: '14px', fontWeight: 'normal', marginTop: '5px' }}>
+            {results.length > 0 ? `${results.length} recette(s) trouvée(s)` : 'Aucune recette trouvée'}
+          </div>
+        </div>
+      )}
 
       {/* Outils de filtre et tri */}
       <div className="filters-and-sort">
@@ -299,7 +243,12 @@ const SearchResults = () => {
       <div className="results-container">
         {results.length > 0 ? (
           results.map((recipe) => (
-            <div key={recipe._id} className="result-item">
+            <div 
+              key={recipe._id} 
+              className="result-item"
+              onClick={() => openModal(recipe)} // Ajout de l'événement de clic pour ouvrir la modale
+              style={{ cursor: 'pointer' }} // Ajout d'un style pour indiquer que c'est cliquable
+            >
               <img 
                 src={recipe.picture.startsWith('http') ? recipe.picture : `http://localhost:8080/${recipe.picture}`} 
                 alt={recipe.name} 
@@ -322,6 +271,9 @@ const SearchResults = () => {
           </p>
         )}
       </div>
+
+      {/* Ajout du composant DetailsRecipe uniquement lorsqu'une recette est sélectionnée */}
+      {selectedRecipe && <DetailsRecipe recipe={selectedRecipe} onClose={closeModal} />}
     </div>
   );
 };

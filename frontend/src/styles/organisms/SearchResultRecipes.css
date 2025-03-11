@@ -57,13 +57,14 @@
   width: 100% ;
 }
 
-/* Ajoutez ce code à votre fichier CSS (par exemple, SearchResultRecipes.css) */
 
 .suggestions-list {
+  display: flex;
+  flex-direction: column;
   position: absolute;
   top: 100%;
   left: 0;
-  width: 100%;
+  width: 60%;
   max-height: 250px;
   overflow-y: auto;
   background: white;
@@ -73,12 +74,16 @@
   padding: 0;
   margin: 0;
   border-radius: 0 0 4px 4px;
+  gap: 0px !important;
 }
 
 .suggestions-list li {
   padding: 10px 15px;
   border-bottom: 1px solid #eee;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-start;
+  text-align: start;
 }
 
 .suggestions-list li:hover {
