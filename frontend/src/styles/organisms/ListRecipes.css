@@ -34,9 +34,6 @@ h1 {
 }
 
 .rating-label {
-  position: relative;
-  top: 25px;
-  left: 5px;
   display: flex;
   flex-direction: row;
 }
@@ -49,4 +46,14 @@ h1 {
 
 .stars.green {
   color: rgb(79, 214, 117);
+}
+.favorites-rating-container {
+  display: flex;
+  align-items: center;
+}
+
+.fav-list {
+  position: relative;
+  left: 150px;
+  top: 30px;
 }

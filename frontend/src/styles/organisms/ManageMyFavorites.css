@@ -1,11 +1,9 @@
 /* Styles for ManageMyFavorites component */
 .favorite-button {
-  position: relative;
+
   font-size: 20px;
   border-radius: 10%;
   border: 1px solid rgb(79, 214, 117);
-  color: rgb(79, 214, 117);
   align-items: center;
-  left: 42%;
-  top: 9%;
+
 }

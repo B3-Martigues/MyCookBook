@@ -17,7 +17,7 @@ const ListRecipes = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const { isAuthenticated } = useAuthStore();
-  const [ratingsData, setRatingsData] = useState({});
+  const [ratingsData, setRatingsData] = useState({}); // Objet contenant les notes moyennes des recettes sous forme {idRecette: noteMoyenne}
 
   const recipePerPage = 8;
 
@@ -116,24 +116,28 @@ const ListRecipes = () => {
       <div className="main-container">
         {currentRecipes.map((recipe) => (
           <div className="img-container" key={recipe._id}>
-            <div className="rating-label">
-              {ratingsData[recipe._id] ? (
-                <>
-                  {/* Affichage des étoiles selon la note moyenne */}
-                  {renderStars(ratingsData[recipe._id])}
-                  <span>{ratingsData[recipe._id].toFixed(1)}</span>
-                </>
-              ) : (
-                "Aucune note"
-              )}
+            <div className="favorites-rating-container">
+              <div className="rating-label">
+                {ratingsData[recipe._id] ? (
+                  <>
+                    {/* Affichage des étoiles selon la note moyenne */}
+                    {renderStars(ratingsData[recipe._id])}
+                    <span>{ratingsData[recipe._id].toFixed(1)}</span>
+                  </>
+                ) : (
+                  "Aucune note"
+                )}
+              </div>
+              {/* Gestion des favoris avec un bouton d'action */}
+              <div className="fav-list">
+                <ManageMyFavorites
+                  // Les props permettent l'echange des données
+                  recipeId={recipe._id}
+                  favorites={favorites}
+                  setFavorites={setFavorites}
+                />
+              </div>
             </div>
-            {/* Gestion des favoris avec un bouton d'action */}
-            <ManageMyFavorites
-              // Les props permettent l'echange des données
-              recipeId={recipe._id}
-              favorites={favorites}
-              setFavorites={setFavorites}
-            />
             <img
               className="img-items"
               onClick={() => setSelectedRecipe(recipe)}
@@ -173,6 +177,12 @@ const ListRecipes = () => {
           onClose={() => setSelectedRecipe(null)}
           favorites={favorites}
           setFavorites={setFavorites}
+          updateRating={(recipeId, newRating) => {
+            setRatingsData((prevRatings) => ({
+              ...prevRatings,
+              [recipeId]: newRating,
+            }));
+          }}
         />
       )}
     </div>

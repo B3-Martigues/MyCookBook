@@ -17,7 +17,13 @@ import Rating from "../organisms/Rating";
 Modal.setAppElement("#root");
 
 // Le composant DetailsRecipe permet d'afficher les détails des recettes dans le modal
-const DetailsRecipe = ({ recipe, onClose, favorites, setFavorites }) => {
+const DetailsRecipe = ({
+  recipe,
+  onClose,
+  favorites,
+  setFavorites,
+  updateRating,
+}) => {
   const [ingredientsData, setIngredientsData] = useState(null);
 
   // Hook useEffect récupère les données des ingrédients au chargement du composant
@@ -121,7 +127,7 @@ const DetailsRecipe = ({ recipe, onClose, favorites, setFavorites }) => {
             </div>
             {/* Gestion des notes */}
             <div>
-              <Rating recipeId={recipe._id} />
+              <Rating recipeId={recipe._id} updateRating={updateRating} />
             </div>
           </div>
 

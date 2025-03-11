@@ -6,8 +6,7 @@ import { Tooltip } from "react-tooltip";
 import "../../styles/organisms/Rating.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp, faStar } from "@fortawesome/free-solid-svg-icons";
-const Rating = ({ recipeId }) => {
-  const [ratingsData, setRatingsData] = useState({}); // Objet contenant les notes moyennes des recettes sous forme {idRecette: noteMoyenne}
+const Rating = ({ recipeId, updateRating }) => {
   const [newRating, setNewRating] = useState(0); // Stocke la note sélectionnée avant validation
   const { isAuthenticated } = useAuthStore();
   const [hoverRating, setHoverRating] = useState(0); // Stocke la note temporaire lorsqu'on survole les étoiles
@@ -22,7 +21,10 @@ const Rating = ({ recipeId }) => {
     try {
       // Seul un utilisateur peut noter les recettes
       if (!isAuthenticated) {
-        toast("Vous devez être connecté pour noter une recette");
+        toast("Vous devez être connecté pour noter une recette", {
+          position: "top-center",
+          autoClose: 2000,
+        });
         return;
       }
       const response = await addRating(recipeId, newRating);
@@ -32,10 +34,7 @@ const Rating = ({ recipeId }) => {
         return;
       }
       // Mise à jour des notes dans l'état local
-      setRatingsData((prevRatings) => ({
-        ...prevRatings,
-        [recipeId]: newRating,
-      }));
+      updateRating(recipeId, response.averageRating);
       // Réinitialisation de la note sélectionnée
       setNewRating(0);
       toast("Votre note a été enregistrée !");
