@@ -57,3 +57,46 @@
   width: 100% ;
 }
 
+/* Ajoutez ce code à votre fichier CSS (par exemple, SearchResultRecipes.css) */
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 250px;
+  overflow-y: auto;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 0 0 4px 4px;
+}
+
+.suggestions-list li {
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.suggestions-list li:hover {
+  background-color: #f5f5f5;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none;
+}
+
+/* Distinction visuelle pour les ingrédients */
+.suggestions-list li[data-type="ingredient"] {
+  font-style: italic;
+  color: #666;
+}
+
+/* Mise en évidence du texte correspondant à la recherche */
+.highlight {
+  font-weight: bold;
+  color: #0066cc;
+}

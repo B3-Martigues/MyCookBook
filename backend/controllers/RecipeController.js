@@ -157,12 +157,20 @@ static updateRecipe = async (req, res) => {
   static searchRecipes = async (req, res) => {
     try {
       const { query, filters, sort } = req.body;
-
+  
       // Construire la requête de recherche
-      const searchQuery = query
-        ? { name: { $regex: query, $options: "i" } }
-        : {};
-
+      let searchQuery = {};
+      if (query) {
+        searchQuery = {
+          $or: [
+            // Recherche sur le nom de la recette
+            { name: { $regex: query, $options: "i" } },
+            // Recherche sur les ingrédients (dans le tableau ingredients_and_quantities)
+            { "ingredients_and_quantities.name": { $regex: query, $options: "i" } }
+          ]
+        };
+      }
+  
       // Construire la requête de filtre
       let filterQuery = {};
       if (filters) {
@@ -173,23 +181,26 @@ static updateRecipe = async (req, res) => {
         if (filters.difficulty && filters.difficulty !== "") {
           filterQuery.difficulty = filters.difficulty;
         }
-        // Ajouter d'autres filtres au besoin
+        if (filters.cost && filters.cost !== "") {
+          filterQuery.cost = filters.cost;
+        }
+        // Vous pouvez ajouter d'autres filtres ici au besoin
       }
-
+  
       // Combiner les requêtes
       const finalQuery = {
         ...searchQuery,
         ...filterQuery
       };
-
+  
       console.log("Requête de recherche:", finalQuery);
       console.log("Tri:", sort || { name: 1 });
-
+  
       // Exécuter la requête avec les filtres et le tri
       const recipes = await Recipe.find(finalQuery).sort(sort || { name: 1 });
-
+  
       console.log(`${recipes.length} recettes trouvées`);
-
+  
       res.status(200).json({ 
         success: true, 
         recipes,
@@ -265,7 +276,7 @@ static updateRecipe = async (req, res) => {
       const user_id = req.user.id;
 
       // Gestion de l'image
-      const picture = req.file ? `img/recipes/${req.file.filename}` : "img/recipes/default.jpg";
+      const picture = req.file ? `img/recipes/${req.file.filename}` : "";
 
       // Création et sauvegarde de la recette
       const newRecipe = new Recipe({
