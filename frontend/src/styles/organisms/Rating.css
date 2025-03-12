@@ -1,1 +1,36 @@
 /* Styles for Rating component */
+
+.star {
+  cursor: pointer;
+  font-size: 22px;
+  transition: color 0.2s;
+  color: rgb(226, 219, 219);
+}
+.star.green {
+  color: rgb(79, 214, 117);
+}
+
+.rating {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#rating-tooltip {
+  font-size: medium;
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: lighter;
+}
+.thumb-icon {
+  margin-left: 10%;
+  font-size: 25px;
+}
+.thumb-icon:hover {
+  transform: scale(1.1);
+}
+#thumb-tooltip {
+  font-size: medium;
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: lighter;
+}

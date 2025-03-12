@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import "../../styles/organisms/RegisterForm.css";
-const RegisterForm = ({ formik }) => (
+const RegisterForm = ({ formik, errorMessage }) => (
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de saisir ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
   <form onSubmit={formik.handleSubmit}>
@@ -67,8 +67,9 @@ const RegisterForm = ({ formik }) => (
         <div className="error">{formik.errors.repeatPassword}</div>
       ) : null}
     </label>
-
+    {/* Affichage des erreurs du formik et du backend */}
     {formik.errors.api && <div>{formik.errors.api}</div>}
+    {errorMessage && <div className="error-message">{errorMessage}</div>}
     <button className="login-btn" type="submit" disabled={formik.isSubmitting}>
       S'inscrire
     </button>

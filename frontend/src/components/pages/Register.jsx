@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuthStore from "../../store/AuthStore";
 import "../../styles/pages/Register.css";
+import { useState } from "react";
 
 const Register = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   // Récupération de la fonction login depuis le 'AuthStore' pour mettre à jour l'état de connexion après l'inscription
   const login = useAuthStore((state) => state.login);
@@ -31,7 +33,7 @@ const Register = () => {
           navigate("/");
           //Si une erreur survient, l'utilisateur est informé des erreurs et reste sur la page d'inscription
         } else if (apiResponse.error) {
-          setErrors({ email: apiResponse.error });
+          setErrorMessage(apiResponse.error);
         }
       } catch (error) {
         console.error("Erreur capturée: ", error);
@@ -40,7 +42,7 @@ const Register = () => {
     },
   });
   //Retourne le formulaire d'inscription avec le prop du formik
-  return <RegisterForm formik={formik} />;
+  return <RegisterForm formik={formik} errorMessage={errorMessage} />;
 };
 
 export default Register;

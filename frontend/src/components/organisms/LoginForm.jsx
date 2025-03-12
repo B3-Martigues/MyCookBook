@@ -6,7 +6,7 @@ import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 //Crée des champs du formulaire permettant à utilisateur de saisir ses données de connexion
 //Formik suit les résultats des inputs dynamiquement et informe l'utilisateur en cas d'erreurs.
-const LoginForm = ({ formik }) => {
+const LoginForm = ({ formik, errorMessage }) => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <h1>Se connecter</h1>
@@ -39,7 +39,9 @@ const LoginForm = ({ formik }) => {
           <div className="error">{formik.errors.password}</div>
         ) : null}
       </label>
+      {/* Affichage des erreurs du formik et du backend */}
       {formik.errors.api && <div className="error">{formik.errors.api}</div>}
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <button
         className="login-btn"
         type="submit"

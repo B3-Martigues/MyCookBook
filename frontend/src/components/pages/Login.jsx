@@ -6,8 +6,10 @@ import LoginUser from "../../api/loginApi";
 import LoginForm from "../organisms/LoginForm";
 import useAuthStore from "../../store/AuthStore";
 import "../../styles/pages/Login.css";
+import { useState } from "react";
 
 const Login = () => {
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
   // Récupération de la fonction login depuis le 'AuthStore' pour mettre à jour l'état de connexion après la connexion
   const login = useAuthStore((state) => state.login);
@@ -34,7 +36,7 @@ const Login = () => {
           navigate("/");
           //Si la connexion est échouée, l'utilisateur est informé des erreurs et reste sur la page de connexion
         } else if (apiResponse.error) {
-          setErrors({ error: apiResponse.error });
+          setErrorMessage(apiResponse.error);
         }
       } catch (error) {
         console.error("Erreur capturée:", error);
@@ -43,7 +45,12 @@ const Login = () => {
     },
   });
   //Retourne le formulaire de connexion avec le prop du formik
-  return <LoginForm formik={formik} />;
+  return (
+    <>
+      
+      <LoginForm formik={formik} errorMessage={errorMessage} />
+    </>
+  );
 };
 
 export default Login;
