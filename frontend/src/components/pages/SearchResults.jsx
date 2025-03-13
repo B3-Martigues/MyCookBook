@@ -72,6 +72,32 @@ const SearchResults = () => {
     }, 300);
   };
 
+  // Fonction pour convertir la difficulté en valeur numérique pour le tri
+  const getDifficultyValue = (difficulty) => {
+    switch(difficulty) {
+      case "Facile": return 1;
+      case "Moyen": return 2;
+      case "Difficile": return 3;
+      default: return 0;
+    }
+  };
+
+  // Fonction pour convertir le coût en valeur numérique pour le tri
+  const getCostValue = (cost) => {
+    switch(cost) {
+      case "Faible": return 1;
+      case "Moyen": return 2;
+      case "Élevé": return 3;
+      default: return 0;
+    }
+  };
+
+  // Fonction pour obtenir le texte de direction du tri
+  const getSortDirectionText = () => {
+    const order = parseInt(Object.values(sort)[0]);
+    return order === 1 ? "croissant" : "décroissant";
+  };
+
   // Fonction pour effectuer la recherche
   const performSearch = async (term, filterOptions, sortOptions) => {
     setLoading(true);
@@ -79,7 +105,38 @@ const SearchResults = () => {
       console.log("Recherche avec:", { term, filterOptions, sortOptions });
       const data = await searchRecipes(term, filterOptions, sortOptions);
       console.log("Données reçues:", data);
-      setResults(data.recipes || []);
+      
+      // Récupérer les recettes
+      let sortedRecipes = data.recipes || [];
+      
+      // Trier les recettes côté client selon le champ et l'ordre de tri
+      const sortField = Object.keys(sortOptions)[0];
+      const sortOrder = sortOptions[sortField];
+      
+      if (sortField === "difficulty") {
+        // Tri spécial pour la difficulté
+        sortedRecipes = sortedRecipes.sort((a, b) => {
+          const valueA = getDifficultyValue(a.difficulty);
+          const valueB = getDifficultyValue(b.difficulty);
+          return sortOrder * (valueA - valueB);
+        });
+      } else if (sortField === "cost") {
+        // Tri spécial pour le coût
+        sortedRecipes = sortedRecipes.sort((a, b) => {
+          const valueA = getCostValue(a.cost);
+          const valueB = getCostValue(b.cost);
+          return sortOrder * (valueA - valueB);
+        });
+      } else {
+        // Tri standard pour les autres champs (comme le nom)
+        sortedRecipes = sortedRecipes.sort((a, b) => {
+          const valueA = a[sortField]?.toLowerCase() || "";
+          const valueB = b[sortField]?.toLowerCase() || "";
+          return sortOrder * valueA.localeCompare(valueB);
+        });
+      }
+      
+      setResults(sortedRecipes);
     } catch (err) {
       console.error("Erreur de recherche:", err);
       setResults([]);
@@ -105,6 +162,17 @@ const SearchResults = () => {
     navigate(`/search?${queryParams.toString()}`);
   };
 
+  // Modification de la gestion des changements de tri
+  const handleSortChange = (e) => {
+    const field = e.target.value;
+    const currentOrder = sort[field] || 1;
+    // Si on change de champ de tri, on réinitialise à l'ordre ascendant
+    // Si on reste sur le même champ, on inverse l'ordre
+    const newOrder = field === Object.keys(sort)[0] ? currentOrder * -1 : 1;
+    
+    updateSearchParams({ sort: field, order: newOrder.toString() });
+  };
+
   // Le formulaire est toujours là pour permettre la soumission manuelle si nécessaire
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -115,9 +183,11 @@ const SearchResults = () => {
     updateSearchParams({ [filterName]: value });
   };
 
-  const handleSortChange = (e) => {
-    const field = e.target.value;
-    updateSearchParams({ sort: field, order: "1" });
+  // Fonction pour inverser l'ordre de tri actuel
+  const toggleSortDirection = () => {
+    const field = Object.keys(sort)[0];
+    const currentOrder = sort[field];
+    updateSearchParams({ order: (currentOrder * -1).toString() });
   };
 
   // Fonction pour gérer l'ouverture de la modale
@@ -223,17 +293,35 @@ const SearchResults = () => {
           </select>
         </label>
 
-        <label>
-          Trier par :
-          <select 
-            value={Object.keys(sort)[0]}
-            onChange={handleSortChange}
-          >
-            <option value="name">Nom</option>
-            <option value="difficulty">Difficulté</option>
-            <option value="cost">Coût</option>
-          </select>
-        </label>
+        <div className="sort-container" style={{ display: 'flex', alignItems: 'center' }}>
+          <label>
+            Trier par :
+            <select 
+              value={Object.keys(sort)[0]}
+              onChange={handleSortChange}
+            >
+              <option value="name">Nom</option>
+              <option value="difficulty">Difficulté</option>
+              <option value="cost">Coût</option>
+            </select>
+          </label>
+          <div className="sort-direction" style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
+            <span>{getSortDirectionText()}</span>
+            <button 
+              type="button" 
+              onClick={toggleSortDirection}
+              style={{ 
+                marginLeft: '5px', 
+                border: 'none', 
+                background: 'none', 
+                cursor: 'pointer',
+                fontSize: '18px'
+              }}
+            >
+              {parseInt(Object.values(sort)[0]) === 1 ? '↑' : '↓'}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* État de chargement */}
