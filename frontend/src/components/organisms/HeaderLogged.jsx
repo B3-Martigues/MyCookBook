@@ -12,19 +12,21 @@ const HeaderLogged = () => {
   return (
     <header>
       <nav className="header-container">
-        <h2 className="logo">MyCookBook</h2>
         <ul>
           <li>
-            <Link to="/">Accueil</Link>
+            <Link to="/">
+              {" "}
+              <h2 className="logo">MyCookBook</h2>
+            </Link>
           </li>
           <li>
             <Link to="/my-recipes">Mes recettes</Link>
           </li>
           <li>
-            <Link to="/favorits">Mes favoris</Link>
+            <Link to="/my-favorites">Mes favoris</Link>
           </li>
           <li>
-            <Link to="/profil">Profil</Link>
+            <Link to="/profile">Profil</Link>
           </li>
           {!isSearchPage && <SearchBar />}
           <li data-tooltip-id="signout-tooltip">

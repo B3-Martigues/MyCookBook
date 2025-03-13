@@ -10,6 +10,8 @@ import PublicLayout from "../layout/PublicLayout";
 import PrivateRoute from "../utils/PrivateRoute";
 import MyRecipes from "../components/pages/MyRecipes";
 import useAuthStore from "../store/AuthStore";
+import Profile from "../components/pages/Profile";
+import MyFavorites from "../components/pages/MyFavorites";
 import SearchResults from "../components/pages/SearchResults";
 
 // Ce composant gère toutes les routes d'application
@@ -41,6 +43,11 @@ const Router = () => {
           <Route
             path="/my-recipes"
             element={<PrivateRoute element={MyRecipes} />}
+          />
+          <Route path="/profile" element={<PrivateRoute element={Profile} />} />
+          <Route
+            path="/my-favorites"
+            element={<PrivateRoute element={MyFavorites} />}
           />
         </Route>
 
