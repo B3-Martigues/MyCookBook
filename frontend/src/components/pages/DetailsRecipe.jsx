@@ -52,7 +52,7 @@ const DetailsRecipe = ({
     <Modal isOpen={!!recipe} onRequestClose={onClose}>
       <div className="modal-container">
         <div className="modal-children">
-          {/* Affichage des information sur la recette courante */}
+          {/* Affichage des information sur la recette courante */}²
           <h2>{recipe.name}</h2>
 
           <img

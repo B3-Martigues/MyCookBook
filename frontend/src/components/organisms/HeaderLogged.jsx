@@ -10,10 +10,12 @@ const HeaderLogged = () => {
   return (
     <header>
       <nav className="header-container">
-        <h2 className="logo">MyCookBook</h2>
         <ul>
           <li>
-            <Link to="/">Accueil</Link>
+            <Link to="/">
+              {" "}
+              <h2 className="logo">MyCookBook</h2>
+            </Link>
           </li>
           <li>
             <Link to="/my-recipes">Mes recettes</Link>

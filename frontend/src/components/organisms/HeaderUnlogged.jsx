@@ -10,10 +10,12 @@ const HeaderUnlogged = () => {
   return (
     <header>
       <nav className="header-container2">
-        <h2 className="logo">MyCookBook</h2>
         <ul>
           <li>
-            <Link to="/">Accueil</Link>
+            <Link to="/">
+              {" "}
+              <h2 className="logo">MyCookBook</h2>
+            </Link>
           </li>
         </ul>
 
