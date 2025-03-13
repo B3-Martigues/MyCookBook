@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faHeartCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/organisms/ManageMyFavorites.css";
 import useAuthStore from "../../store/AuthStore";
-import { Tooltip } from "react-tooltip";
+import { toast } from "react-toastify";
 
 // Composant ManageMyFavorites permet d'ajouter et de supprimer des recettes des favoris en cliquant sur un bouton
 const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
@@ -32,11 +32,13 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
         await deleteFavoriteRecipe(recipeId);
         setFavorites((prev) => prev.filter((fav) => fav._id !== recipeId));
         setIsFavorite(false);
+        toast("Reccete supprimée des favoris");
       } else {
         // Si la recette n'est pas dans les favoris, on l'ajoute
         await addRecipeToFavorites(recipeId);
         setFavorites((prev) => [...prev, { _id: recipeId }]); // Ajoute un nouvel objet à la liste des favoris
         setIsFavorite(true);
+        toast("Recette ajoutée aux favoris");
       }
     } catch (err) {
       setError(`Une erreur est survenue: ${err.message}`);
