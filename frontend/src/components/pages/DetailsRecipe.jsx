@@ -12,6 +12,7 @@ import "../../styles/pages/DetailsRecipe.css";
 import { useState, useEffect } from "react";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
 import Rating from "../organisms/Rating";
+import Comment from "../organisms/Comment";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
@@ -23,6 +24,8 @@ const DetailsRecipe = ({
   favorites,
   setFavorites,
   updateRating,
+  isAuthenticated,
+  currentUser,
 }) => {
   const [ingredientsData, setIngredientsData] = useState(null);
 
@@ -52,7 +55,7 @@ const DetailsRecipe = ({
     <Modal isOpen={!!recipe} onRequestClose={onClose}>
       <div className="modal-container">
         <div className="modal-children">
-          {/* Affichage des information sur la recette courante */}²
+          {/* Affichage des information sur la recette courante */}
           <h2>{recipe.name}</h2>
 
           <img
@@ -178,6 +181,15 @@ const DetailsRecipe = ({
               ))}
             </ol>
           </div>
+          
+          <hr />
+          {/* Commentaires */}
+          <Comment 
+            recipeId={recipe._id} 
+            isAuthenticated={isAuthenticated} 
+            currentUser={currentUser} 
+          />
+          
           <button className="closing-button" onClick={onClose}>
             Fermer
           </button>
