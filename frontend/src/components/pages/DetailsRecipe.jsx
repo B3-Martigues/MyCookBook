@@ -9,23 +9,62 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import "../../styles/pages/DetailsRecipe.css";
+import { useState, useEffect } from "react";
+import ManageMyFavorites from "../organisms/ManageMyFavorites";
+import Rating from "../organisms/Rating";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
 
-const DetailsRecipe = ({ recipe, onClose }) => {
+// Le composant DetailsRecipe permet d'afficher les détails des recettes dans le modal
+const DetailsRecipe = ({
+  recipe,
+  onClose,
+  favorites,
+  setFavorites,
+  updateRating,
+}) => {
+  const [ingredientsData, setIngredientsData] = useState(null);
+
+  // Hook useEffect récupère les données des ingrédients au chargement du composant
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      try {
+        const response = await fetch("/ingredients.json"); // Contient les noms et les URLs des images des ingredients
+        if (!response.ok) {
+          throw new Error("Le fichier n'a pas été rétrouvé");
+        }
+        const data = await response.json();
+        setIngredientsData(data);
+      } catch (error) {
+        console.error("Erreur lors de la récuperation des données", error);
+        setIngredientsData([]); // Définit une valeur par défaut en cas d'erreur
+      }
+    };
+    fetchIngredients();
+  }, []);
+
+  if (!ingredientsData) {
+    return <div>Chargement...</div>;
+  }
   return (
     // L'ouverture du modal selon la valeur du booléen, et sa fermeture après une actions spécifique de l'utilisateur
     <Modal isOpen={!!recipe} onRequestClose={onClose}>
       <div className="modal-container">
         <div className="modal-children">
-          {/* Affichage des information sur la recette courante */}
+          {/* Affichage des information sur la recette courante */}²
           <h2>{recipe.name}</h2>
+
           <img
             className="modal-img"
-            src={`http://localhost:8080/${recipe.picture}`} //L'image est stockée dans le backend
+            src={
+              recipe.picture
+                ? `http://localhost:8080/${recipe.picture}`
+                : "/images/placeholder.jpg"
+            } //L'image est stockée dans le backend
             alt={recipe.name}
           />
+
           <div className="description-container">
             {/* Catégorie */}
             <div>
@@ -74,20 +113,48 @@ const DetailsRecipe = ({ recipe, onClose }) => {
               Durée de la préparation
             </Tooltip>
           </div>
+          <div className="fav-rating-container">
+            <div className="detail-fav-btn" data-tooltip-id="fav-tooltip">
+              {/* Gestion des favoris avec un bouton d'action */}
+              <ManageMyFavorites
+                recipeId={recipe._id}
+                favorites={favorites}
+                setFavorites={setFavorites}
+              />
+              <Tooltip id="fav-tooltip" place="bottom">
+                Favoris: Ajouter/Retirer
+              </Tooltip>
+            </div>
+            {/* Gestion des notes */}
+            <div>
+              <Rating recipeId={recipe._id} updateRating={updateRating} />
+            </div>
+          </div>
+
           <hr />
           {/* Ingrédients */}
           <div className="ingredients-container">
             <h4>Ingrédients: </h4>
             <ul>
               {recipe.ingredients_and_quantities.map((ingredient) => {
-                const imgUrl = `/images/${ingredient.name.toLowerCase()}.jpg`;
-                const defaultImage = "images/default.jpg";
+                const defaultImage = "images/placeholder.jpg"; // Image par défaut si l'image de l'ingrédient n'est pas trouvée
+                //  Recherche des données de l'ingrédient dans les données chargées
+                const ingredientData = ingredientsData.find(
+                  (item) =>
+                    item.name.toLowerCase() === ingredient.name.toLowerCase()
+                );
+                // Si les données de l'ingrédient existent, utilise l'image associée; sinon, utilise l'image par défaut
+                const ingredientImageUrl = ingredientData
+                  ? ingredientData.image
+                  : defaultImage;
+
                 return (
                   <li key={ingredient._id}>
                     <div className="item-container">
+                      {/* Affichage de l'image de l'ingrédient */}
                       <img
                         className="img-ingredient"
-                        src={imgUrl}
+                        src={ingredientImageUrl}
                         onError={(e) => (e.target.src = defaultImage)}
                         alt={ingredient.name}
                       />

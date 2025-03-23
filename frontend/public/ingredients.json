@@ -104,6 +104,10 @@
     "image": "/images/cacao.jpg"
   },
   {
+    "name": "Café",
+    "image": "/images/café.jpg"
+  },
+  {
     "name": "Calamar",
     "image": "/images/calamar.jpg"
   },
@@ -298,6 +302,10 @@
   {
     "name": "Feta",
     "image": "/images/feta.jpg"
+  },
+  {
+    "name": "Feuilles de lasagne",
+    "image": "/images/feuilles_de_lasagne.jpg"
   },
   {
     "name": "Figue",
@@ -536,6 +544,10 @@
     "image": "/images/muscade.jpg"
   },
   {
+    "name": "Myrtilles",
+    "image": "/images/myrtilles.jpg"
+  },
+  {
     "name": "Noisettes",
     "image": "/images/noisettes.jpg"
   },
@@ -636,6 +648,10 @@
     "image": "/images/patate_douce.jpg"
   },
   {
+    "name": "Pâte à pizza",
+    "image": "/images/pâte_à_pizza.jpg"
+  },
+  {
     "name": "Penne",
     "image": "/images/penne.jpg"
   },
@@ -708,6 +724,10 @@
     "image": "/images/pruneau.jpg"
   },
   {
+    "name": "Purée de pomme de terre",
+    "image": "/images/purée_de_pommes_de_terre.jpg"
+  },
+  {
     "name": "Purée de tomate",
     "image": "/images/purée_de_tomate.png"
   },
@@ -722,6 +742,10 @@
   {
     "name": "Pêche",
     "image": "/images/pêche.jpg"
+  },
+  {
+    "name": "Quinoa",
+    "image": "/images/quinoa.jpg"
   },
   {
     "name": "Raclette",
@@ -830,6 +854,10 @@
   {
     "name": "Tomates cerises",
     "image": "/images/tomates_cerises.jpg"
+  },
+  {
+    "name": "Tomates concassées",
+    "image": "/images/tomates_concassées.jpg"
   },
   {
     "name": "Tomates pelées",

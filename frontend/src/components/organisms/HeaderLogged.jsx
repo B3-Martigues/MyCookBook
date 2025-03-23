@@ -1,44 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/organisms/HeaderLogged.css";
 import { Tooltip } from "react-tooltip";
-import { useState } from "react";
+import "../../styles/organisms/HeaderLogged.css";
 import Logout from "./Logout";
+import SearchBar from "./SearchBar";
+
 const HeaderLogged = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const isSearchPage = location.pathname === "/search";
+
   return (
     <header>
       <nav className="header-container">
-        <h2 className="logo">MyCookBook</h2>
         <ul>
           <li>
-            <Link to="/">Accueil</Link>
+            <Link to="/">
+              {" "}
+              <h2 className="logo">MyCookBook</h2>
+            </Link>
           </li>
           <li>
             <Link to="/my-recipes">Mes recettes</Link>
           </li>
           <li>
-            <Link to="/favorits">Mes favoris</Link>
+            <Link to="/my-favorites">Mes favoris</Link>
           </li>
           <li>
-            <Link to="/profil">Profil</Link>
+            <Link to="/profile">Profil</Link>
           </li>
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Rechercher une recette"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button>
-              <FontAwesomeIcon icon={faSearch} />
-            </button>
-          </div>
+          {!isSearchPage && <SearchBar />}
           <li data-tooltip-id="signout-tooltip">
             <Link>
               <Logout />
-
               <Tooltip id="signout-tooltip" place="bottom">
                 Déconnexion
               </Tooltip>
@@ -49,4 +42,5 @@ const HeaderLogged = () => {
     </header>
   );
 };
+
 export default HeaderLogged;

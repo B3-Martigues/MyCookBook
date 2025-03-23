@@ -39,6 +39,9 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
           }
         }
       }
+    } else {
+      // Réinitialiser les champs si on n'est pas en mode édition
+      resetForm();
     }
   }, [editingIngredient]);
 
@@ -65,6 +68,15 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
+  
+    // Ne pas afficher les suggestions si on est en mode édition
+    if (!isEditing) {
+      setSuggestions(
+        value ? ingredients.filter((ing) =>
+          ing.name.toLowerCase().includes(value.toLowerCase())
+        ) : []
+      );
+    }
 
     // Filtre les ingrédients en fonction de la recherche
     setSuggestions(
@@ -99,10 +111,21 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
     setUnitSuggestions([]); // Vide les suggestions après sélection
   };
 
+  // Réinitialiser le formulaire
+  const resetForm = () => {
+    setInputValue("");
+    setQuantity("");
+    setUnit("");
+    setIsEditing(false);
+    setEditIndex(null);
+    setSuggestions([]); // Vider les suggestions
+    setUnitSuggestions([]); // Vider les suggestions d'unités
+  };
+
   // Ajout ou mise à jour d'un ingrédient
   const handleAdd = () => {
-    console.log("Ajout local de l'ingrédient");
     if (inputValue && quantity) {
+      // Trouver l'ingrédient dans le fichier JSON pour récupérer l'image
       const existingIngredient = ingredients.find(
         (ing) => ing.name.toLowerCase() === inputValue.toLowerCase()
       );
@@ -113,29 +136,25 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
         quantity: `${quantity} ${pluralUnit}`.trim(),
         image: existingIngredient ? existingIngredient.image : "/images/placeholder.jpg",
       };
+      
+      // Si nous sommes en mode édition, ajouter l'index
+      if (isEditing && editIndex !== null) {
+        newIngredient.index = editIndex;
+      }
   
       onAddIngredient(newIngredient); // Callback local uniquement
+      
+      // Réinitialiser le formulaire après l'ajout ou la modification
+      resetForm();
     }
   };
   
-  
-  
-
   // Annuler l'édition
   const handleCancel = () => {
     resetForm();
     if (onCancelEdit) {
       onCancelEdit();
     }
-  };
-
-  // Réinitialiser le formulaire
-  const resetForm = () => {
-    setInputValue("");
-    setQuantity("");
-    setUnit("");
-    setIsEditing(false);
-    setEditIndex(null);
   };
 
   return (

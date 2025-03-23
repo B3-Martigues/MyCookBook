@@ -1,36 +1,29 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-// import "../../styles/organisms/Navbar.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignIn, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Link, useLocation } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/organisms/HeaderUnlogged.css";
+import SearchBar from "./SearchBar";
+
 const HeaderUnlogged = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const isSearchPage = location.pathname === "/search";
+
   return (
     <header>
       <nav className="header-container2">
-        <h2 className="logo">MyCookBook</h2>
         <ul>
           <li>
-            <Link to="/">Accueil</Link>
+            <Link to="/">
+              {" "}
+              <h2 className="logo">MyCookBook</h2>
+            </Link>
           </li>
         </ul>
-
-        <div className="search-bar2">
-          <input
-            type="text"
-            placeholder="Rechercher une recette"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </div>
+        {!isSearchPage && <SearchBar />}
         <ul>
           <li data-tooltip-id="signin-tooltip">
-            <Link to="/login ">
+            <Link to="/login">
               <FontAwesomeIcon icon={faSignIn} />
             </Link>
           </li>
@@ -42,4 +35,5 @@ const HeaderUnlogged = () => {
     </header>
   );
 };
+
 export default HeaderUnlogged;

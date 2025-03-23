@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CustomSelect from "../../utils/CustomSelect";
-import IngredientInput from "./IngredientInput"; 
+import IngredientInput from "./IngredientInput";
 import { addRecipe, getRecipeById, updateRecipe } from "../../api/recipesApi";
 import ingredients from "../../../public/ingredients.json";
 
@@ -19,13 +19,13 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
 
   // État pour stocker l'étape en cours d'ajout
   const [step, setStep] = useState("");
-  
+
   // État pour stocker l'ingrédient à éditer
   const [editingIngredient, setEditingIngredient] = useState(null);
-  
+
   // État pour stocker l'étape à éditer
   const [editingStepIndex, setEditingStepIndex] = useState(null);
-  
+
   // État pour stocker l'URL de l'image actuelle (pour l'affichage)
   const [currentImageUrl, setCurrentImageUrl] = useState("");
 
@@ -34,18 +34,21 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
 
   // État pour les erreurs éventuelles
   const [error, setError] = useState(null);
-  
+
   // État pour les messages de succès
   const [successMessage, setSuccessMessage] = useState(null);
-  
+
   // État pour indiquer si on est en train de charger les données
   const [loading, setLoading] = useState(recipeId !== null);
-  
+
   // État pour indiquer si on est en mode édition
   const [isEditing, setIsEditing] = useState(recipeId !== null);
 
-  // État pour stocker les ingredients avant application de la modification en db 
-  const [localIngredients, setLocalIngredients] = useState([]);
+  // État pour stocker l'url de la photo de la recette choisit
+  const [previewImageUrl, setPreviewImageUrl] = useState("");
+
+  // On n'utilise plus de localIngredients séparés, tous les ingrédients sont dans recipe.ingredients_and_quantities
+  // pour éviter la confusion et les problèmes de synchronisation
 
   // Charger la recette si on est en mode édition
   useEffect(() => {
@@ -55,76 +58,82 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           const response = await getRecipeById(recipeId);
           if (response.success) {
             const recipeData = response.recipe;
-            
+
             // Extraire les heures et minutes du temps de préparation
-            let prepTime = { hours: "", minutes: "" };
-            
+            let prepTime = { hours: "0", minutes: "1" }; // Initialiser à "0" heures et "1" minute par défaut
+
             if (recipeData.preparation_time) {
               // Si preparation_time est déjà un objet
-              if (typeof recipeData.preparation_time === 'object') {
+              if (typeof recipeData.preparation_time === "object") {
                 prepTime = {
-                  hours: recipeData.preparation_time.hours?.toString() || "",
-                  minutes: recipeData.preparation_time.minutes?.toString() || ""
+                  hours: recipeData.preparation_time.hours?.toString() || "0", // Initialiser à "0" si vide
+                  minutes: Math.max(0, Number(recipeData.preparation_time.minutes)).toString(), // Forcer un minimum de 1 minute
                 };
-              } 
+              }
               // Si preparation_time est une chaîne JSON
-              else if (typeof recipeData.preparation_time === 'string') {
+              else if (typeof recipeData.preparation_time === "string") {
                 try {
                   const parsedTime = JSON.parse(recipeData.preparation_time);
                   prepTime = {
-                    hours: parsedTime.hours?.toString() || "",
-                    minutes: parsedTime.minutes?.toString() || ""
+                    hours: parsedTime.hours?.toString() || "0", // Initialiser à "0" si vide
+                    minutes: Math.max(1, Number(parsedTime.minutes)).toString(), // Forcer un minimum de 1 minute
                   };
                 } catch (err) {
                   console.error("Erreur lors du parsing du temps de préparation:", err);
                 }
               }
             }
-            
+
             // Normaliser les étapes si nécessaire
             const normalizedSteps = recipeData.steps?.map((step, index) => {
               // Si step est un string, le convertir en objet
-              if (typeof step === 'string') {
+              if (typeof step === "string") {
                 return { description: step, step_number: index + 1 };
               }
               // Sinon, s'assurer que le step a un step_number
               return { ...step, step_number: step.step_number || index + 1 };
             }) || [];
 
-            // Formater correctement les ingrédients
-            const normalizedIngredients = recipeData.ingredients_and_quantities?.map(ing => {
+            // Normaliser les ingrédients en récupérant les images à partir du fichier JSON
+            const normalizedIngredients = recipeData.ingredients_and_quantities?.map((ing) => {
               // Si ing est un string, essayer de le parser
-              if (typeof ing === 'string') {
+              if (typeof ing === "string") {
                 try {
                   const parsedIngredient = JSON.parse(ing);
-                  // Si l'ingrédient parsé a une image, la conserver, sinon utiliser le placeholder
+                  // Trouver l'ingrédient dans le fichier JSON pour récupérer l'image
+                  const foundIngredient = ingredients.find(
+                    (i) => i.name.toLowerCase() === parsedIngredient.name.toLowerCase()
+                  );
                   return {
                     ...parsedIngredient,
-                    image: parsedIngredient.image || "/images/placeholder.jpg"
+                    image: foundIngredient ? foundIngredient.image : "/images/placeholder.jpg",
                   };
                 } catch (err) {
                   return { name: ing, quantity: "", image: "/images/placeholder.jpg" };
                 }
               }
-              // Si l'ingrédient est déjà un objet, conserver l'image existante ou utiliser le placeholder
+              // Si l'ingrédient est déjà un objet, trouver l'image dans le fichier JSON
+              const foundIngredient = ingredients.find(
+                (i) => i.name.toLowerCase() === ing.name.toLowerCase()
+              );
               return {
                 ...ing,
-                image: ing.image || "/images/placeholder.jpg"
+                image: foundIngredient ? foundIngredient.image : "/images/placeholder.jpg",
               };
             }) || [];
-            
+
             // Stocker l'URL de l'image si elle existe
             if (recipeData.picture_url) {
               setCurrentImageUrl(recipeData.picture_url);
             }
-            
+
             // Mettre à jour l'état de la recette
             setRecipe({
               ...recipeData,
               picture: "", // On garde ce champ vide pour l'input file
               preparation_time: prepTime,
               steps: normalizedSteps,
-              ingredients_and_quantities: normalizedIngredients
+              ingredients_and_quantities: normalizedIngredients,
             });
           } else {
             setError("Impossible de charger la recette");
@@ -136,7 +145,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           setLoading(false);
         }
       };
-      
+
       fetchRecipe();
     }
   }, [recipeId]);
@@ -153,25 +162,81 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
 
   // Ajouter ou mettre à jour un ingrédient dans la liste
   const addIngredient = (ingredient) => {
-    console.log("Ajout d'un ingrédient :", ingredient); // Log pour voir si ça se déclenche
     if (ingredient.name && ingredient.quantity) {
-      if (ingredient.index !== undefined) {
-        const updatedIngredients = [...localIngredients];
-        updatedIngredients[ingredient.index] = ingredient;
-        setLocalIngredients(updatedIngredients);
-      } else {
-        setLocalIngredients([...localIngredients, ingredient]);
+      // Vérifier si l'ingrédient existe déjà (en ignorant la casse)
+      const ingredientExists = recipe.ingredients_and_quantities.some(
+        (ing) => ing.name.toLowerCase() === ingredient.name.toLowerCase() && 
+                ingredient.index === undefined // Ignorer cette vérification si nous sommes en train d'éditer l'ingrédient
+      );
+      
+      if (ingredientExists) {
+        setError(`L'ingrédient "${ingredient.name}" est déjà dans la recette.`);
+        // Cacher l'erreur après 3 secondes
+        setTimeout(() => setError(null), 3000);
+        return;
       }
+  
+      if (ingredient.index !== undefined) {
+        // Mettre à jour un ingrédient existant
+        const updatedIngredients = [...recipe.ingredients_and_quantities];
+        updatedIngredients[ingredient.index] = {
+          name: ingredient.name,
+          quantity: ingredient.quantity,
+          image: ingredient.image || "/images/placeholder.jpg"
+        };
+        
+        setRecipe({
+          ...recipe,
+          ingredients_and_quantities: updatedIngredients
+        });
+  
+        // Informer le parent du changement d'ingrédient si nécessaire
+        if (onIngredientChange && typeof onIngredientChange === "function") {
+          onIngredientChange();
+        }
+      } else {
+        // Ajouter un nouvel ingrédient
+        setRecipe({
+          ...recipe,
+          ingredients_and_quantities: [...recipe.ingredients_and_quantities, {
+            name: ingredient.name,
+            quantity: ingredient.quantity,
+            image: ingredient.image || "/images/placeholder.jpg"
+          }]
+        });
+      }
+      
+      // Réinitialiser l'ingrédient en cours d'édition
+      setEditingIngredient(null);
     }
   };
-  
-  
 
   // Charger un ingrédient pour édition
   const loadIngredientForEdit = (index) => {
+    const ingredientToEdit = recipe.ingredients_and_quantities[index];
+    
+    // Extraire quantité et unité
+    let quantity = "";
+    let unit = "";
+    
+    if (ingredientToEdit.quantity) {
+      const parts = ingredientToEdit.quantity.trim().split(" ");
+      if (parts.length >= 1) {
+        quantity = parts[0];
+        if (parts.length > 1) {
+          unit = parts.slice(1).join(" ");
+        }
+      }
+    }
+    
+    // Créer l'objet d'édition avec toutes les informations nécessaires
     setEditingIngredient({
       index,
-      ...recipe.ingredients_and_quantities[index]
+      name: ingredientToEdit.name,
+      quantity: ingredientToEdit.quantity,
+      extractedQuantity: quantity,
+      extractedUnit: unit,
+      image: ingredientToEdit.image
     });
   };
 
@@ -182,19 +247,12 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
 
   // Supprimer un ingrédient de la liste
   const deleteIngredient = (index) => {
-    if (index < recipe.ingredients_and_quantities.length) {
-      // Supprimer un ingrédient de recipe.ingredients_and_quantities
-      setRecipe({
-        ...recipe,
-        ingredients_and_quantities: recipe.ingredients_and_quantities.filter(
-          (_, i) => i !== index
-        ),
-      });
-    } else {
-      // Supprimer un ingrédient de localIngredients
-      const localIndex = index - recipe.ingredients_and_quantities.length;
-      setLocalIngredients(localIngredients.filter((_, i) => i !== localIndex));
-    }
+    setRecipe({
+      ...recipe,
+      ingredients_and_quantities: recipe.ingredients_and_quantities.filter(
+        (_, i) => i !== index
+      )
+    });
   };
 
   // Ajouter une étape à la liste des étapes
@@ -203,16 +261,16 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
       if (editingStepIndex !== null) {
         // Si on édite une étape existante
         const updatedSteps = [...recipe.steps];
-        updatedSteps[editingStepIndex] = { 
-          description: step, 
-          step_number: editingStepIndex + 1 
+        updatedSteps[editingStepIndex] = {
+          description: step,
+          step_number: editingStepIndex + 1,
         };
-        
+
         setRecipe({
           ...recipe,
           steps: updatedSteps,
         });
-        
+
         setEditingStepIndex(null);
       } else {
         // Si on ajoute une nouvelle étape
@@ -225,7 +283,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           return { ...prevRecipe, steps: renumberedSteps };
         });
       }
-      
+
       setStep("");
     }
   };
@@ -241,7 +299,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
     const updatedSteps = recipe.steps
       .filter((_, i) => i !== index)
       .map((step, i) => ({ ...step, step_number: i + 1 }));
-      
+
     setRecipe({
       ...recipe,
       steps: updatedSteps,
@@ -251,39 +309,49 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   // Soumettre le formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Fusionner les ingrédients locaux avec ceux de la recette
-    const mergedIngredients = [
-      ...recipe.ingredients_and_quantities,
-      ...localIngredients,
-    ];
-  
+    
+      const { hours, minutes } = recipe.preparation_time;
+    
+      if (Number(hours) === 0 && Number(minutes) === 0) {
+        setError("Le temps de préparation doit être d'au moins 1 minute.");
+        setTimeout(() => setError(null), 3000); // Cacher l'erreur après 3 secondes
+        return;
+      }
+    
+    // Récupération des ingrédients avec les images correctes
+    const enrichedIngredients = recipe.ingredients_and_quantities.map(
+      (ing) => {
+        // Si l'ingrédient n'a pas d'image ou utilise le placeholder, essayer de trouver la bonne image
+        if (!ing.image || ing.image === "/images/placeholder.jpg") {
+          const foundIngredient = ingredients.find(
+            (i) => i.name.toLowerCase() === ing.name.toLowerCase()
+          );
+          return {
+            ...ing,
+            image: foundIngredient ? foundIngredient.image : "/images/placeholder.jpg",
+          };
+        }
+        return ing;
+      }
+    );
+
     // Création d'un objet FormData pour l'envoi
     const formData = new FormData();
     formData.append("name", recipe.name);
     formData.append("category", recipe.category);
     formData.append("difficulty", recipe.difficulty);
     formData.append("cost", recipe.cost);
-  
-    // Conversion des heures/minutes en nombres avant de les stringifier
-    const prepTime = {
-      hours: Number(recipe.preparation_time.hours) || 0,
-      minutes: Number(recipe.preparation_time.minutes) || 0,
-    };
-    formData.append("preparation_time", JSON.stringify(prepTime));
-  
-    // Convertir les tableaux en JSON
-    formData.append(
-      "ingredients_and_quantities",
-      JSON.stringify(mergedIngredients) // Utiliser les ingrédients fusionnés
-    );
+    formData.append("preparation_time", JSON.stringify({
+    hours: Number(recipe.preparation_time.hours) || 0, // Convertir en nombre ou initialiser à 0
+    minutes: Math.max(0, Number(recipe.preparation_time.minutes)), // Forcer un minimum de 1 minute
+    }));
+    formData.append("ingredients_and_quantities", JSON.stringify(enrichedIngredients));
     formData.append("steps", JSON.stringify(recipe.steps));
-  
-    // Ajouter l'image si elle existe
+
     if (recipe.picture) {
       formData.append("picture", recipe.picture);
     }
-  
+
     try {
       let response;
       if (isEditing) {
@@ -291,13 +359,18 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
       } else {
         response = await addRecipe(formData);
       }
-  
+
       if (response.success) {
         setSuccessMessage(
           isEditing ? "Recette mise à jour avec succès !" : "Recette ajoutée avec succès !"
         );
+        
+        // Récupérer la recette complète à partir de la réponse
+        const updatedRecipe = response.recipe;
+        
         if (onSuccess && typeof onSuccess === "function") {
-          onSuccess();
+          // Passer la recette mise à jour et un booléen indiquant s'il s'agit d'une édition
+          onSuccess(updatedRecipe, isEditing);
         } else {
           // Réinitialisation du formulaire en cas de succès
           setRecipe({
@@ -310,7 +383,6 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
             steps: [],
             ingredients_and_quantities: [],
           });
-          setLocalIngredients([]); // Réinitialiser les ingrédients locaux
           setCurrentImageUrl("");
           setError(null);
           setCurrentPage(1);
@@ -343,11 +415,11 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h1>{isEditing ? "Modifier la recette" : "Ajouter une recette"}</h1>
-      
+
       {/* Affichage des messages d'erreur ou de succès */}
       {error && <div className="error-message">{error}</div>}
       {successMessage && <div className="success-message">{successMessage}</div>}
-      
+
       {/* Première page du formulaire */}
       {currentPage === 1 && (
         <div>
@@ -404,65 +476,106 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           {/* Temps de préparation */}
           <h3>Temps de préparation</h3>
           <div className="prep-time">
-            <input
-              type="number"
-              name="hours"
-              placeholder="Heures"
-              value={recipe.preparation_time.hours}
-              onChange={(e) =>
+          {/* Champ des heures */}
+          <input
+            type="number"
+            name="hours"
+            placeholder="Heures"
+            value={recipe.preparation_time.hours === "0" ? "" : recipe.preparation_time.hours} // Afficher une chaîne vide si les heures sont à 0
+            onChange={(e) => {
+              const value = e.target.value;
+              setRecipe({
+                ...recipe,
+                preparation_time: {
+                  ...recipe.preparation_time,
+                  hours: value === "" ? "0" : value, // Garder "0" dans l'état interne si le champ est vide
+                },
+              });
+            }}
+            min="0" // Heures peuvent être 0
+            max="23"
+          />
+
+          {/* Champ des minutes */}
+          <input
+            type="number"
+            name="minutes"
+            placeholder="Minutes"
+            value={recipe.preparation_time.minutes === "0" ? "" : recipe.preparation_time.minutes}
+            onChange={(e) => {
+              const value = e.target.value;
+              const hours = Number(recipe.preparation_time.hours);
+              const minutes = Number(value);
+
+              if (hours > 0 && minutes < 1) {
                 setRecipe({
                   ...recipe,
                   preparation_time: {
                     ...recipe.preparation_time,
-                    hours: e.target.value,
+                    minutes: "0", // Mets les minutes à 0 si elles sont inférieures à 1 et les heures > 0
                   },
-                })
-              }
-              min="0"
-              max="23"
-            />
-            <input
-              type="number"
-              name="minutes"
-              placeholder="Minutes"
-              value={recipe.preparation_time.minutes}
-              onChange={(e) =>
+                });
+              } else {
                 setRecipe({
                   ...recipe,
                   preparation_time: {
                     ...recipe.preparation_time,
-                    minutes: e.target.value,
+                    minutes: value === "" ? "0" : value,
                   },
-                })
+                });
               }
-              min="0"
-              max="59"
-            />
-          </div>
-          
+            }}
+            min="0"
+            max="59"
+          />
+
+
+          {/* Avertissement visuel (optionnel) */}
+          <p style={{ color: "gray", fontSize: "0.8em", marginTop: "5px" }}>
+          </p>
+        </div>
+          <h3>Ajout d'une image {isEditing ? "(facultatif pour la modification)" : ""}</h3>
           {/* Affichage de l'image actuelle si elle existe */}
           {isEditing && currentImageUrl && (
             <div className="current-image">
               <h3>Image actuelle</h3>
-              <img 
-                src={currentImageUrl} 
-                alt="Image actuelle de la recette" 
+              <img
+                src={currentImageUrl}
+                alt="Image actuelle de la recette"
                 style={{ maxWidth: "200px", maxHeight: "200px" }}
               />
             </div>
           )}
-          
+
+          {/* Aperçu de l'image sélectionnée */}
+          {previewImageUrl && (
+            <div className="image-preview">
+              <img
+                src={previewImageUrl}
+                alt="Aperçu de l'image sélectionnée"
+                style={{ maxWidth: "200px", maxHeight: "200px", marginBottom: "10px" }}
+              />
+            </div>
+          )}
+
           {/* Ajout d'une image */}
           <input
             type="file"
             className="file-input"
             id="file"
             accept="image/*"
-            onChange={(e) =>
-              setRecipe({ ...recipe, picture: e.target.files[0] })
-            }
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                const imageUrl = URL.createObjectURL(file);
+                setPreviewImageUrl(imageUrl);
+                setRecipe({ ...recipe, picture: file });
+              } else {
+                setPreviewImageUrl("");
+                setRecipe({ ...recipe, picture: "" });
+              }
+            }}
           />
-          <h3>Ajout d'une image {isEditing ? "(facultatif pour la modification)" : ""}</h3>
           <label htmlFor="file" className="file-label">
             <i className="fas fa-camera"></i> Choisir un fichier
           </label>
@@ -478,39 +591,39 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
           <hr></hr>
         </div>
       )}
-      
+
       {/* Deuxième page du formulaire */}
       {currentPage === 2 && (
         <div className="form-page">
           <h3>Ingrédients</h3>
-          <IngredientInput 
-            onAddIngredient={addIngredient} 
+          <IngredientInput
+            onAddIngredient={addIngredient}
             editingIngredient={editingIngredient}
             onCancelEdit={cancelIngredientEdit}
           />
 
-        <div className="ingred-list">
-          <ul>
-            {[...recipe.ingredients_and_quantities, ...localIngredients].map((ingred, index) => (
-              <li key={index} className="ingredient-item">
-                <img
-                  src={ingred.image || "/images/placeholder.jpg"}
-                  alt={ingred.name}
-                  style={{ width: "50px", marginRight: "10px", objectFit: "cover", borderRadius: "5px" }}
-                />
-                <span>{ingred.name} - {ingred.quantity}</span>
-                <div>
-                  <button type="button" onClick={() => loadIngredientForEdit(index)}>
-                    &#9998;
-                  </button>
-                  <button type="button" onClick={() => deleteIngredient(index)}>
-                    &#x1F5D1;
-                  </button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+          <div className="ingred-list">
+            <ul>
+              {recipe.ingredients_and_quantities.map((ingred, index) => (
+                <li key={index} className="ingredient-item">
+                  <img
+                    src={ingred.image || "/images/placeholder.jpg"}
+                    alt={ingred.name}
+                    style={{ width: "50px", marginRight: "10px", objectFit: "cover", borderRadius: "5px" }}
+                  />
+                  <span>{ingred.name} - {ingred.quantity}</span>
+                  <div>
+                    <button type="button" onClick={() => loadIngredientForEdit(index)}>
+                      &#9998;
+                    </button>
+                    <button type="button" onClick={() => deleteIngredient(index)}>
+                      &#x1F5D1;
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
 
 
           <h3>Préparation</h3>

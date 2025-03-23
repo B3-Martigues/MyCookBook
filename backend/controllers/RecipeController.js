@@ -5,7 +5,7 @@ class RecipeController {
   // Méthode pour récupérer toutes les recettes
   static getAllRecipes = async (req, res) => {
     try {
-      const recipes = await Recipe.find();
+      const recipes = await Recipe.find().populate("user_id", "name");
       res.status(200).json({
         success: "Succès de la récupération des recettes",
         recipes,
@@ -18,89 +18,86 @@ class RecipeController {
     }
   };
 
+  static getRecipeById = async (req, res) => {
+    try {
+      const { id } = req.params; // Récupère l'ID depuis les paramètres de la requête
+      const recipe = await Recipe.findById(id); // Cherche la recette par son ID
 
-static getRecipeById = async (req, res) => {
-  try {
-    const { id } = req.params; // Récupère l'ID depuis les paramètres de la requête
-    const recipe = await Recipe.findById(id); // Cherche la recette par son ID
+      if (!recipe) {
+        return res.status(404).json({
+          error: "Recette non trouvée",
+        });
+      }
 
-    if (!recipe) {
-      return res.status(404).json({
-        error: "Recette non trouvée",
+      res.status(200).json({
+        success: true,
+        recipe, // Retourne la recette trouvée
+      });
+    } catch (err) {
+      console.error("Erreur lors de la récupération de la recette:", err);
+      res.status(500).json({
+        error: "Erreur serveur lors de la récupération de la recette",
+        details: err.message,
       });
     }
+  };
 
-    res.status(200).json({
-      success: true,
-      recipe, // Retourne la recette trouvée
-    });
-  } catch (err) {
-    console.error("Erreur lors de la récupération de la recette:", err);
-    res.status(500).json({
-      error: "Erreur serveur lors de la récupération de la recette",
-      details: err.message,
-    });
-  }
-};
+  // Méthode pour mettre à jour une recette
+  static updateRecipe = async (req, res) => {
+    try {
+      const { id } = req.params; // ID de la recette à mettre à jour
+      const user_id = req.user.id; // ID de l'utilisateur connecté
 
-// Méthode pour mettre à jour une recette
-static updateRecipe = async (req, res) => {
-  try {
-    const { id } = req.params; // ID de la recette à mettre à jour
-    const user_id = req.user.id; // ID de l'utilisateur connecté
+      // Vérifier que la recette existe et appartient à l'utilisateur
+      const recipe = await Recipe.findOne({ _id: id, user_id });
+      if (!recipe) {
+        return res.status(404).json({
+          error: "Recette non trouvée ou non autorisée",
+        });
+      }
 
-    // Vérifier que la recette existe et appartient à l'utilisateur
-    const recipe = await Recipe.findOne({ _id: id, user_id });
-    if (!recipe) {
-      return res.status(404).json({
-        error: "Recette non trouvée ou non autorisée",
+      // Mise à jour des champs de la recette
+      const {
+        name,
+        category,
+        difficulty,
+        cost,
+        preparation_time,
+        ingredients_and_quantities,
+        steps,
+      } = req.body;
+
+      recipe.name = name || recipe.name;
+      recipe.category = category || recipe.category;
+      recipe.difficulty = difficulty || recipe.difficulty;
+      recipe.cost = cost || recipe.cost;
+      recipe.preparation_time = preparation_time
+        ? JSON.parse(preparation_time)
+        : recipe.preparation_time;
+      recipe.ingredients_and_quantities = ingredients_and_quantities
+        ? JSON.parse(ingredients_and_quantities)
+        : recipe.ingredients_and_quantities;
+      recipe.steps = steps ? JSON.parse(steps) : recipe.steps;
+
+      // Si une nouvelle image est uploadée
+      if (req.file) {
+        recipe.picture = `img/recipes/${req.file.filename}`;
+      }
+
+      await recipe.save(); // Sauvegarder les changements dans la BDD
+
+      res.status(200).json({
+        success: true,
+        recipe,
+      });
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de la recette:", err);
+      res.status(500).json({
+        error: "Erreur serveur lors de la mise à jour de la recette",
+        details: err.message,
       });
     }
-
-    // Mise à jour des champs de la recette
-    const {
-      name,
-      category,
-      difficulty,
-      cost,
-      preparation_time,
-      ingredients_and_quantities,
-      steps,
-    } = req.body;
-
-    recipe.name = name || recipe.name;
-    recipe.category = category || recipe.category;
-    recipe.difficulty = difficulty || recipe.difficulty;
-    recipe.cost = cost || recipe.cost;
-    recipe.preparation_time = preparation_time
-      ? JSON.parse(preparation_time)
-      : recipe.preparation_time;
-    recipe.ingredients_and_quantities = ingredients_and_quantities
-      ? JSON.parse(ingredients_and_quantities)
-      : recipe.ingredients_and_quantities;
-    recipe.steps = steps ? JSON.parse(steps) : recipe.steps;
-
-    // Si une nouvelle image est uploadée
-    if (req.file) {
-      recipe.picture = `img/recipes/${req.file.filename}`;
-    }
-
-    await recipe.save(); // Sauvegarder les changements dans la BDD
-
-    res.status(200).json({
-      success: true,
-      recipe,
-    });
-  } catch (err) {
-    console.error("Erreur lors de la mise à jour de la recette:", err);
-    res.status(500).json({
-      error: "Erreur serveur lors de la mise à jour de la recette",
-      details: err.message,
-    });
-  }
-};
-
-
+  };
 
   // Méthode pour récupérer les recettes de l'utilisateur connecté
   static getUserRecipes = async (req, res) => {
@@ -128,19 +125,20 @@ static updateRecipe = async (req, res) => {
     try {
       const { id } = req.params; // ID de la recette à supprimer
       const user_id = req.user.id; // ID de l'utilisateur connecté
-  
+
       // Vérifier que la recette existe et appartient à l'utilisateur
       const recipe = await Recipe.findOne({ _id: id, user_id });
-  
+
       if (!recipe) {
         return res.status(404).json({
-          error: "Recette non trouvée ou vous n'êtes pas autorisé à la supprimer",
+          error:
+            "Recette non trouvée ou vous n'êtes pas autorisé à la supprimer",
         });
       }
-  
+
       // Supprimer la recette
       await Recipe.findByIdAndDelete(id);
-  
+
       res.status(200).json({
         success: "Recette supprimée avec succès",
       });
@@ -148,6 +146,69 @@ static updateRecipe = async (req, res) => {
       console.error("Erreur lors de la suppression de la recette:", err);
       res.status(500).json({
         error: "Erreur lors de la suppression de la recette",
+        details: err.message,
+      });
+    }
+  };
+
+  // Méthode pour rechercher des recettes avec filtre
+  static searchRecipes = async (req, res) => {
+    try {
+      const { query, filters, sort } = req.body;
+  
+      // Construire la requête de recherche
+      let searchQuery = {};
+      if (query) {
+        searchQuery = {
+          $or: [
+            // Recherche sur le nom de la recette
+            { name: { $regex: query, $options: "i" } },
+            // Recherche sur les ingrédients (dans le tableau ingredients_and_quantities)
+            { "ingredients_and_quantities.name": { $regex: query, $options: "i" } }
+          ]
+        };
+      }
+  
+      // Construire la requête de filtre
+      let filterQuery = {};
+      if (filters) {
+        // Ajouter uniquement les filtres qui ont une valeur
+        if (filters.category && filters.category !== "") {
+          filterQuery.category = filters.category;
+        }
+        if (filters.difficulty && filters.difficulty !== "") {
+          filterQuery.difficulty = filters.difficulty;
+        }
+        if (filters.cost && filters.cost !== "") {
+          filterQuery.cost = filters.cost;
+        }
+        // Vous pouvez ajouter d'autres filtres ici au besoin
+      }
+  
+      // Combiner les requêtes
+      const finalQuery = {
+        ...searchQuery,
+        ...filterQuery
+      };
+  
+      console.log("Requête de recherche:", finalQuery);
+      console.log("Tri:", sort || { name: 1 });
+  
+      // Exécuter la requête avec les filtres et le tri
+      const recipes = await Recipe.find(finalQuery).sort(sort || { name: 1 });
+  
+      console.log(`${recipes.length} recettes trouvées`);
+  
+      res.status(200).json({ 
+        success: true, 
+        recipes,
+        query: finalQuery,
+        sortUsed: sort || { name: 1 }
+      });
+    } catch (err) {
+      console.error("Erreur de recherche:", err);
+      res.status(500).json({
+        error: "Erreur lors de la recherche de recettes",
         details: err.message,
       });
     }
@@ -213,7 +274,7 @@ static updateRecipe = async (req, res) => {
       const user_id = req.user.id;
 
       // Gestion de l'image
-      const picture = req.file ? `img/recipes/${req.file.filename}` : "img/recipes/default.jpg";
+      const picture = req.file ? `img/recipes/${req.file.filename}` : "";
 
       // Création et sauvegarde de la recette
       const newRecipe = new Recipe({
