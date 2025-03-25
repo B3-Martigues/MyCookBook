@@ -15,12 +15,11 @@ form {
 
 input {
   padding: 10px;
-  margin-bottom: 20px;
   border-width: 1px;
   border-color: rgb(79, 214, 117);
   background-color: rgb(250, 250, 250);
   border-style: solid;
-  border-radius: 3px;
+  border-radius: 6px;
   text-align: center;
   font-size: medium !important;
   font-style: inherit;

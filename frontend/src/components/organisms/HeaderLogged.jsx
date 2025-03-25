@@ -1,46 +1,72 @@
+import { useState } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import "../../styles/organisms/HeaderLogged.css";
 import Logout from "./Logout";
 import SearchBar from "./SearchBar";
 
+/**
+ * Composant HeaderLogged
+ * Affiche la barre de navigation principale pour les utilisateurs connectés
+ * Inclut le logo, les liens de navigation, la barre de recherche et le bouton de déconnexion
+ */
 const HeaderLogged = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
-    <header>
+    <header className="main-header">
       <nav className="header-container">
-        <ul>
-          <li>
-            <Link to="/">
-              {" "}
-              <h2 className="logo">MyCookBook</h2>
-            </Link>
-          </li>
-          <li>
-            <Link to="/my-recipes">Mes recettes</Link>
-          </li>
-          <li>
-            <Link to="/my-favorites">Mes favoris</Link>
-          </li>
-          <li>
-            <Link to="/profile">Profil</Link>
-          </li>
-          {!isSearchPage && <SearchBar />}
-          <li data-tooltip-id="signout-tooltip">
-            <Link>
-              <Logout />
-              <Tooltip id="signout-tooltip" place="bottom">
-                Déconnexion
-              </Tooltip>
-            </Link>
-          </li>
-        </ul>
+        <div className="top-header">
+          <Link to="/" className="logo-link">
+            <h2 className="logo">MyCookBook</h2>
+          </Link>
+          
+          <div className="burger-menu" onClick={toggleMenu}>
+            <FontAwesomeIcon 
+              icon={isMenuOpen ? faTimes : faBars}
+              className={isMenuOpen ? 'close-icon' : 'burger-icon'}
+            />
+          </div>
+        </div>
+
+        {!isSearchPage && <SearchBar />}
+
+        <div className={`mobile-nav ${isMenuOpen ? 'active' : ''}`}>
+          <Link to="/my-recipes" className="nav-link" onClick={closeMenu}>Mes recettes</Link>
+          <Link to="/my-favorites" className="nav-link" onClick={closeMenu}>Mes favoris</Link>
+          <Link to="/profile" className="nav-link" onClick={closeMenu}>Profil</Link>
+          <div className="logout-wrapper">
+            <Logout />
+          </div>
+        </div>
+
+        <div className="nav-links">
+          <Link to="/my-recipes" className="nav-link">Mes recettes</Link>
+          <Link to="/my-favorites" className="nav-link">Mes favoris</Link>
+          <Link to="/profile" className="nav-link">Profil</Link>
+          <div className="logout-wrapper" data-tooltip-id="signout-tooltip">
+            <Logout />
+            <Tooltip id="signout-tooltip" place="bottom">
+              Déconnexion
+            </Tooltip>
+          </div>
+        </div>
       </nav>
     </header>
   );
 };
 
+// Export du composant pour utilisation dans d'autres parties de l'application
 export default HeaderLogged;

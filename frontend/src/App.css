@@ -5,8 +5,33 @@
   text-align: center;
 }
 
-/* Color variavle CSS */
+:root {
+  --accent-color: #07bc0c; /* Couleur d'accentuation */
+  --font-color: #333333; /* Couleur de texte principale */
+  --border-color: #e0e0e0; /* Couleur de bordure */
+  --background-color: #ffffff; /* Couleur de fond */
+  --hover-color: rgba(7, 188, 12, 0.1); /* Couleur de survol */
+  --font-family: 'Arial', sans-serif; /* Style de police */
+  --font-size: 16px; /* Taille de police par défaut */
+}
 
-/* Font style variavle CSS */
-/* Color variavle CSS */
-/* Color variavle CSS */
+/* Application des variables CSS */
+body {
+  color: var(--font-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  background-color: var(--background-color);
+}
+
+.border {
+  border: 1px solid var(--border-color);
+}
+
+.button {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.button:hover {
+  background-color: var(--hover-color);
+}

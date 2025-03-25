@@ -24,9 +24,9 @@ label {
   margin-top: 40px;
 }
 
-input {
+/* input {
   padding: 12px !important;
-}
+} */
 
 input::placeholder {
   font-style: italic;

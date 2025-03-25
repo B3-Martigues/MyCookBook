@@ -1,5 +1,138 @@
+/* Styles de base de la barre de recherche */
 .search-bar-container {
   position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  height: 40px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  overflow: visible;
+}
+
+.search-bar-container input {
+  flex: 1;
+  border: none;
+  font-size: 14px;
+  color: #333333;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.search-bar-container input:focus {
+  outline: none;
+  border-color: #4fd675;
+}
+
+.search-bar-container button {
+  height: 100%;
+  width: 30px;
+  padding: 0;
+  background: #4fd675;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.search-bar-container button:hover {
+  background: #217040;
+}
+
+.search-icon {
+  font-size: 16px;
+}
+
+/* Liste des suggestions */
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  overflow-y: auto;
+  background: white;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0;
+}
+
+.suggestions-list li {
+  padding: 12px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  background: white;
+}
+
+.suggestions-list li:hover {
+  background-color: #f5f5f5;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Media Queries pour le responsive */
+@media screen and (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+  }
+
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .search-bar-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 10px 0;
+  }
+
+  .suggestions-list {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+  }
+
+  .search-bar-container button {
+    width: 45px;
+  }
+}
+
+.search-form {
+  height: 50px !important;
+  min-height: 20px !important;
+  width: 100%;
+}
+
+.search-form input {
+  width: 100%;
+}
+
+/* Distinction visuelle pour les ingrédients */
+.suggestions-list li[data-type="ingredient"] {
+  font-style: italic;
+  color: #666;
+}
+
+/* Mise en évidence du texte correspondant à la recherche */
+.highlight {
+  font-weight: bold;
+  color: #0066cc;
 }
 
 .search-results {

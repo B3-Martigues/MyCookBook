@@ -28,9 +28,9 @@ label {
   color: rgb(6, 74, 74);
   margin-top: 40px;
 }
-input {
+/* input {
   margin-top: 10px;
-}
+} */
 input::placeholder {
   font-style: italic;
   font-weight: 200 !important;

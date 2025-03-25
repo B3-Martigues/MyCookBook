@@ -57,3 +57,22 @@ h1 {
   left: 150px;
   top: 30px;
 }
+
+
+/* Media Queries pour le responsive de tablet */
+@media screen and (max-width: 768px) { 
+  .main-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur tablette */
+    gap: 30px; /* Ajuster l'écart pour un meilleur espacement */
+  }
+}
+
+/* Media Queries pour le responsive de mobile */
+@media screen and (max-width: 425px) { 
+  .main-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+    gap: 20px; /* Réduire l'écart pour un meilleur espacement */
+  }
+}

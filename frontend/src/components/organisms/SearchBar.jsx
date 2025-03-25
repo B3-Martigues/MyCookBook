@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { searchRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "../pages/DetailsRecipe"; // Importation du composant DetailsRecipe
 import "../../styles/organisms/SearchBar.css";
@@ -148,7 +150,9 @@ const SearchBar = () => {
         onKeyPress={handleKeyPress}
         onFocus={() => searchTerm.length >= 2 && setShowSuggestions(true)}
       />
-      <button onClick={handleSearch}>Rechercher</button>
+      <button onClick={handleSearch}>
+        <FontAwesomeIcon icon={faSearch} className="search-icon" />
+      </button>
       
       {/* Liste de suggestions */}
       {showSuggestions && suggestions.length > 0 && (
