@@ -40,7 +40,7 @@ router.get("/ratings", RatingController.getRatings);
 
 // Routes pour la gestion des commentaires
 router.post("/comments", verifyToken, CommentController.addComment);
-router.get("/comments/recipe/:recipeId", verifyToken, CommentController.getCommentsByRecipe);
+router.get("/comments/recipe/:recipeId", CommentController.getCommentsByRecipe);
 router.put("/comments/:commentId", verifyToken, CommentController.updateComment);
 router.delete("/comments/:commentId", verifyToken, CommentController.deleteComment); 
 
