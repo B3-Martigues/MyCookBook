@@ -8,7 +8,6 @@ const RatingController = require("../controllers/RatingController");
 const CommentController = require("../controllers/CommentController");
 const upload = require("../middlewares/upload");
 const verifyToken = require("../middlewares/verifyToken");
-const authMiddleware = require("../middleware/authMiddleware"); // Middleware pour vérifier l'authentification
 
 // Routes pour l'autorisation et l'authentification
 router.post("/register", AuthController.register);
@@ -40,10 +39,10 @@ router.post("/add-rating", verifyToken, RatingController.addRating);
 router.get("/ratings", RatingController.getRatings);
 
 // Routes pour la gestion des commentaires
-router.post("/comments", authMiddleware, CommentController.addComment);
-router.get("/comments/recipe/:recipeId", CommentController.getCommentsByRecipe);
-router.put("/comments/:commentId", authMiddleware, CommentController.updateComment);
-router.delete("/comments/:commentId", authMiddleware, CommentController.deleteComment); 
+router.post("/comments", verifyToken, CommentController.addComment);
+router.get("/comments/recipe/:recipeId", verifyToken, CommentController.getCommentsByRecipe);
+router.put("/comments/:commentId", verifyToken, CommentController.updateComment);
+router.delete("/comments/:commentId", verifyToken, CommentController.deleteComment); 
 
 // Exportation du routeur pour l'utiliser dans le fichier server.js
 module.exports = router;

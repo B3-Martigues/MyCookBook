@@ -1,17 +1,38 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-// Cette variable permet de créer et stocker l'etat 'isAuthenticated' dans le localStorage,
 const useAuthStore = create(
   persist(
-    (set) => ({
+    (set, get) => ({
       isAuthenticated: false,
-      login: () => set({ isAuthenticated: true }), //    Lorsque le login est appelé, l'état change pour true
-      logout: () => set({ isAuthenticated: false }), //  Lorsque le logout est appelé, l'état change pour false
+      currentUser: null,
+      login: (userData) => {
+        console.log("Login called with:", userData);
+        set({ 
+          isAuthenticated: true, 
+          currentUser: userData 
+        });
+      },
+      logout: () => {
+        console.log("Logout called");
+        set({ 
+          isAuthenticated: false, 
+          currentUser: null 
+        });
+      },
+      // Méthode pour vérifier si l'utilisateur est réellement connecté
+      checkAuthentication: () => {
+        const { isAuthenticated, currentUser } = get();
+        console.log("Authentication check:", { 
+          isAuthenticated, 
+          hasUserData: !!currentUser 
+        });
+        return isAuthenticated && !!currentUser;
+      }
     }),
     {
-      name: "auth-storage", // La clé pour le localStorage
-      getStorage: () => localStorage, //  Indique que le localStorage est utilisé pour stocker l'état
+      name: "auth-storage",
+      getStorage: () => localStorage,
     }
   )
 );

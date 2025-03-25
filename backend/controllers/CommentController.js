@@ -55,13 +55,13 @@ class CommentController {
       // Récupération des commentaires pour la recette spécifiée
       const comments = await Comment.find({ recipe_id: recipeId })
         .sort({ createdAt: -1 }) // Trier par date de création (plus récent en premier)
-        .populate("user_id", "username"); // Récupérer le nom d'utilisateur
+        .populate("user_id", "name"); // Récupérer le nom d'utilisateur
 
       // Formatage des commentaires pour inclure le nom d'utilisateur
       const formattedComments = comments.map(comment => ({
         _id: comment._id,
         content: comment.content,
-        username: comment.user_id.username,
+        username: comment.user_id.name,
         user_id: comment.user_id._id,
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt
