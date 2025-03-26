@@ -7,7 +7,8 @@ import { getUserFavoriteRecipes } from "../../api/favoritesApi";
 import { getRatings } from "../../api/ratingApi";
 import useAuthStore from "../../store/AuthStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faHourglass2, faUtensils } from "@fortawesome/free-solid-svg-icons";
+
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
   const [error, setError] = useState(null);
@@ -138,38 +139,49 @@ const ListRecipes = () => {
                 />
               </div>
             </div>
-            <img
-              className="img-items"
-              onClick={() => setSelectedRecipe(recipe)}
-              src={
-                recipe.picture
-                  ? `http://localhost:8080/${recipe.picture}`
-                  : "/images/placeholder.jpg"
-              }
-              alt={recipe.name}
-            />
-            <h3>{recipe.name}</h3>
-            <p>Ajouté par: {recipe.user_id?.name || "Notre équipe"}</p>
+            <div className="img-items">
+              <img
+                onClick={() => setSelectedRecipe(recipe)}
+                src={
+                  recipe.picture
+                    ? `http://localhost:8080/${recipe.picture}`
+                    : "/images/placeholder.jpg"
+                }
+                alt={recipe.name}
+              />
+            </div>
+            <div className="recipe-info">
+              <h3>{recipe.name}</h3>
+              <p>Ajouté par: {recipe.user_id?.name || "Notre équipe"}</p>
+              <div className="recipe-details">
+                <div className="recipe-detail-item">
+                  <FontAwesomeIcon icon={faHourglass2} />
+                  <span>
+                    {recipe.preparation_time ? (
+                      `${recipe.preparation_time.hours > 0 ? `${recipe.preparation_time.hours}h ` : ''}${recipe.preparation_time.minutes}min`
+                    ) : 'N/A'}
+                  </span>
+                </div>
+                <div className="recipe-detail-item">
+                  <FontAwesomeIcon icon={faUtensils} />
+                  <span>{recipe.difficulty || 'Facile'}</span>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </div>
-      {/* Pagination - boutons pour changer de page */}
-      {Array.from(
-        // la proprieté length définit le nombre de boutons de pagination
-        { length: Math.ceil(recipes.length / recipePerPage) },
-        (
-          _,
-          i //L'index sera pris en compte pour générer les boutons
-        ) => (
+      <div className="pagination-container">
+        {Array.from({ length: Math.ceil(recipes.length / recipePerPage) }).map((_, index) => (
           <button
-            className="page-btn"
-            key={i + 1}
-            onClick={() => paginate(i + 1)}
+            key={index + 1}
+            className={`page-btn ${currentPage === index + 1 ? 'active' : ''}`}
+            onClick={() => paginate(index + 1)}
           >
-            {i + 1} {/* Affichage des nombres de pages */}
+            {index + 1}
           </button>
-        )
-      )}
+        ))}
+      </div>
       {/* Une condition qui affiche les détails après un click sur l'image  */}
       {selectedRecipe && (
         <DetailsRecipe

@@ -6,73 +6,204 @@ h1 {
 .main-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 50px;
+  gap: 35px;
 }
 
 .img-container {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   overflow: hidden;
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out;
+  background-color: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .img-container:hover {
-  transform: scale(1.02);
+  border-color: rgb(67, 190, 102);
+  transform: translateY(-3px);
 }
 
 .img-items {
   width: 100%;
-  height: 200px;
-  border-radius: 5px;
-  cursor: pointer;
+  height: 0;
+  padding-bottom: 65%; /* Ratio légèrement plus grand pour mieux voir l'image */
+  position: relative;
+  overflow: hidden;
+}
+
+.img-items img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.img-container:hover img {
+  transform: scale(1.05);
 }
 
 .page-btn {
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  background-color: #f5f5f5 !important;
+  color: #666 !important;
+  border-radius: 8px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.page-btn:hover {
+  background-color: #e0e0e0 !important;
+}
+
+.page-btn.active {
   background-color: rgb(67, 190, 102) !important;
   color: white !important;
-  margin: 1px;
-  border-radius: 5px;
 }
 
 .rating-label {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 4px 8px;
+  border-radius: 20px;
   display: flex;
-  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  height: 26px;
+  backdrop-filter: blur(4px);
 }
 
 .stars {
-  cursor: pointer;
-  font-size: 14px;
-  color: rgb(226, 219, 219);
+  color: #FFD700 !important; /* Étoiles en jaune */
+  font-size: 12px;
 }
 
 .stars.green {
   color: rgb(79, 214, 117);
 }
+
 .favorites-rating-container {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
   display: flex;
-  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
 }
 
 .fav-list {
-  position: relative;
-  left: 150px;
-  top: 30px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
+.fav-list:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.fav-list svg {
+  font-size: 16px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.fav-list.active svg {
+  color: #ff3b30;
+}
+
+.recipe-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recipe-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.recipe-info p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.recipe-details {
+  display: flex;
+  gap: 16px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.recipe-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #666;
+  padding: 4px 0;
+}
+
+.recipe-detail-item svg {
+  color: rgb(67, 190, 102);
+  font-size: 1rem;
+}
 
 /* Media Queries pour le responsive de tablet */
-@media screen and (max-width: 768px) { 
+@media screen and (max-width: 768px) {
   .main-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur tablette */
-    gap: 30px; /* Ajuster l'écart pour un meilleur espacement */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    padding: 15px;
   }
 }
 
 /* Media Queries pour le responsive de mobile */
-@media screen and (max-width: 425px) { 
+@media screen and (max-width: 425px) {
   .main-container {
-    display: grid;
-    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
-    gap: 20px; /* Réduire l'écart pour un meilleur espacement */
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 10px;
   }
+}
+
+/* Style moderne pour la pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 30px 0;
+}
+
+/* Assurer que la modal est au-dessus */
+.ReactModal__Overlay {
+  z-index: 1000 !important;
+}
+
+.ReactModal__Content {
+  z-index: 1001 !important;
 }

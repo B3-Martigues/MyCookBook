@@ -48,140 +48,123 @@ const DetailsRecipe = ({
     return <div>Chargement...</div>;
   }
   return (
-    // L'ouverture du modal selon la valeur du booléen, et sa fermeture après une actions spécifique de l'utilisateur
-    <Modal isOpen={!!recipe} onRequestClose={onClose}>
-      <div className="modal-container">
-        <div className="modal-children">
-          {/* Affichage des information sur la recette courante */}²
-          <h2>{recipe.name}</h2>
+    <Modal
+      isOpen={true}
+      onRequestClose={onClose}
+      className="modal-content"
+      overlayClassName="modal-overlay"
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
+    >
+      <div className="modal-header">
+        <h2>{recipe.name}</h2>
+        <button className="modal-close" onClick={onClose}>×</button>
+      </div>
 
-          <img
-            className="modal-img"
-            src={
-              recipe.picture
-                ? `http://localhost:8080/${recipe.picture}`
-                : "/images/placeholder.jpg"
-            } //L'image est stockée dans le backend
-            alt={recipe.name}
-          />
+      <img
+        className="modal-image"
+        src={recipe.picture ? `http://localhost:8080/${recipe.picture}` : "/images/placeholder.jpg"}
+        alt={recipe.name}
+      />
 
-          <div className="description-container">
-            {/* Catégorie */}
-            <div>
-              <p className="icon" data-tooltip-id="category-tooltip">
-                <FontAwesomeIcon icon={faUtensils} />
-              </p>
-              {recipe.category}
-            </div>
-            <Tooltip id="category-tooltip" place="top">
-              Catégorie de la recette
-            </Tooltip>
-            {/* Coût */}
-            <div>
-              <p className="icon" data-tooltip-id="cost-tooltip">
-                <FontAwesomeIcon icon={faEuro} />
-              </p>
-              {recipe.cost}
-            </div>
-            <Tooltip id="cost-tooltip" place="top">
-              Coût du plat
-            </Tooltip>
-            {/* Difficulté */}
-            <div>
-              <p className="icon" data-tooltip-id="difficulty-tooltip">
-                <FontAwesomeIcon icon={faSquarePollVertical} />
-              </p>
-              {recipe.difficulty}
-            </div>
-            <Tooltip id="difficulty-tooltip" place="top">
-              Niveau de difficulté
-            </Tooltip>
-            {/* Temps de préparation */}
-            <div>
-              <p className="icon" data-tooltip-id="time-tooltip">
-                <FontAwesomeIcon icon={faHourglass2} />
-              </p>
-              {recipe.preparation_time.hours > 0
-                ? `${recipe.preparation_time.hours} h`
-                : " "}
-
-              {recipe.preparation_time.minutes > 0
-                ? `${recipe.preparation_time.minutes} min`
-                : ""}
-            </div>
-            <Tooltip id="time-tooltip" place="top">
-              Durée de la préparation
-            </Tooltip>
-          </div>
-          <div className="fav-rating-container">
-            <div className="detail-fav-btn" data-tooltip-id="fav-tooltip">
-              {/* Gestion des favoris avec un bouton d'action */}
-              <ManageMyFavorites
-                recipeId={recipe._id}
-                favorites={favorites}
-                setFavorites={setFavorites}
-              />
-              <Tooltip id="fav-tooltip" place="bottom">
-                Favoris: Ajouter/Retirer
-              </Tooltip>
-            </div>
-            {/* Gestion des notes */}
-            <div>
-              <Rating recipeId={recipe._id} updateRating={updateRating} />
-            </div>
-          </div>
-
-          <hr />
-          {/* Ingrédients */}
-          <div className="ingredients-container">
-            <h4>Ingrédients: </h4>
-            <ul>
-              {recipe.ingredients_and_quantities.map((ingredient) => {
-                const defaultImage = "images/placeholder.jpg"; // Image par défaut si l'image de l'ingrédient n'est pas trouvée
-                //  Recherche des données de l'ingrédient dans les données chargées
-                const ingredientData = ingredientsData.find(
-                  (item) =>
-                    item.name.toLowerCase() === ingredient.name.toLowerCase()
-                );
-                // Si les données de l'ingrédient existent, utilise l'image associée; sinon, utilise l'image par défaut
-                const ingredientImageUrl = ingredientData
-                  ? ingredientData.image
-                  : defaultImage;
-
-                return (
-                  <li key={ingredient._id}>
-                    <div className="item-container">
-                      {/* Affichage de l'image de l'ingrédient */}
-                      <img
-                        className="img-ingredient"
-                        src={ingredientImageUrl}
-                        onError={(e) => (e.target.src = defaultImage)}
-                        alt={ingredient.name}
-                      />
-                      {ingredient.name} - {ingredient.quantity}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <hr />
-          {/* Étapes */}
-          <div className="steps-container">
-            <h4>Étapes: </h4>
-            <ol>
-              {recipe.steps.map((step) => (
-                <li className="steps" key={step._id}>
-                  <strong className="step-numbers"> {step.step_number} </strong>{" "}
-                  <p className="step-description">{step.description}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <button className="closing-button" onClick={onClose}>
-            Fermer
-          </button>
+      <div className="recipe-meta">
+        <div className="meta-item">
+          <FontAwesomeIcon icon={faHourglass2} className="icon" />
+          <span>{recipe.preparation_time.hours}h {recipe.preparation_time.minutes}min</span>
         </div>
+        <div className="meta-item">
+          <FontAwesomeIcon icon={faUtensils} className="icon" />
+          <span>{recipe.difficulty}</span>
+        </div>
+        <div className="meta-item">
+          <FontAwesomeIcon icon={faEuro} className="icon" />
+          <span>{recipe.cost}</span>
+        </div>
+        <div className="meta-item">
+          <ManageMyFavorites
+            recipeId={recipe._id}
+            favorites={favorites}
+            setFavorites={setFavorites}
+          />
+          <Rating recipeId={recipe._id} updateRating={updateRating} />
+        </div>
+      </div>
+
+      <div className="description-container">
+        {/* Catégorie */}
+        <div>
+          <p className="icon" data-tooltip-id="category-tooltip">
+            <FontAwesomeIcon icon={faUtensils} />
+          </p>
+          {recipe.category}
+        </div>
+        <Tooltip id="category-tooltip" place="top">
+          Catégorie de la recette
+        </Tooltip>
+        {/* Temps de préparation */}
+        <div>
+          <p className="icon" data-tooltip-id="time-tooltip">
+            <FontAwesomeIcon icon={faHourglass2} />
+          </p>
+          {recipe.preparation_time.hours > 0
+            ? `${recipe.preparation_time.hours} h`
+            : " "}
+
+          {recipe.preparation_time.minutes > 0
+            ? `${recipe.preparation_time.minutes} min`
+            : ""}
+        </div>
+        <Tooltip id="time-tooltip" place="top">
+          Durée de la préparation
+        </Tooltip>
+      </div>
+
+      <hr />
+      {/* Ingrédients */}
+      <div className="ingredients-container">
+        <h4>Ingrédients: </h4>
+        <ul>
+          {recipe.ingredients_and_quantities.map((ingredient) => {
+            const defaultImage = "images/placeholder.jpg"; // Image par défaut si l'image de l'ingrédient n'est pas trouvée
+            //  Recherche des données de l'ingrédient dans les données chargées
+            const ingredientData = ingredientsData.find(
+              (item) =>
+                item.name.toLowerCase() === ingredient.name.toLowerCase()
+            );
+            // Si les données de l'ingrédient existent, utilise l'image associée; sinon, utilise l'image par défaut
+            const ingredientImageUrl = ingredientData
+              ? ingredientData.image
+              : defaultImage;
+
+            return (
+              <li key={ingredient._id}>
+                <div className="item-container">
+                  {/* Affichage de l'image de l'ingrédient */}
+                  <img
+                    className="img-ingredient"
+                    src={ingredientImageUrl}
+                    onError={(e) => (e.target.src = defaultImage)}
+                    alt={ingredient.name}
+                  />
+                  {ingredient.name} - {ingredient.quantity}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <hr />
+      {/* Étapes */}
+      <div className="steps-container">
+        <h4>Étapes: </h4>
+        <ol>
+          {recipe.steps.map((step) => (
+            <li className="steps" key={step._id}>
+              <strong className="step-numbers"> {step.step_number} </strong>{" "}
+              <p className="step-description">{step.description}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </Modal>
   );

@@ -42,19 +42,20 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
       setError(`Une erreur est survenue: ${err.message}`);
     }
   };
+
   // Si l'utilisateur n'est pas connecté, le bouton de favori n'est affiche pas
   if (!isAuthenticated) {
     return null;
   }
+
   // Rendu du bouton qui permet d'ajouter ou de supprimer la recette de favoris
   return (
-    <button onClick={toggleFavorite} className="favorite-button">
-      {isFavorite ? (
-        <FontAwesomeIcon icon={faHeartCircleCheck} />
-      ) : (
-        <FontAwesomeIcon icon={faHeart} color="palegreen" />
-      )}
-    </button>
+    <div 
+      className={`fav-list ${isFavorite ? 'active' : ''}`}
+      onClick={toggleFavorite}
+    >
+      <FontAwesomeIcon icon={faHeart} />
+    </div>
   );
 };
 
