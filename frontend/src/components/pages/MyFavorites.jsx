@@ -6,8 +6,9 @@ import {
 import DetailsRecipe from "../pages/DetailsRecipe";
 import "../../styles/pages/MyFavorites.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faSearch, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
+import { Link } from 'react-router-dom';
 
 const MyFavorites = () => {
   const [favorites, setFavorites] = useState([]); //État pour stocker les recettes favorites de l'utilisateur
@@ -44,9 +45,24 @@ const MyFavorites = () => {
   return (
     <div>
       <h1>Mes Recettes Favorites</h1>
-      {/* Si aucune recette n'est dans les favoris, afficher un message */}
       {favorites.length === 0 ? (
-        <p>Vous n'avez pas encore de recettes favorites.</p>
+        <div className="favorites-empty">
+          <img 
+            src="/images/illustration/empty-favorites.svg" 
+            alt="Aucun favori" 
+            className="empty-illustration"
+          />
+          <h2 className="empty-title">
+            Vous n'avez pas encore de recettes favorites
+          </h2>
+          <p className="empty-description">
+            Explorez notre collection de délicieuses recettes et ajoutez vos préférées à vos favoris en cliquant sur le cœur <FontAwesomeIcon icon={faHeart} style={{ color: '#ff3b30' }} />
+          </p>
+          <Link to="/" className="explore-button">
+            <FontAwesomeIcon icon={faUtensils} />
+            Découvrir des recettes
+          </Link>
+        </div>
       ) : (
         // Affichage des recettes présentes dans les favoris
         <div className="favorites-container">

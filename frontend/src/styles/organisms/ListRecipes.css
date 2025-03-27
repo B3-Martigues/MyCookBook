@@ -6,7 +6,7 @@ h1 {
 .main-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 35px;
+  gap: 25px;
 }
 
 .img-container {
@@ -174,11 +174,19 @@ h1 {
 }
 
 /* Media Queries pour le responsive de tablet */
+@media screen and (max-width: 1024px) {
+  .main-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    padding: 0;
+  }
+}
+/* Media Queries pour le responsive de tablet */
 @media screen and (max-width: 768px) {
   .main-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
-    padding: 15px;
+    padding: 0;
   }
 }
 
@@ -201,9 +209,9 @@ h1 {
 
 /* Assurer que la modal est au-dessus */
 .ReactModal__Overlay {
-  z-index: 1000 !important;
+  z-index: 1005 !important;
 }
 
 .ReactModal__Content {
-  z-index: 1001 !important;
+  z-index: 1000 !important;
 }

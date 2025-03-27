@@ -3,9 +3,19 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 80px; /* Hauteur du header */
 }
 
 .main-content {
   flex: 1;
   padding: 20px;
+}
+
+/* Ajustement pour le z-index des modales */
+.ReactModal__Overlay {
+  z-index: 1010;
+}
+
+.ReactModal__Content {
+  z-index: 1011;
 } 

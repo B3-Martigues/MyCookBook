@@ -5,7 +5,7 @@ import DetailsRecipe from "../pages/DetailsRecipe";
 import { getUserRecipes, deleteRecipe } from "../../api/recipesApi";
 import "../../styles/pages/MyRecipes.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faArrowLeft, faShare, faStar, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
 
 const MyRecipes = () => {
   const [showForm, setShowForm] = useState(false);
@@ -143,8 +143,54 @@ const MyRecipes = () => {
           ) : error ? (
             <div className="error-message">{error}</div>
           ) : recipes.length === 0 ? (
-            <div className="no-recipes-message">
-              Vous n'avez pas encore créé de recettes.
+            <div className="recipes-empty">
+              <img 
+                src="/images/illustration/empty-recipes.svg" 
+                alt="Aucune recette" 
+                className="empty-illustration"
+              />
+              <div className="empty-content">
+                <h2 className="empty-title">
+                  Commencez votre collection de recettes
+                </h2>
+                <p className="empty-description">
+                  Partagez vos meilleures recettes avec la communauté et gardez-les précieusement à portée de main.
+                </p>
+                <button className="create-recipe-button" onClick={handleAddRecipe}>
+                  <FontAwesomeIcon icon={faPlus} />
+                  Créer ma première recette
+                </button>
+              </div>
+
+              <div className="features-list">
+                <div className="feature-item">
+                  <FontAwesomeIcon icon={faShare} className="feature-icon" />
+                  <div className="feature-text">
+                    <h3 className="feature-title">Partagez vos créations</h3>
+                    <p className="feature-description">
+                      Inspirez la communauté avec vos recettes uniques
+                    </p>
+                  </div>
+                </div>
+                <div className="feature-item">
+                  <FontAwesomeIcon icon={faStar} className="feature-icon" />
+                  <div className="feature-text">
+                    <h3 className="feature-title">Recevez des avis</h3>
+                    <p className="feature-description">
+                      Obtenez des retours et des suggestions d'amélioration
+                    </p>
+                  </div>
+                </div>
+                <div className="feature-item">
+                  <FontAwesomeIcon icon={faUtensils} className="feature-icon" />
+                  <div className="feature-text">
+                    <h3 className="feature-title">Organisez vos recettes</h3>
+                    <p className="feature-description">
+                      Gardez toutes vos recettes au même endroit
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="recipes-list">

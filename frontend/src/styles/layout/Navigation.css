@@ -1,0 +1,15 @@
+/* Assurez-vous que ces styles sont appliqués à votre menu burger */
+.burger-menu {
+  z-index: 1000; /* En dessous du modal */
+}
+
+/* Si vous avez un menu déroulant ou une navigation mobile */
+.mobile-nav,
+.nav-menu {
+  z-index: 1000; /* Même niveau que le burger */
+}
+
+/* Pour le backdrop/overlay du menu burger s'il existe */
+.menu-overlay {
+  z-index: 999; /* En dessous du menu */
+} 

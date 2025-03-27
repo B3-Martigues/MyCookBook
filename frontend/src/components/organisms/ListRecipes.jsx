@@ -113,7 +113,6 @@ const ListRecipes = () => {
 
   return (
     <div>
-      <h1>Recettes</h1>
       <div className="main-container">
         {currentRecipes.map((recipe) => (
           <div className="img-container" key={recipe._id}>

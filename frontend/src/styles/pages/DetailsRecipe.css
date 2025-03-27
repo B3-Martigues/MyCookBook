@@ -178,11 +178,12 @@ li {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1010;
+  padding: 16px;
 }
 
 .modal-content {
@@ -194,23 +195,49 @@ li {
   border-radius: 12px;
   padding: 24px;
   overflow-y: auto;
-  z-index: 2001;
+  z-index: 1011;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .modal-close {
-  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
   border: none;
-  font-size: 24px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  color: #2c3e50;
+  font-size: 36px;
   cursor: pointer;
-  color: #666;
-  padding: 8px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background-color: #e8e8e8;
+  color: #e53935;
+}
+
+/* Amélioration de l'accessibilité */
+.modal-close:focus {
+  outline: 2px solid rgb(67, 190, 102);
+  outline-offset: 2px;
 }
 
 .modal-image {
@@ -247,9 +274,25 @@ li {
 }
 
 @media (max-width: 768px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
   .modal-content {
-    width: 95%;
+    width: 100%;
+    height: 90%;
     padding: 16px;
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+  }
+
+  .modal-header {
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.25rem;
   }
 
   .modal-image {
@@ -264,12 +307,26 @@ li {
 @media (max-width: 480px) {
   .modal-content {
     width: 100%;
-    height: 100%;
+    height: 90%;
     max-height: 100vh;
     border-radius: 0;
+    border-radius: 12px;
   }
 
   .recipe-meta {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 375px) {
+  .modal-overlay {
+    padding: 8px;
+  }
+
+  .modal-content {
+    margin: 8px;
+    padding: 12px;
+    max-height: calc(100vh - 16px);
+    border-radius: 6px;
   }
 }

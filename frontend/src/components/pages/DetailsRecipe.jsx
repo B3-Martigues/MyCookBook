@@ -55,10 +55,17 @@ const DetailsRecipe = ({
       overlayClassName="modal-overlay"
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
+      contentLabel="Détails de la recette"
     >
       <div className="modal-header">
         <h2>{recipe.name}</h2>
-        <button className="modal-close" onClick={onClose}>×</button>
+        <button 
+          className="modal-close" 
+          onClick={onClose}
+          aria-label="Fermer la recette"
+        >
+          ×
+        </button>
       </div>
 
       <img

@@ -164,3 +164,22 @@
 .filters {
   margin-top: 10px;
 }
+
+
+/* Media Queries pour 425px */
+@media screen and (max-width: 425px) {
+
+  .top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0px;
+  }
+  
+  .search-bar-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0px 0;
+  }
+}

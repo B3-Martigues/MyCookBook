@@ -1,0 +1,36 @@
+.page-intro {
+  padding: 40px 0 20px 40px;
+  max-width: 800px;
+}
+
+.page-intro h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.page-intro p {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .page-intro {
+    padding: 30px 20px 15px;
+  }
+
+  .page-intro h1 {
+    font-size: 1.8rem;
+  }
+
+  .page-intro p {
+    font-size: 1rem;
+  }
+} 
