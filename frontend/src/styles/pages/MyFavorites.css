@@ -1,9 +1,8 @@
 .favorites-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 50px;
-  justify-content: center;
   transform: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
 }
 
 .image-items {
@@ -52,6 +51,34 @@
   max-width: 400px;
 }
 
+.favorites-suggestion {
+  background: linear-gradient(135deg, rgba(79, 214, 117, 0.08) 0%, rgba(33, 112, 64, 0.05) 100%);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.suggestion-content {
+  flex: 1;
+}
+
+.suggestion-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.suggestion-text strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
 .explore-button {
   display: inline-flex;
   align-items: center;
@@ -59,14 +86,14 @@
   background: linear-gradient(to right, #4fd675, #217040);
   color: white;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   border: none;
   font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
   text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .explore-button:hover {
@@ -75,24 +102,188 @@
 }
 
 .explore-button svg {
+  font-size: 1rem;
+}
+
+.favorites-header {
+  margin-bottom: 40px;
+}
+
+.favorites-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+}
+
+.favorites-subtitle {
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.favorite-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.favorite-card:hover {
+  transform: translateY(-3px);
+  border-color: rgb(67, 190, 102);
+}
+
+.favorite-image-container {
+  position: relative;
+  padding-bottom: 65%;
+  overflow: hidden;
+}
+
+.favorite-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.favorite-card:hover .favorite-image {
+  transform: scale(1.05);
+}
+
+.favorite-content {
+  padding: 16px;
+}
+
+.favorite-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+.favorite-author {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.delete-btn svg {
+  color: #ff3b30;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.delete-btn:hover svg {
+  color: #dc3545;
+}
+
+@media (max-width: 1024px) {
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 24px;
+  }
 }
 
 @media (max-width: 768px) {
-  .favorites-empty {
-    padding: 40px 20px;
+  .favorites-container {
+    padding: 30px 16px;
   }
 
-  .empty-illustration {
-    width: 200px;
-    height: 200px;
+  .favorites-title {
+    font-size: 1.75rem;
   }
 
-  .empty-title {
-    font-size: 1.3rem;
-  }
-
-  .empty-description {
+  .favorites-subtitle {
     font-size: 1rem;
+  }
+
+  .favorites-grid {
+    gap: 20px;
+  }
+
+  .favorites-suggestion {
+    padding: 16px;
+    gap: 12px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .suggestion-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .suggestion-text strong {
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .explore-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    min-width: auto;
+    flex-shrink: 0;
+  }
+
+  .explore-button svg {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .favorites-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .favorites-suggestion {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .suggestion-text {
+    font-size: 0.85rem;
+  }
+
+  .explore-button {
+    padding: 8px 12px;
   }
 }

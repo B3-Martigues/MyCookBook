@@ -2,11 +2,8 @@
 
 .home-hero {
   position: relative;
-  padding: 60px 40px;
-  margin-bottom: 40px;
-  background: linear-gradient(135deg, rgba(79, 214, 117, 0.08) 0%, rgba(33, 112, 64, 0.05) 100%);
-  border-radius: 24px;
-  overflow: hidden;
+  padding: 80px 40px 60px;
+  background: linear-gradient(135deg, rgba(79, 214, 117, 0.03) 0%, rgba(33, 112, 64, 0.02) 100%);
 }
 
 .hero-pattern {
@@ -21,19 +18,27 @@
 }
 
 .hero-content {
-  position: relative;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-header {
+  max-width: 600px;
 }
 
 .hero-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.8rem;
-  font-weight: 600;
-  color: #2c3e50;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
   margin: 0 0 24px;
-  line-height: 1.2;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-align: left;
 }
 
 .hero-title span {
@@ -44,11 +49,40 @@
 
 .hero-description {
   font-family: 'Inter', sans-serif;
-  font-size: 1.2rem;
-  color: #64748b;
+  font-size: 1.25rem;
+  color: #666;
   line-height: 1.6;
-  margin: 0 auto 40px;
-  max-width: 600px;
+  margin: 0 0 32px;
+  text-align: left;
+}
+
+.stats-container {
+  display: flex;
+  gap: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-number {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .features-grid {
@@ -103,56 +137,129 @@
   margin: 0;
 }
 
+/* Nouvelle section pour la recette mise en avant */
+.featured-recipe {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.featured-recipe:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+}
+
+.featured-recipe:hover .featured-image {
+  transform: scale(1.05);
+}
+
+.featured-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.featured-content {
+  padding: 24px;
+  background: white;
+}
+
+.featured-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4fd675;
+  margin-bottom: 8px;
+}
+
+.featured-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 16px;
+  line-height: 1.3;
+}
+
+.featured-meta {
+  display: flex;
+  gap: 20px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-item svg {
+  color: #4fd675;
+}
+
 .recipes-section {
-  margin-top: 60px;
+  padding: 60px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-bottom: 32px;
-  padding: 0 40px;
 }
 
 .section-title {
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.8rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.75rem;
   font-weight: 600;
-  color: #2c3e50;
+  color: #1a1a1a;
   margin: 0;
+  text-align: left;
 }
 
 @media (max-width: 1024px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-title {
+    font-size: 2.8rem;
+  }
+
+  .featured-recipe {
+    max-width: 600px;
   }
 }
 
 @media (max-width: 768px) {
   .home-hero {
-    padding: 40px 20px;
-    margin-bottom: 30px;
+    padding: 60px 20px 40px;
   }
 
   .hero-title {
-    font-size: 2.2rem;
+    font-size: 2.4rem;
   }
 
   .hero-description {
     font-size: 1.1rem;
   }
 
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .stats-container {
+    flex-wrap: wrap;
+    gap: 24px;
   }
 
-  .section-header {
-    padding: 0 20px;
+  .featured-image {
+    height: 220px;
   }
 
-  .section-title {
-    font-size: 1.5rem;
+  .recipes-section {
+    padding: 40px 20px;
   }
 }

@@ -133,9 +133,6 @@ const MyRecipes = () => {
 
       {!showForm ? (
         <>
-          <button className="add-recipe-button" onClick={handleAddRecipe}>
-            <FontAwesomeIcon icon={faPlus} className="plus-icon" /> Ajouter une recette
-          </button>
           <h1 className="page-title">Mes recettes</h1>
 
           {loading ? (
@@ -156,40 +153,10 @@ const MyRecipes = () => {
                 <p className="empty-description">
                   Partagez vos meilleures recettes avec la communauté et gardez-les précieusement à portée de main.
                 </p>
-                <button className="create-recipe-button" onClick={handleAddRecipe}>
+                <button className="add-recipe-btn-primary" onClick={handleAddRecipe}>
                   <FontAwesomeIcon icon={faPlus} />
                   Créer ma première recette
                 </button>
-              </div>
-
-              <div className="features-list">
-                <div className="feature-item">
-                  <FontAwesomeIcon icon={faShare} className="feature-icon" />
-                  <div className="feature-text">
-                    <h3 className="feature-title">Partagez vos créations</h3>
-                    <p className="feature-description">
-                      Inspirez la communauté avec vos recettes uniques
-                    </p>
-                  </div>
-                </div>
-                <div className="feature-item">
-                  <FontAwesomeIcon icon={faStar} className="feature-icon" />
-                  <div className="feature-text">
-                    <h3 className="feature-title">Recevez des avis</h3>
-                    <p className="feature-description">
-                      Obtenez des retours et des suggestions d'amélioration
-                    </p>
-                  </div>
-                </div>
-                <div className="feature-item">
-                  <FontAwesomeIcon icon={faUtensils} className="feature-icon" />
-                  <div className="feature-text">
-                    <h3 className="feature-title">Organisez vos recettes</h3>
-                    <p className="feature-description">
-                      Gardez toutes vos recettes au même endroit
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
           ) : (
