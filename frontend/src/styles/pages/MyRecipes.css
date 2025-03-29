@@ -157,7 +157,7 @@ li {
 }
 
 button {
-  color: rgb(255, 255, 255) !important;
+  color: rgb(79, 214, 117) !important;
   background-color: rgb(253, 253, 253) !important;
   font-size: larger;
   border-color: rgb(255, 255, 255);
@@ -282,33 +282,6 @@ hr {
   font-size: 1.2rem;
 }
 
-.add-recipe-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(to right, #4fd675, #217040);
-  color: white;
-  padding: 14px 28px;
-  border-radius: 12px;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 24px;
-}
-
-.add-recipe-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 214, 117, 0.2);
-}
-
-.add-recipe-btn-primary svg {
-  font-size: 1.2rem;
-  color: white;
-}
-
 @media (max-width: 768px) {
   .recipes-empty {
     padding: 30px 16px 40px;
@@ -328,11 +301,6 @@ hr {
   }
 
   .create-recipe-button {
-    padding: 12px 24px;
-    font-size: 1rem;
-  }
-
-  .add-recipe-btn-primary {
     padding: 12px 24px;
     font-size: 1rem;
   }

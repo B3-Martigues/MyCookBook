@@ -61,7 +61,7 @@ const Rating = ({ recipeId, updateRating }) => {
           <span
             key={star}
             className={`star ${
-              star <= (hoverRating || newRating) ? "green" : "" // Condition ternaire pour le hover
+              star <= (hoverRating || newRating) ? "yellow" : "" // Condition ternaire pour le hover
             } `}
             onMouseEnter={() => handleMouseEnter(star)}
             onClick={() => handleRatingChange(star)}

@@ -1,3 +1,6 @@
+/* Importer les styles de base partagés */
+@import './HeaderBase.css';
+
 /* ---------------------------------- */
 /* Configuration principale du header  */
 /* ---------------------------------- */
@@ -10,14 +13,14 @@
   background: transparent;
   transition: all 0.3s ease;
   z-index: 1000;
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid transparent;
 }
 
-/* Classe à ajouter lors du scroll */
+/* Modification de l'effet de scroll */
 .main-header.scrolled {
   background: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ccc;
 }
 
 /* Container principal du header */
@@ -34,8 +37,6 @@
   margin-top: 80px; /* Ajuster selon la hauteur de votre header */
   padding: 0 50px;
 }
-
-
 
 /* ---------------------------------- */
 /* Styles du logo et son conteneur    */
@@ -320,6 +321,163 @@
 
   .mobile-nav .logout-wrapper {
     margin-top: 15px; /* Ajustement de la marge pour 425px */
+  }
+}
+
+/* Style spécifique pour les liens de navigation de page */
+.nav-page {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Style pour le lien actif */
+.nav-active {
+  background: rgba(79, 214, 117, 0.1);
+  font-weight: 700;
+}
+
+.nav-active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 3px;
+  background: #4fd675;
+  border-radius: 2px;
+}
+
+/* Ajustement pour le mobile */
+@media screen and (max-width: 768px) {
+  .mobile-nav .nav-active {
+    background: rgba(79, 214, 117, 0.1);
+    width: 80%;
+    text-align: center;
+    border-radius: 8px;
+  }
+  
+  .mobile-nav .nav-active::after {
+    width: 20%;
+  }
+}
+
+/* ---------------------------------- */
+/* Dropdown Profil                    */
+/* ---------------------------------- */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-button {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.profile-button:hover,
+.profile-button.active {
+  background: rgba(79, 214, 117, 0.1);
+}
+
+.caret-icon {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.profile-button.active .caret-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: dropdownFade 0.2s ease;
+}
+
+.dropdown-item {
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background: rgba(79, 214, 117, 0.1);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0.3rem 0;
+}
+
+.logout-item {
+  color: #dc3545;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.logout-item span {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+}
+
+.logout-item:hover {
+  background: rgba(220, 53, 69, 0.1);
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ajustement pour le mobile */
+@media screen and (max-width: 768px) {
+  .profile-dropdown {
+    display: none;
+  }
+  
+  .mobile-nav .profile-dropdown {
+    display: block;
+    width: 100%;
+  }
+  
+  .mobile-nav .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    margin-top: 0.5rem;
+    width: 100%;
   }
 }
 

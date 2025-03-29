@@ -133,6 +133,9 @@ const MyRecipes = () => {
 
       {!showForm ? (
         <>
+          <button className="add-recipe-button" onClick={handleAddRecipe}>
+            <FontAwesomeIcon icon={faPlus} className="plus-icon" /> Ajouter une recette
+          </button>
           <h1 className="page-title">Mes recettes</h1>
 
           {loading ? (
@@ -153,7 +156,7 @@ const MyRecipes = () => {
                 <p className="empty-description">
                   Partagez vos meilleures recettes avec la communauté et gardez-les précieusement à portée de main.
                 </p>
-                <button className="add-recipe-btn-primary" onClick={handleAddRecipe}>
+                <button className="create-recipe-button" onClick={handleAddRecipe}>
                   <FontAwesomeIcon icon={faPlus} />
                   Créer ma première recette
                 </button>

@@ -1,3 +1,6 @@
+/* Importer les styles de base partagés */
+@import './HeaderBase.css';
+
 /* Styles for Navbar component */
 .header-container2 {
   display: flex;
@@ -70,4 +73,128 @@
 .search-bar2 button:hover {
   border: none;
   background: none;
+}
+
+/* Styles spécifiques à HeaderUnlogged */
+.login-wrapper {
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.login-wrapper:hover {
+  opacity: 0.8;
+}
+
+.login-wrapper a {
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.login-wrapper a:hover {
+  color: #4fd675;
+}
+
+/* Styles pour le header */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 0;
+  background: transparent;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border-bottom: 1px solid transparent;
+}
+
+/* Classe ajoutée lors du scroll */
+.main-header.scrolled {
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ccc;
+}
+
+/* Style pour le lien de connexion */
+.nav-link {
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 600;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-link svg {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+/* Effet de hover */
+.nav-link:hover {
+  color: #4fd675;
+  background: rgba(79, 214, 117, 0.1);
+}
+
+/* Style pour le lien actif */
+.nav-active {
+  background: rgba(79, 214, 117, 0.1);
+  color: #4fd675;
+  font-weight: 700;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .nav-link {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .nav-link svg {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+/* Ajustement du conteneur principal */
+.header-container {
+  margin: 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Ajustement pour le mobile */
+@media screen and (max-width: 768px) {
+  .header-container {
+    flex-direction: row; /* Force la direction en ligne */
+    margin: 0 15px;
+    gap: 1rem;
+  }
+
+  .top-header {
+    flex: 0 0 auto; /* Empêche le logo de rétrécir */
+  }
+
+  .nav-links {
+    flex: 0 0 auto; /* Empêche le bouton de rétrécir */
+  }
+
+  /* Cache la barre de recherche en mobile si nécessaire */
+  .search-container {
+    display: none;
+  }
 }
