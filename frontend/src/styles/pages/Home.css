@@ -222,6 +222,7 @@
   text-align: left;
 }
 
+
 @media (max-width: 1024px) {
   .hero-content {
     grid-template-columns: 1fr;

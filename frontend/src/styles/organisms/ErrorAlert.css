@@ -1,0 +1,52 @@
+.error-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px auto;
+  max-width: 600px;
+  box-shadow: 0 2px 4px rgba(254, 202, 202, 0.2);
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.error-icon {
+  flex-shrink: 0;
+  color: #dc2626;
+  font-size: 24px;
+  padding-top: 2px;
+}
+
+.error-content {
+  flex-grow: 1;
+}
+
+.error-title {
+  color: #dc2626;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.error-message {
+  color: #991b1b;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.5;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Animation d'entrée */
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+} 

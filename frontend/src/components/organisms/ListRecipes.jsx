@@ -8,6 +8,8 @@ import { getRatings } from "../../api/ratingApi";
 import useAuthStore from "../../store/AuthStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faHourglass2, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { RecipeCardPlaceholder } from "./Placeholder";
+import ErrorAlert from "./ErrorAlert";
 
 const ListRecipes = () => {
   // États pour stocker les recettes, les erreurs, le statut de chargement et la page actuelle
@@ -98,10 +100,26 @@ const ListRecipes = () => {
     );
   };
 
-  // Affichage d'un message de chargement tant que les données ne sont pas disponibles
-  if (loading) return <div>Chargement...</div>;
+  // Affichage du message de chargement tant que les données ne sont pas disponibles
+  if (loading) {
+    return (
+      <div className="main-container">
+        {[1, 2, 3, 4, 5, 6].map((index) => (
+          <RecipeCardPlaceholder key={index} />
+        ))}
+      </div>
+    );
+  }
+
   // Affichage du message d'erreur en cas de problème
-  if (error) return <div>Erreur: {error}</div>;
+  if (error) {
+    return (
+      <ErrorAlert 
+        title="Erreur: Failed to fetch" 
+        message="Le contenu n'a pas pu être chargé. Veuillez vérifier votre connexion et réessayer."
+      />
+    );
+  }
 
   // Préparation des variables pour gérer la pagination
   const lastRecipeIndex = currentPage * recipePerPage;

@@ -144,6 +144,14 @@ const DetailsRecipe = ({
               ))}
             </ol>
           </div>
+          
+          {/* Ajout du composant Comment */}
+          <Comment 
+            recipeId={recipe._id}
+            isAuthenticated={isAuthenticated}
+            currentUser={currentUser}
+          />
+          
           <button className="closing-button" onClick={onClose}>
             Fermer
           </button>
