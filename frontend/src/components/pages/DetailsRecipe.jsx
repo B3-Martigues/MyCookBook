@@ -12,6 +12,7 @@ import "../../styles/pages/DetailsRecipe.css";
 import { useState, useEffect } from "react";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
 import Rating from "../organisms/Rating";
+import Comment from "../organisms/Comment";
 
 // Modal permet de garder focus sur la fenêtre ouverte
 Modal.setAppElement("#root");
@@ -23,6 +24,8 @@ const DetailsRecipe = ({
   favorites,
   setFavorites,
   updateRating,
+  isAuthenticated,
+  currentUser,
 }) => {
   const [ingredientsData, setIngredientsData] = useState(null);
 
@@ -48,54 +51,22 @@ const DetailsRecipe = ({
     return <div>Chargement...</div>;
   }
   return (
-    <Modal
-      isOpen={true}
-      onRequestClose={onClose}
-      className="modal-content"
-      overlayClassName="modal-overlay"
-      shouldCloseOnOverlayClick={true}
-      shouldCloseOnEsc={true}
-      contentLabel="Détails de la recette"
-    >
-      <div className="modal-header">
-        <h2>{recipe.name}</h2>
-        <button 
-          className="modal-close" 
-          onClick={onClose}
-          aria-label="Fermer la recette"
-        >
-          ×
-        </button>
-      </div>
+    // L'ouverture du modal selon la valeur du booléen, et sa fermeture après une actions spécifique de l'utilisateur
+    <Modal isOpen={!!recipe} onRequestClose={onClose}>
+      <div className="modal-container">
+        <div className="modal-children">
+          {/* Affichage des information sur la recette courante */}²
+          <h2>{recipe.name}</h2>
 
-      <img
-        className="modal-image"
-        src={recipe.picture ? `http://localhost:8080/${recipe.picture}` : "/images/placeholder.jpg"}
-        alt={recipe.name}
-      />
-
-      <div className="recipe-meta">
-        <div className="meta-item">
-          <FontAwesomeIcon icon={faHourglass2} className="icon" />
-          <span>{recipe.preparation_time.hours}h {recipe.preparation_time.minutes}min</span>
-        </div>
-        <div className="meta-item">
-          <FontAwesomeIcon icon={faUtensils} className="icon" />
-          <span>{recipe.difficulty}</span>
-        </div>
-        <div className="meta-item">
-          <FontAwesomeIcon icon={faEuro} className="icon" />
-          <span>{recipe.cost}</span>
-        </div>
-        <div className="meta-item">
-          <ManageMyFavorites
-            recipeId={recipe._id}
-            favorites={favorites}
-            setFavorites={setFavorites}
+          <img
+            className="modal-img"
+            src={
+              recipe.picture
+                ? `http://localhost:8080/${recipe.picture}`
+                : "/images/placeholder.jpg"
+            } //L'image est stockée dans le backend
+            alt={recipe.name}
           />
-          <Rating recipeId={recipe._id} updateRating={updateRating} />
-        </div>
-      </div>
 
       <div className="description-container">
         {/* Catégorie */}
@@ -143,35 +114,40 @@ const DetailsRecipe = ({
               ? ingredientData.image
               : defaultImage;
 
-            return (
-              <li key={ingredient._id}>
-                <div className="item-container">
-                  {/* Affichage de l'image de l'ingrédient */}
-                  <img
-                    className="img-ingredient"
-                    src={ingredientImageUrl}
-                    onError={(e) => (e.target.src = defaultImage)}
-                    alt={ingredient.name}
-                  />
-                  {ingredient.name} - {ingredient.quantity}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-      <hr />
-      {/* Étapes */}
-      <div className="steps-container">
-        <h4>Étapes: </h4>
-        <ol>
-          {recipe.steps.map((step) => (
-            <li className="steps" key={step._id}>
-              <strong className="step-numbers"> {step.step_number} </strong>{" "}
-              <p className="step-description">{step.description}</p>
-            </li>
-          ))}
-        </ol>
+                return (
+                  <li key={ingredient._id}>
+                    <div className="item-container">
+                      {/* Affichage de l'image de l'ingrédient */}
+                      <img
+                        className="img-ingredient"
+                        src={ingredientImageUrl}
+                        onError={(e) => (e.target.src = defaultImage)}
+                        alt={ingredient.name}
+                      />
+                      {ingredient.name} - {ingredient.quantity}
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <hr />
+          {/* Étapes */}
+          <div className="steps-container">
+            <h4>Étapes: </h4>
+            <ol>
+              {recipe.steps.map((step) => (
+                <li className="steps" key={step._id}>
+                  <strong className="step-numbers"> {step.step_number} </strong>{" "}
+                  <p className="step-description">{step.description}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <button className="closing-button" onClick={onClose}>
+            Fermer
+          </button>
+        </div>
       </div>
     </Modal>
   );
