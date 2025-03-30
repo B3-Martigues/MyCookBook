@@ -1,9 +1,44 @@
 /* Styles for ManageMyFavorites component */
 .favorite-button {
-
   font-size: 20px;
   border-radius: 10%;
   border: 1px solid rgb(79, 214, 117);
   align-items: center;
+}
 
+.fav-list {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fav-list.disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.fav-list:not(.disabled):hover {
+  background-color: rgba(255, 255, 255, 1);
+  transform: scale(1.05);
+}
+
+.fav-list svg {
+  font-size: 16px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.fav-list.active svg {
+  color: #ff3b30;
+}
+
+.fav-list.disabled svg {
+  color: #999;
 }
