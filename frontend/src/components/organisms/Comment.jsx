@@ -7,14 +7,13 @@ import {
 } from "../../api/commentApi";
 import useAuthStore from "../../store/AuthStore";
 import { toast } from "react-toastify";
-import "../../styles/organisms/Comment.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEllipsisVertical, faPaperPlane, faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+import "../../styles/organisms/CommentChat.css";
 
 // Fonction de formatage de date
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString('fr-FR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
   });
@@ -24,92 +23,42 @@ const Comment = ({ recipeId }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editContent, setEditContent] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
   const { isAuthenticated, currentUser } = useAuthStore();
-
-  const getUsername = (userId) => {
-    // Si c'est l'utilisateur courant, utilise son nom
-    if (currentUser && userId === currentUser.id) {
-      return "Moi";
-    }
-    
-    // Sinon, trouve le username dans les commentaires (si disponible)
-    const commentUser = comments.find(c => c.user_id === userId)?.username;
-    return commentUser || "Utilisateur inconnu";
-  };
-
-  useEffect(() => {
-    console.log("Debug - Authentication State:", {
-      isAuthenticated,
-      currentUser: currentUser ? { 
-        id: currentUser.id, 
-        name: currentUser.name,
-        fullObject: currentUser
-      } : null
-    });
-  }, [isAuthenticated, currentUser]);
+  const [editContent, setEditContent] = useState("");
+  const [activeMenu, setActiveMenu] = useState(null);
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
         setLoading(true);
         const response = await getCommentsByRecipe(recipeId);
-        console.log("API Response:", response); // Debug
-    
         if (response.success) {
-          // Ici nous sommes sûrs que response.comments est un tableau
-          setComments(response.comments);
-          setError(null);
-        } else {
-          setError(response.error || "Impossible de charger les commentaires");
-          toast.error(response.error || "Erreur de chargement");
+          setComments(response.comments.reverse());
         }
       } catch (err) {
-        console.error("Erreur lors de la récupération des commentaires:", err);
-        toast.error("Erreur de connexion. Veuillez réessayer.");
-        setError("Erreur de connexion. Veuillez réessayer.");
+        toast.error("Erreur de chargement des commentaires");
       } finally {
         setLoading(false);
       }
     };
-
-    if (recipeId) {
-      fetchComments();
-    }
+    fetchComments();
   }, [recipeId]);
 
-  const handleAddComment = async (e) => {
-    e.preventDefault();
+  // Fonction pour fermer le menu si on clique ailleurs
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.message-actions')) {
+        setActiveMenu(null);
+      }
+    };
 
-    const isReallyAuthenticated = useAuthStore.getState().checkAuthentication();
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
 
-    if (!isReallyAuthenticated) {
-      toast.error("Veuillez vous reconnecter");
-      return;
-    }
-
-    console.log("Debug - Add Comment Authentication Check:", {
-      isAuthenticated,
-      currentUser: currentUser ? {
-        id: currentUser.id,
-        name: currentUser.name,
-        hasId: !!currentUser.id,
-        fullObject: currentUser
-      } : null
-    });
-
-    if (!isAuthenticated || !currentUser || !currentUser.id) {
-      toast.error("Vous devez être connecté pour ajouter un commentaire");
-      return;
-    }
-
-    if (!newComment.trim()) {
-      toast.error("Le commentaire ne peut pas être vide");
-      return;
-    }
+  const handleSendComment = async () => {
+    if (!newComment.trim()) return;
 
     try {
       const response = await addComment(recipeId, newComment);
@@ -117,55 +66,43 @@ const Comment = ({ recipeId }) => {
         const newCommentData = {
           _id: response.comment._id,
           content: response.comment.content,
-          username: currentUser.name, 
+          username: currentUser.name,
           user_id: currentUser.id,
-          createdAt: response.comment.createdAt,
-          updatedAt: response.comment.updatedAt
+          createdAt: response.comment.createdAt
         };
-
-        setComments(prevComments => [newCommentData, ...(prevComments || [])]);
+        setComments(prev => [newCommentData, ...prev]);
         setNewComment("");
-        toast.success("Commentaire ajouté avec succès");
-      } else {
-        toast.error(response.error || "Erreur lors de l'ajout du commentaire");
       }
     } catch (err) {
-      console.error("Erreur lors de l'ajout du commentaire:", err);
-      toast.error("Erreur lors de l'ajout du commentaire");
+      toast.error("Erreur lors de l'envoi du commentaire");
     }
   };
 
-  const handleUpdateComment = async (e) => {
-    e.preventDefault();
-    
-    if (!editContent.trim()) {
-      toast.error("Le commentaire ne peut pas être vide");
-      return;
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendComment();
     }
+  };
 
+  const handleEditComment = async (commentId) => {
+    if (!editContent.trim()) return;
+    
     try {
-      const response = await updateComment(editingCommentId, editContent);
+      const response = await updateComment(commentId, editContent);
       if (response.success) {
-        setComments(prevComments => 
-          prevComments.map(comment => 
-            comment._id === editingCommentId 
-              ? { 
-                  ...comment, 
-                  content: editContent,
-                  updatedAt: new Date().toISOString() 
-                }
+        setComments(prev => 
+          prev.map(comment => 
+            comment._id === commentId 
+              ? { ...comment, content: editContent, updatedAt: new Date().toISOString() }
               : comment
           )
         );
         setEditingCommentId(null);
         setEditContent("");
-        toast.success("Commentaire modifié avec succès");
-      } else {
-        toast.error(response.error || "Erreur lors de la modification");
       }
     } catch (err) {
-      console.error("Erreur lors de la modification:", err);
-      toast.error("Erreur lors de la modification du commentaire");
+      toast.error("Erreur lors de la modification");
     }
   };
 
@@ -173,114 +110,139 @@ const Comment = ({ recipeId }) => {
     try {
       const response = await deleteComment(commentId);
       if (response.success) {
-        setComments(prevComments => 
-          (prevComments || []).filter(comment => comment._id !== commentId)
-        );
-        toast.success("Commentaire supprimé avec succès");
-      } else {
-        toast.error(response.error || "Erreur lors de la suppression");
+        setComments(prev => prev.filter(comment => comment._id !== commentId));
+        setActiveMenu(null);
       }
     } catch (err) {
-      console.error("Erreur lors de la suppression:", err);
-      toast.error("Erreur lors de la suppression du commentaire");
+      toast.error("Erreur lors de la suppression");
     }
   };
 
   return (
-    <div className="comments-container">
-      <h4>Commentaires:</h4>
-
-      {isAuthenticated ? (
-        <form onSubmit={handleAddComment} className="comment-form">
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Ajouter un commentaire..."
-            maxLength="500"
-            required
-          />
-          <button type="submit" className="comment-btn">
-            Publier
-          </button>
-        </form>
-      ) : (
-        <p className="comment-login-prompt">
-          Connectez-vous pour laisser un commentaire
-        </p>
-      )}
-
-      {loading ? (
-        <p>Chargement des commentaires...</p>
-      ) : comments.length > 0 ? (
-        <ul className="comments-list">
-          {comments.map((comment) => (
-            <li key={comment._id} className="comment-item">
-              <div className="comment-header">
-              <span className="comment-username">
-                {getUsername(comment.user_id?._id || comment.user_id)}
-              </span>
-                <span className="comment-date">
+    <div className="chat-container">
+      <div className="messages-container">
+        {loading ? (
+          <div className="loading-messages">Chargement des messages...</div>
+        ) : comments.length === 0 ? (
+          <div className="no-messages">Soyez le premier à commenter cette recette !</div>
+        ) : (
+          comments.map((comment) => (
+            <div
+              key={comment._id}
+              className={`message ${
+                comment.user_id === currentUser?.id ? "message-own" : "message-other"
+              }`}
+            >
+              <div className="message-header">
+                <span className="message-author">
+                  {comment.user_id === currentUser?.id ? "Moi" : comment.username}
+                </span>
+                <span className="message-time">
                   {formatDate(comment.createdAt)}
-                  {comment.updatedAt && comment.updatedAt !== comment.createdAt && " (modifié)"}
+                  {comment.updatedAt && comment.updatedAt !== comment.createdAt && 
+                    <span className="edited-tag">(modifié)</span>
+                  }
                 </span>
               </div>
-              {editingCommentId === comment._id ? (
-                <form onSubmit={handleUpdateComment} className="comment-edit-form">
-                  <textarea
-                    value={editContent}
-                    onChange={(e) => setEditContent(e.target.value)}
-                    maxLength="500"
-                    required
-                  />
-                  <div className="comment-edit-buttons">
-                    <button type="submit" className="comment-btn">
-                      Enregistrer
-                    </button>
-                    <button
-                      type="button"
-                      className="comment-btn-cancel"
-                      onClick={() => {
-                        setEditingCommentId(null);
-                        setEditContent("");
+              <div className="message-wrapper">
+                <div className="message-content">
+                  {editingCommentId === comment._id ? (
+                    <div className="edit-message-container">
+                      <textarea
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                        autoFocus
+                        className="edit-textarea"
+                      />
+                      <div className="edit-actions">
+                        <button 
+                          className="edit-confirm"
+                          onClick={() => handleEditComment(comment._id)}
+                        >
+                          Enregistrer
+                        </button>
+                        <button 
+                          className="edit-cancel"
+                          onClick={() => {
+                            setEditingCommentId(null);
+                            setEditContent("");
+                          }}
+                        >
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p>{comment.content}</p>
+                  )}
+                </div>
+                
+                {comment.user_id === currentUser?.id && !editingCommentId && (
+                  <div className="message-actions">
+                    <button 
+                      className="action-menu-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveMenu(activeMenu === comment._id ? null : comment._id);
                       }}
                     >
-                      Annuler
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
                     </button>
-                  </div>
-                </form>
-              ) : (
-                <div className="comment-content">
-                  <p>{comment.content}</p>
-                  {isAuthenticated &&
-                    currentUser &&
-                    comment.user_id === currentUser.id && (
-                      <div className="comment-actions">
-                        <button
-                          className="comment-btn-edit"
+                    
+                    {activeMenu === comment._id && (
+                      <div className="action-menu">
+                        <button 
+                          className="menu-item"
                           onClick={() => {
                             setEditingCommentId(comment._id);
                             setEditContent(comment.content);
+                            setActiveMenu(null);
                           }}
                         >
-                          Modifier
+                          <FontAwesomeIcon icon={faPencil} />
+                          <span>Modifier</span>
                         </button>
-                        <button
-                          className="comment-btn-delete"
+                        <button 
+                          className="menu-item delete"
                           onClick={() => handleDeleteComment(comment._id)}
                         >
-                          Supprimer
+                          <FontAwesomeIcon icon={faTrash} />
+                          <span>Supprimer</span>
                         </button>
                       </div>
                     )}
-                </div>
-              )}
-            </li>
-          ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
-        </ul>
-      ) : (
-        <p className="no-comments">Aucun commentaire pour cette recette.</p>
-      )}
+      <div className="chat-input-container">
+        {isAuthenticated ? (
+          <>
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Écrivez votre commentaire..."
+              maxLength="500"
+            />
+            <button 
+              className={`send-button ${!newComment.trim() ? 'inactive' : ''}`}
+              onClick={handleSendComment}
+              disabled={!newComment.trim()}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </>
+        ) : (
+          <div className="login-prompt">
+            Connectez-vous pour participer à la discussion
+          </div>
+        )}
+      </div>
     </div>
   );
 };

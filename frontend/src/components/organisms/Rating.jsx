@@ -61,29 +61,21 @@ const Rating = ({ recipeId, updateRating }) => {
           <span
             key={star}
             className={`star ${
-              star <= (hoverRating || newRating) ? "yellow" : "" // Condition ternaire pour le hover
-            } `}
+              star <= (hoverRating || newRating) ? "green" : ""
+            }`}
             onMouseEnter={() => handleMouseEnter(star)}
             onClick={() => handleRatingChange(star)}
             onMouseLeave={handleMouseLeave}
-            data-tooltip-id="rating-tooltip"
           >
-            <Tooltip id="rating-tooltip" place="bottom">
-              Notez et confirmez
-            </Tooltip>
             <FontAwesomeIcon icon={faStar} />
           </span>
         ))}
         <button
-          data-tooltip-id="thumb-tooltip"
           className="thumb-icon"
           onClick={handleSubmitRating}
         >
           <FontAwesomeIcon icon={faThumbsUp} />
         </button>
-        <Tooltip id="thumb-tooltip" place="bottom">
-          Confirmez
-        </Tooltip>
       </div>
     </div>
   );

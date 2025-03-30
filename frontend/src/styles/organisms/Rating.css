@@ -4,10 +4,11 @@
   cursor: pointer;
   font-size: 22px;
   transition: color 0.2s;
-  color: rgb(226, 219, 219);
+  color: #e2dbdb;  /* Couleur grise pour les étoiles non sélectionnées */
 }
+
 .star.green {
-  color: rgb(79, 214, 117);
+  color: #4fd675;
 }
 
 .rating {
@@ -15,22 +16,64 @@
   flex-direction: row;
   align-items: center;
 }
+
+.thumb-icon {
+  margin-left: 10%;
+  font-size: 25px;
+  color: #4fd675;  /* Couleur verte pour le bouton de validation */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.thumb-icon:hover {
+  transform: scale(1.1);
+  color: #3fb861;  /* Une teinte légèrement plus foncée au survol */
+}
+
+/* Animation subtile pour le hover des étoiles */
+.star:hover {
+  transform: scale(1.1);
+}
+
+/* Style pour les étoiles précédentes lorsqu'on survole une étoile */
+.star:hover ~ .star {
+  color: #e2dbdb;
+}
+
+/* Style pour toutes les étoiles précédentes jusqu'à celle survolée */
+.rating:hover .star:hover,
+.rating:hover .star:hover ~ .star {
+  color: #FFA500;  /* Orange plus foncé pour le hover */
+}
+
 #rating-tooltip {
   font-size: medium;
   font-family: monospace;
   font-size: 18px;
   font-weight: lighter;
 }
-.thumb-icon {
-  margin-left: 10%;
-  font-size: 25px;
-}
-.thumb-icon:hover {
-  transform: scale(1.1);
-}
+
 #thumb-tooltip {
   font-size: medium;
   font-family: monospace;
   font-size: 18px;
   font-weight: lighter;
+}
+
+.rating-container {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.rating-star {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #e2dbdb;
+  transition: color 0.2s ease;
+}
+
+.rating-star:hover,
+.rating-star.active {
+  color: #4fd675;
 }

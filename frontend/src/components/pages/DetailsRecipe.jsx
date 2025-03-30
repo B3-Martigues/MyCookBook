@@ -6,6 +6,9 @@ import {
   faUtensils,
   faHourglass2,
   faSquarePollVertical,
+  faTimes,
+  faHeart,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import "../../styles/pages/DetailsRecipe.css";
@@ -27,6 +30,7 @@ const DetailsRecipe = ({
   isAuthenticated,
   currentUser,
 }) => {
+  const [activeTab, setActiveTab] = useState('ingredients');
   const [ingredientsData, setIngredientsData] = useState(null);
 
   // Hook useEffect récupère les données des ingrédients au chargement du composant
@@ -47,19 +51,51 @@ const DetailsRecipe = ({
     fetchIngredients();
   }, []);
 
+  // Fonction pour rendre les étoiles avec un style plein ou vide
+  const renderStars = (rating) => {
+    const ratingValue = parseFloat(rating) || 0;
+    return (
+      <div className="stars-container" data-tooltip-id="rating-info">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <FontAwesomeIcon
+            key={star}
+            icon={faStar}
+            className={`star ${star <= ratingValue ? "filled" : "empty"}`}
+          />
+        ))}
+        <Tooltip id="rating-info">
+          Note moyenne : {ratingValue.toFixed(1)}/5
+        </Tooltip>
+      </div>
+    );
+  };
+
   if (!ingredientsData) {
     return <div>Chargement...</div>;
   }
   return (
-    // L'ouverture du modal selon la valeur du booléen, et sa fermeture après une actions spécifique de l'utilisateur
-    <Modal isOpen={!!recipe} onRequestClose={onClose}>
+    <Modal 
+      isOpen={!!recipe} 
+      onRequestClose={onClose}
+      className="recipe-modal"
+      overlayClassName="recipe-modal-overlay"
+    >
       <div className="modal-container">
-        <div className="modal-children">
-          {/* Affichage des information sur la recette courante */}²
-          <h2>{recipe.name}</h2>
-
+        <div className="modal-header">
+          <div className="modal-header-actions">
+            {isAuthenticated && (
+              <ManageMyFavorites
+                recipeId={recipe._id}
+                favorites={favorites}
+                setFavorites={setFavorites}
+              />
+            )}
+            <button className="modal-close" onClick={onClose}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+          </div>
           <img
-            className="modal-img"
+            className="modal-image"
             src={
               recipe.picture
                 ? `http://localhost:8080/${recipe.picture}`
@@ -67,94 +103,101 @@ const DetailsRecipe = ({
             } //L'image est stockée dans le backend
             alt={recipe.name}
           />
-
-      <div className="description-container">
-        {/* Catégorie */}
-        <div>
-          <p className="icon" data-tooltip-id="category-tooltip">
-            <FontAwesomeIcon icon={faUtensils} />
-          </p>
-          {recipe.category}
-        </div>
-        <Tooltip id="category-tooltip" place="top">
-          Catégorie de la recette
-        </Tooltip>
-        {/* Temps de préparation */}
-        <div>
-          <p className="icon" data-tooltip-id="time-tooltip">
-            <FontAwesomeIcon icon={faHourglass2} />
-          </p>
-          {recipe.preparation_time.hours > 0
-            ? `${recipe.preparation_time.hours} h`
-            : " "}
-
-          {recipe.preparation_time.minutes > 0
-            ? `${recipe.preparation_time.minutes} min`
-            : ""}
-        </div>
-        <Tooltip id="time-tooltip" place="top">
-          Durée de la préparation
-        </Tooltip>
-      </div>
-
-      <hr />
-      {/* Ingrédients */}
-      <div className="ingredients-container">
-        <h4>Ingrédients: </h4>
-        <ul>
-          {recipe.ingredients_and_quantities.map((ingredient) => {
-            const defaultImage = "images/placeholder.jpg"; // Image par défaut si l'image de l'ingrédient n'est pas trouvée
-            //  Recherche des données de l'ingrédient dans les données chargées
-            const ingredientData = ingredientsData.find(
-              (item) =>
-                item.name.toLowerCase() === ingredient.name.toLowerCase()
-            );
-            // Si les données de l'ingrédient existent, utilise l'image associée; sinon, utilise l'image par défaut
-            const ingredientImageUrl = ingredientData
-              ? ingredientData.image
-              : defaultImage;
-
-                return (
-                  <li key={ingredient._id}>
-                    <div className="item-container">
-                      {/* Affichage de l'image de l'ingrédient */}
-                      <img
-                        className="img-ingredient"
-                        src={ingredientImageUrl}
-                        onError={(e) => (e.target.src = defaultImage)}
-                        alt={ingredient.name}
-                      />
-                      {ingredient.name} - {ingredient.quantity}
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <hr />
-          {/* Étapes */}
-          <div className="steps-container">
-            <h4>Étapes: </h4>
-            <ol>
-              {recipe.steps.map((step) => (
-                <li className="steps" key={step._id}>
-                  <strong className="step-numbers"> {step.step_number} </strong>{" "}
-                  <p className="step-description">{step.description}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
+          <h2>{recipe.name}</h2>
           
-          {/* Ajout du composant Comment */}
-          <Comment 
-            recipeId={recipe._id}
-            isAuthenticated={isAuthenticated}
-            currentUser={currentUser}
-          />
-          
-          <button className="closing-button" onClick={onClose}>
-            Fermer
+          <div className="recipe-meta">
+            <div className="meta-item">
+              <FontAwesomeIcon icon={faUtensils} />
+              <span>{recipe.category}</span>
+            </div>
+            <div className="meta-item">
+              <FontAwesomeIcon icon={faHourglass2} />
+              <span>
+                {recipe.preparation_time.hours > 0 ? `${recipe.preparation_time.hours}h ` : ''}
+                {recipe.preparation_time.minutes}min
+              </span>
+            </div>
+            <div className="meta-item rating">
+              <Rating
+                recipeId={recipe._id}
+                updateRating={updateRating}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="modal-tabs">
+          <button 
+            className={`tab-button ${activeTab === 'ingredients' ? 'active' : ''}`}
+            onClick={() => setActiveTab('ingredients')}
+          >
+            Ingrédients
           </button>
+          <button 
+            className={`tab-button ${activeTab === 'steps' ? 'active' : ''}`}
+            onClick={() => setActiveTab('steps')}
+          >
+            Préparation
+          </button>
+          <button 
+            className={`tab-button ${activeTab === 'comments' ? 'active' : ''}`}
+            onClick={() => setActiveTab('comments')}
+          >
+            Commentaires
+          </button>
+        </div>
+
+        <div className="modal-content">
+          {activeTab === 'ingredients' && (
+            <div className="ingredients-section">
+              <ul className="ingredients-list">
+                {recipe.ingredients_and_quantities.map((ingredient) => {
+                  const ingredientData = ingredientsData.find(
+                    (item) => item.name.toLowerCase() === ingredient.name.toLowerCase()
+                  );
+                  const ingredientImageUrl = ingredientData?.image || "/images/placeholder.jpg";
+
+                  return (
+                    <li key={ingredient._id} className="ingredient-item">
+                      <img
+                        className="ingredient-image"
+                        src={ingredientImageUrl}
+                        alt={ingredient.name}
+                        onError={(e) => {e.target.src = "/images/placeholder.jpg"}}
+                      />
+                      <div className="ingredient-details">
+                        <span className="ingredient-name">{ingredient.name}</span>
+                        <span className="ingredient-quantity">{ingredient.quantity}</span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+
+          {activeTab === 'steps' && (
+            <div className="steps-section">
+              <ol className="steps-list">
+                {recipe.steps.map((step) => (
+                  <li key={step._id} className="step-item">
+                    <span className="step-number">{step.step_number}</span>
+                    <p className="step-description">{step.description}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {activeTab === 'comments' && (
+            <div className="comments-section">
+              <Comment
+                recipeId={recipe._id}
+                isAuthenticated={isAuthenticated}
+                currentUser={currentUser}
+              />
+            </div>
+          )}
         </div>
       </div>
     </Modal>

@@ -170,7 +170,7 @@ button {
     "Lucida Sans", Arial, sans-serif;
 }
 button:hover {
-  transform: scale(1.02);
+  transform: scale(1.00);
 }
 .next {
   margin-left: 70%;
