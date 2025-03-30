@@ -63,7 +63,7 @@ const MyFavorites = () => {
     fetchFavorites();
   }, []);
 
-  // Ajout de la fonction de suppression
+  // Fonction pour supprimer une recette des favoris
   const removeFavorite = async (recipeId, event) => {
     event.stopPropagation();
     try {
@@ -96,7 +96,7 @@ const MyFavorites = () => {
               <strong>Envie de plus ?</strong>
               {isMobile ? 
                 "Découvrez de nouvelles recettes" : 
-                "Explorez notre collection et ajoutez de nouvelles recettes à vos favoris"}
+                " Explorez notre collection et ajoutez de nouvelles recettes à vos favoris"}
             </p>
           </div>
           <Link to="/" className="explore-button">
@@ -106,7 +106,7 @@ const MyFavorites = () => {
         </div>
       )}
 
-      {favorites.length === 0 ? (
+      {favorites.length === 0 && !loading ? (
         <div className="favorites-empty">
           <img 
             src="/images/illustration/empty-favorites.svg" 
@@ -127,7 +127,6 @@ const MyFavorites = () => {
       ) : (
         <div className="favorites-grid">
           {loading ? (
-            // Afficher plusieurs placeholders pendant le chargement
             Array.from({ length: 6 }).map((_, index) => (
               <Card key={index} loading={true} />
             ))
@@ -141,7 +140,9 @@ const MyFavorites = () => {
                 ratingsData={ratingsData}
                 onCardClick={(recipe) => setSelectedRecipe(recipe)}
                 renderStars={renderStars}
-                loading={false}
+                showFavoriteButton={false} // Désactive le bouton favoris
+                showDeleteButton={true} // Active le bouton de suppression
+                onDelete={removeFavorite} // Passe la fonction de suppression
               />
             ))
           )}

@@ -64,4 +64,33 @@
   gap: 5px;
   color: #666;
   font-size: 0.9rem;
+}
+
+.delete-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.delete-btn svg {
+  color: #ff3b30;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.delete-btn:hover svg {
+  color: #dc3545;
 } 

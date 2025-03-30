@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglass2, faUtensils, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHourglass2, faUtensils, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
 import { RecipeCardPlaceholder } from "../organisms/Placeholder";
 import "../../styles/molecules/Card.css";
@@ -12,7 +12,10 @@ const Card = ({
   ratingsData, 
   onCardClick,
   renderStars,
-  loading = false
+  loading = false,
+  showFavoriteButton = true,
+  showDeleteButton = false,
+  onDelete
 }) => {
   if (loading) {
     return <RecipeCardPlaceholder />;
@@ -32,13 +35,26 @@ const Card = ({
             {renderStars(ratingsData[recipe._id])}
           </div>
         )}
-        <div className="fav-list">
-          <ManageMyFavorites
-            recipeId={recipe._id}
-            favorites={favorites}
-            setFavorites={setFavorites}
-          />
-        </div>
+        {showFavoriteButton && (
+          <div className="fav-list">
+            <ManageMyFavorites
+              recipeId={recipe._id}
+              favorites={favorites}
+              setFavorites={setFavorites}
+            />
+          </div>
+        )}
+        {showDeleteButton && (
+          <button 
+            className="delete-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(recipe._id, e);
+            }}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        )}
       </div>
       <div className="img-items">
         <img
