@@ -186,8 +186,8 @@
 
 .delete-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 0;
+  left: 0;
   width: 32px;
   height: 32px;
   border-radius: 50%;

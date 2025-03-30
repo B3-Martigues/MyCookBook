@@ -4,47 +4,82 @@ import {
   deleteFavoriteRecipe,
 } from "../../api/favoritesApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
+import Card from "../molecules/Card";
 import "../../styles/pages/MyFavorites.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faSearch, faHeart, faUtensils, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faSearch, faHeart, faUtensils, faArrowRight, faHourglass2 } from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
 import { Link } from 'react-router-dom';
+import Recommendation from "../organisms/Recommendation";
 
 const MyFavorites = () => {
   const [favorites, setFavorites] = useState([]); //État pour stocker les recettes favorites de l'utilisateur
   const [selectedRecipe, setSelectedRecipe] = useState(null); //État pour stocker la recette actuellement sélectionnée
   const [error, setError] = useState(null);
   const [ratingsData, setRatingsData] = useState({}); // Ajout de l'état pour les notes
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(true); // Ajout de l'état de chargement
 
   const isMobile = window.innerWidth <= 768;
 
-  useEffect(() => {
-    // Récupération des recettes favorites au chargement du composant
-    const fetchFavorites = async () => {
-      try {
-        const response = await getUserFavoriteRecipes();
-        if (response.error) {
-          setError(
-            `Erreur lors de la récupération des recettes favorites: ${response.error}`
-          );
-        }
-        // Mise à jour de l'état avec la liste des recettes favorites
-        setFavorites(response.favorites);
-      } catch (err) {
-        setError(`Une Erreur est survenue: ${err} `);
+  // Fonction pour afficher les étoiles (même fonction que dans ListRecipes)
+  const renderStars = (rating) => {
+    return (
+      <div className="rating-display">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={`rating-star ${star <= rating ? "filled" : "outlined"}`}
+          >
+            {star <= rating ? "★" : "☆"}
+          </span>
+        ))}
+        <span className="rating-value">{rating ? rating.toFixed(1) : "0.0"}</span>
+      </div>
+    );
+  };
+
+  const fetchFavorites = async () => {
+    setLoading(true); // Début du chargement
+    try {
+      const response = await getUserFavoriteRecipes();
+      if (response.error) {
+        setError(
+          `Erreur lors de la récupération des recettes favorites: ${response.error}`
+        );
       }
-    };
+      if (response.success) {
+        setFavorites(response.favorites);
+        setRecipes(response.recipes);
+      }
+    } catch (err) {
+      console.error("Erreur lors du chargement des favoris:", err);
+    } finally {
+      setLoading(false); // Fin du chargement
+    }
+  };
+
+  useEffect(() => {
     fetchFavorites();
   }, []);
 
-  // Fonction pour supprimer une recette des favoris
+  // Ajout de la fonction de suppression
   const removeFavorite = async (recipeId, event) => {
-    event.stopPropagation(); // //Évite de déclancher onClick de l'image
-    // Suppression de la recette (ciblée avec ID) des favoris
-    await deleteFavoriteRecipe(recipeId);
-    // Mise à jour de l'état des favoris après la suppression
-    setFavorites(favorites.filter((recipe) => recipe._id !== recipeId));
+    event.stopPropagation();
+    try {
+      await deleteFavoriteRecipe(recipeId);
+      setFavorites(favorites.filter((recipe) => recipe._id !== recipeId));
+    } catch (err) {
+      console.error("Erreur lors de la suppression du favori:", err);
+    }
   };
+
+  const handleFavoriteUpdate = (newFavorites) => {
+    setFavorites(newFavorites);
+    // Mettre à jour la liste des favoris principale
+    fetchFavorites(); // Votre fonction pour recharger les favoris
+  };
+
   return (
     <div className="favorites-container">
       <div className="favorites-header">
@@ -91,41 +126,25 @@ const MyFavorites = () => {
         </div>
       ) : (
         <div className="favorites-grid">
-          {favorites.map((recipe) => (
-            <div
-              className="favorite-card"
-              key={recipe._id}
-              onClick={() => setSelectedRecipe(recipe)}
-            >
-              <div className="favorite-image-container">
-                <img
-                  className="favorite-image"
-                  src={
-                    recipe.picture
-                      ? `http://localhost:8080/${recipe.picture}`
-                      : "/images/placeholder.jpg"
-                  }
-                  alt={recipe.name}
-                />
-                <button
-                  className="delete-btn"
-                  onClick={(e) => removeFavorite(recipe._id, e)}
-                  data-tooltip-id={`delete-tooltip-${recipe._id}`}
-                >
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-                <Tooltip id={`delete-tooltip-${recipe._id}`}>
-                  Retirer des favoris
-                </Tooltip>
-              </div>
-              <div className="favorite-content">
-                <h3 className="favorite-title">{recipe.name}</h3>
-                <p className="favorite-author">
-                  Ajouté par: {recipe.user_id?.name || "Notre équipe"}
-                </p>
-              </div>
-            </div>
-          ))}
+          {loading ? (
+            // Afficher plusieurs placeholders pendant le chargement
+            Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index} loading={true} />
+            ))
+          ) : (
+            favorites.map((recipe) => (
+              <Card
+                key={recipe._id}
+                recipe={recipe}
+                favorites={favorites}
+                setFavorites={setFavorites}
+                ratingsData={ratingsData}
+                onCardClick={(recipe) => setSelectedRecipe(recipe)}
+                renderStars={renderStars}
+                loading={false}
+              />
+            ))
+          )}
         </div>
       )}
       {/* Si une recette est sélectionnée, afficher les détails */}
@@ -143,6 +162,14 @@ const MyFavorites = () => {
           }}
         />
       )}
+
+      <Recommendation 
+        favorites={favorites}
+        setFavorites={(newFavorites) => {
+          setFavorites(newFavorites);
+          fetchFavorites(); // Recharger les favoris après la mise à jour
+        }}
+      />
     </div>
   );
 };

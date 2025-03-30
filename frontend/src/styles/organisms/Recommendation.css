@@ -1,0 +1,177 @@
+.recommendations-section {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+}
+
+.recommendations-section h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.recommendations-container {
+  margin-top: 50px;
+  padding: 20px;
+}
+
+.recommendations-container h2 {
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.5rem;
+}
+
+.recommendations-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+/* Réutilisation des styles de ListRecipes pour la cohérence */
+.recommendations-grid .img-container {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.recommendation-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.recommendation-card:hover {
+  transform: translateY(-5px);
+}
+
+.recommendation-image {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.recommendation-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recommendation-info {
+  padding: 15px;
+}
+
+.recommendation-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.recommendation-details {
+  display: flex;
+  justify-content: space-between;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.recommendation-details span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.recommendation-details svg {
+  color: #4fd675;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+  .recommendations-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .recommendations-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .recommendations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recommendations-header {
+  margin-bottom: 20px;
+}
+
+.recommendations-header h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.see-more-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.see-more-button:hover {
+  background-color: #45a049;
+}
+
+/* Styles pour les placeholders */
+.placeholder {
+  animation: pulse 1.5s infinite;
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 200px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
+}
+
+.placeholder-text {
+  height: 20px;
+  background-color: #e0e0e0;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.placeholder-text-small {
+  height: 15px;
+  width: 60%;
+  background-color: #e0e0e0;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.6;
+  }
+} 
