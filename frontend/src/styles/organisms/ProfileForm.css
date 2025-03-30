@@ -1,11 +1,68 @@
 .profile-form {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  box-shadow: none !important;
+  background-color: #FDFDFD;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
+
+.profile-form h1 {
+  margin: 0;
+  padding: 10px 0;
+  margin-top: 3svh;
+  margin-bottom: 3svh;
+  border-radius: 10px;
+  padding: 0.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 200%;
+}
+
+.error {
+display: block;
+}
+
 .profile-container {
+  position: relative;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   width: 80%;
+}
+
+.profile-container input{
+  border-bottom:solid 2px rgb(79, 214, 117);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: #FDFDFD;
+  border-radius: 0;
+}
+
+.profile-container label {
+  margin: 0 0 8svh 0 ;
+  width: 25% !important;
+  color: rgb(70, 189, 104);
+  font-size: 120%;
+}
+
+.profile-container input:focus {
+  border-bottom:solid 2px rgb(79, 214, 117);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: #FDFDFD;
+  border-radius: 0;
+}
+
+#repeatPasswordLabel{
+  margin: 01svh ;
+}
+
+
+.button-container {
+  width: 16rem;
+  display: flex;
+  justify-content: space-between;
 }

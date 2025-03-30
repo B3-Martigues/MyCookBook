@@ -1,10 +1,26 @@
 /* Styles for Profile component */
 .delete-account-parent-button {
   border-bottom-width: 1px;
-  color: red !important;
+  color: white !important;
   font-size: smaller;
   margin-top: 40px;
+  border-radius: 5px;
+  font-size: larger;
+  padding: 1svh;
+  background-color: rgb(243, 0, 0) !important;
 }
+
+.update-account-parent-button{
+  border-bottom-width: 1px;
+  color: white !important;
+  font-size: smaller;
+  margin-top: 40px;
+  border-radius: 5px;
+  font-size: larger;
+  padding: 1svh;
+  background-color: rgb(79, 214, 117) !important;
+}
+
 .modal {
   position: fixed;
   top: 0;

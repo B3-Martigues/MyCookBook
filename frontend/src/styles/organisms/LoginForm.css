@@ -2,35 +2,53 @@
 @import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
 
 h1 {
-  font-family: "Bree Serif", serif;
-  letter-spacing: 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 200%;
+  margin: 10svh 0 0 0;
+  font-weight: 700;
 }
+
+h2{
+  color: rgb(105, 219, 137);
+  font-size: 120%;
+  font-style: italic;
+  margin-bottom: 0;
+}
+
+main{
+  padding: 0 !important;
+}
+
 form {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column !important;
-  padding: 50px;
-  background-color: rgb(253, 253, 253);
-  border-radius: 5px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  min-width: 500px;
-  min-height: 700px;
+  display: flex;
+  justify-content: flex-start;
+  box-shadow: none !important;
+  background-color: #F2F2F2;
+  padding: 0 !important;
+  padding-bottom: 15svh !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  width: 40% !important;
+  width: 30% !important;
   font-size: 18px;
   font-family: monospace;
   font-weight: lighter;
   color: rgb(6, 74, 74);
   margin-top: 40px;
 }
-/* input {
-  margin-top: 10px;
-} */
+
+forminput {
+  border-bottom:solid 2px rgb(79, 214, 117);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: #FDFDFD;
+  border-radius: 0;
+}
+
 input::placeholder {
   font-style: italic;
   font-weight: 200 !important;
@@ -52,7 +70,7 @@ input::placeholder {
 }
 
 .register-icon {
-  color: rgb(79, 214, 117);
+  color: rgb(79, 214, 117) !important;
   font-size: 25px;
   margin-top: 20px;
 }
@@ -60,12 +78,13 @@ input::placeholder {
 .register-icon:hover {
   transform: scale(1.1) !important;
 }
+
 .error {
   color: rgb(235, 63, 6) !important;
   font-size: 15px !important;
-  margin-top: -10px;
   font-family: monospace;
 }
+
 .error-message {
   color: rgb(235, 63, 6);
   font-size: 15px;

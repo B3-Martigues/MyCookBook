@@ -60,7 +60,7 @@ const ProfileForm = ({
               <div className="error">{formik.errors.password} </div>
             ) : null}
           </label>
-          <label htmlFor="repeatPassword">
+          <label htmlFor="repeatPassword" id="repeatPasswordLabel">
             Confirmez le mot de passe
             <input
               type="password"
@@ -76,22 +76,25 @@ const ProfileForm = ({
               <div className="error-message">{errorMessage}</div>
             )}
             {formik.touched.repeatPassword && formik.errors.repeatPassword ? (
-              <div>{formik.errors.repeatPassword} </div>
+              <div className="error">{formik.errors.repeatPassword}</div>
             ) : null}
           </label>
           {/* Ajout d'un bouton de soumission pour envoyer le formulaire*/}
-          <button type="submit">Mettre à jour</button>
+          <div className="button-container">
+          <button
+            type="button"
+            className="delete-account-parent-button" // Affiche la confirmation de suppression
+            onClick={confirmDelete}
+          >
+            Supprimer
+          </button>
+            <button type="submit" className="update-account-parent-button">Mettre à jour</button>
+        </div>
         </div>
       </form>
       {/* Section pour supprimer le compte de l'utilisateur */}
       <span>
-        <button
-          type="button"
-          className="delete-account-parent-button" // Affiche la confirmation de suppression
-          onClick={confirmDelete}
-        >
-          Supprimer mon compte
-        </button>
+
         {showDeleteModal && (
           <div className="modal">
             <h4>

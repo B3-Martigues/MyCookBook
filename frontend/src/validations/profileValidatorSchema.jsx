@@ -33,7 +33,7 @@ const profileValidatorSchema = () => {
     repeatPassword: Yup.string()
       .oneOf(
         [Yup.ref("password"), null],
-        "Le mots de passe doivent correspondre"
+        "Les mots de passe doivent correspondre"
       )
       .notRequired(),
   });
