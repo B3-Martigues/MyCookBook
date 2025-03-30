@@ -14,6 +14,7 @@ const MyFavorites = () => {
   const [favorites, setFavorites] = useState([]); //État pour stocker les recettes favorites de l'utilisateur
   const [selectedRecipe, setSelectedRecipe] = useState(null); //État pour stocker la recette actuellement sélectionnée
   const [error, setError] = useState(null);
+  const [ratingsData, setRatingsData] = useState({}); // Ajout de l'état pour les notes
 
   const isMobile = window.innerWidth <= 768;
 
@@ -134,6 +135,12 @@ const MyFavorites = () => {
           onClose={() => setSelectedRecipe(null)}
           favorites={favorites}
           setFavorites={setFavorites}
+          updateRating={(recipeId, newRating) => {
+            setRatingsData((prevRatings) => ({
+              ...prevRatings,
+              [recipeId]: newRating,
+            }));
+          }}
         />
       )}
     </div>

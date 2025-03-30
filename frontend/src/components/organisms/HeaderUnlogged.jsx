@@ -37,10 +37,21 @@ const HeaderUnlogged = () => {
           <Link to="/" className="logo-link">
             <h2 className="logo">MyCookBook</h2>
           </Link>
+          {/* Version mobile/tablet */}
+          <div className="nav-links-unlogged-mobile">
+            <Link 
+              to="/login" 
+              className={`nav-link nav-page ${isActive('/login') ? 'nav-active' : ''}`}
+            >
+              <FontAwesomeIcon icon={faSignIn} />
+              <span>Connexion</span>
+            </Link>
+          </div>
         </div>
 
         {!isSearchPage && <SearchBar />}
 
+        {/* Version desktop */}
         <div className="nav-links">
           <Link 
             to="/login" 
@@ -50,6 +61,8 @@ const HeaderUnlogged = () => {
             <span>Connexion</span>
           </Link>
         </div>
+
+        
       </nav>
     </header>
   );

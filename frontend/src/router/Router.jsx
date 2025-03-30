@@ -21,7 +21,10 @@ const Router = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return (
     <BrowserRouter>
-      <ToastContainer autoClose={1000} />
+      <ToastContainer 
+        autoClose={1000} 
+        style={{ top: '60px' }}  // Baisse les notifications de 50px
+      />
       <Routes>
         <Route
           path="/"

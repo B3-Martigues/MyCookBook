@@ -177,24 +177,49 @@
   gap: 2rem;
 }
 
-/* Ajustement pour le mobile */
+/* Styles de base */
+.nav-links-unlogged-mobile {
+  display: none;  /* Caché par défaut (desktop) */
+}
+
+.nav-links {
+  display: flex;  /* Visible par défaut (desktop) */
+  align-items: center;
+}
+
+/* Media query pour tablet et mobile */
 @media screen and (max-width: 768px) {
+  .nav-links {
+    display: none;  /* Cache la version desktop */
+  }
+
+  .nav-links-unlogged-mobile {
+    display: flex;  /* Affiche la version mobile */
+    align-items: center;
+    margin-left: auto;  /* Aligne à droite avec le logo */
+  }
+
   .header-container {
-    flex-direction: row; /* Force la direction en ligne */
+    flex-direction: row;
     margin: 0 15px;
     gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  .top-header {
-    flex: 0 0 auto; /* Empêche le logo de rétrécir */
+  .nav-links-unlogged-mobile .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
   }
 
-  .nav-links {
-    flex: 0 0 auto; /* Empêche le bouton de rétrécir */
+  .nav-links-unlogged-mobile .nav-link svg {
+    font-size: 1rem;
   }
 
-  /* Cache la barre de recherche en mobile si nécessaire */
-  .search-container {
-    display: none;
+  .nav-links-unlogged-mobile .nav-link span {
+    display: inline;  /* Assure que le texte est visible */
+    font-size: 1rem;
   }
 }

@@ -5,10 +5,10 @@ import {
   deleteFavoriteRecipe,
 } from "../../api/favoritesApi";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faHeartCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import "../../styles/organisms/ManageMyFavorites.css";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import useAuthStore from "../../store/AuthStore";
-import { Tooltip } from "react-tooltip";
+import "../../styles/organisms/ManageMyFavorites.css";
 
 // Composant ManageMyFavorites permet d'ajouter et de supprimer des recettes des favoris en cliquant sur un bouton
 const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
@@ -25,6 +25,14 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
 
   // Fonction pour ajouter et supprimer une recette des favoris
   const toggleFavorite = async () => {
+    if (!isAuthenticated) {
+      toast("Vous devez être connecté pour mettre en favoris une recette", {
+        position: "top-center",
+        autoClose: 2000,
+      });
+      return;
+    }
+    
     setError(null);
     try {
       if (isFavorite) {
@@ -42,11 +50,6 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
       setError(`Une erreur est survenue: ${err.message}`);
     }
   };
-
-  // Si l'utilisateur n'est pas connecté, le bouton de favori n'est affiche pas
-  if (!isAuthenticated) {
-    return null;
-  }
 
   // Rendu du bouton qui permet d'ajouter ou de supprimer la recette de favoris
   return (
