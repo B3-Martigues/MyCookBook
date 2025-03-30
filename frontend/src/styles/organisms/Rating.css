@@ -7,22 +7,24 @@
   color: #e2dbdb;  /* Couleur grise pour les étoiles non sélectionnées */
 }
 
-.star.green {
-  color: #4fd675;
+.star.yellow {
+  color: #FFD700;  /* Couleur dorée pour les étoiles sélectionnées/survolées */
 }
 
 .rating {
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 4px;
 }
 
 .thumb-icon {
+  background: none;
+  border: none;
   margin-left: 10%;
   font-size: 25px;
-  color: #4fd675;  /* Couleur verte pour le bouton de validation */
+  color: #4fd675;
   cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .thumb-icon:hover {
@@ -76,4 +78,19 @@
 .rating-star:hover,
 .rating-star.active {
   color: #4fd675;
+}
+
+.rating-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  padding: 0;
+  color: #e2dbdb;
+  transition: all 0.2s ease;
+}
+
+.rating-btn.active {
+  color: #FFD700;
+  transform: scale(1.1);
 }

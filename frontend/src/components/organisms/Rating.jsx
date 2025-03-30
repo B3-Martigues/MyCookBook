@@ -1,25 +1,36 @@
-import { addRating } from "../../api/ratingApi";
-import { useState } from "react";
+import { addRating, getRatings } from "../../api/ratingApi";
+import { useState, useEffect } from "react";
 import useAuthStore from "../../store/AuthStore";
 import { toast } from "react-toastify";
-import { Tooltip } from "react-tooltip";
-import "../../styles/organisms/Rating.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faThumbsUp, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import "../../styles/organisms/Rating.css";
+
 const Rating = ({ recipeId, updateRating }) => {
-  const [newRating, setNewRating] = useState(0); // Stocke la note sélectionnée avant validation
+  const [newRating, setNewRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
   const { isAuthenticated } = useAuthStore();
-  const [hoverRating, setHoverRating] = useState(0); // Stocke la note temporaire lorsqu'on survole les étoiles
 
-  // Mise à jour de la note sélectionné par l'utilisateur
-  const handleRatingChange = (rating) => {
-    setNewRating(rating);
-  };
+  // Charger la note existante au montage du composant
+  useEffect(() => {
+    const fetchRating = async () => {
+      try {
+        const response = await getRatings();
+        if (response.success && response.ratings[recipeId]) {
+          setNewRating(response.ratings[recipeId]);
+        }
+      } catch (err) {
+        console.error("Erreur lors du chargement de la note:", err);
+      }
+    };
+    
+    if (recipeId) {
+      fetchRating();
+    }
+  }, [recipeId]);
 
-  // Envoi de la note au backend après confirmation
-  const handleSubmitRating = async () => {
+  const handleRatingClick = async (rating) => {
     try {
-      // Seul un utilisateur peut noter les recettes
       if (!isAuthenticated) {
         toast("Vous devez être connecté pour noter une recette", {
           position: "top-center",
@@ -27,56 +38,53 @@ const Rating = ({ recipeId, updateRating }) => {
         });
         return;
       }
-      const response = await addRating(recipeId, newRating);
+
+      // Mise à jour optimiste de l'UI
+      setNewRating(rating);
+      
+      const response = await addRating(recipeId, rating);
+      
       if (response.error) {
-        console.error("Erreur lors de l'ajout de la note", response.error);
-        toast("La note n'a pas été enregistrée");
+        // En cas d'erreur, on revient à l'état précédent
+        setNewRating(prevRating => prevRating);
+        toast.error("La note n'a pas été enregistrée");
         return;
       }
-      // Mise à jour des notes dans l'état local
+
+      // Mise à jour de la note moyenne dans l'interface
       updateRating(recipeId, response.averageRating);
-      // Réinitialisation de la note sélectionnée
-      setNewRating(0);
-      toast("Votre note a été enregistrée !");
+      toast.success("Votre note a été enregistrée !");
     } catch (err) {
-      toast("Une erreur s'est produite. Veuillez réessayer");
+      // En cas d'erreur, on revient à l'état précédent
+      setNewRating(prevRating => prevRating);
+      toast.error("Une erreur s'est produite. Veuillez réessayer");
       console.error(`Erreur: ${err}`);
     }
   };
 
-  // Un effect interactive du style après avoir ciblé une des etoiles avec le cursor,
   const handleMouseEnter = (rating) => {
     setHoverRating(rating);
   };
-  // Suppression de l'effet de survol après sortie du curseur
+
   const handleMouseLeave = () => {
     setHoverRating(0);
   };
 
   return (
-    <div>
-      <div className="rating">
-        {/* Affichage dynamique des étoiles*/}
-        {[1, 2, 3, 4, 5].map((star) => (
-          <span
-            key={star}
-            className={`star ${
-              star <= (hoverRating || newRating) ? "green" : ""
-            }`}
-            onMouseEnter={() => handleMouseEnter(star)}
-            onClick={() => handleRatingChange(star)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <FontAwesomeIcon icon={faStar} />
-          </span>
-        ))}
+    <div className="rating">
+      {[1, 2, 3, 4, 5].map((star) => (
         <button
-          className="thumb-icon"
-          onClick={handleSubmitRating}
+          key={star}
+          className={`rating-btn ${
+            star <= (hoverRating || newRating) ? "filled" : "outlined"
+          }`}
+          onMouseEnter={() => handleMouseEnter(star)}
+          onClick={() => handleRatingClick(star)}
+          onMouseLeave={handleMouseLeave}
         >
-          <FontAwesomeIcon icon={faThumbsUp} />
+          {star <= (hoverRating || newRating) ? "★" : "☆"}
         </button>
-      </div>
+      ))}
     </div>
   );
 };
