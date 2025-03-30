@@ -71,32 +71,47 @@ h1 {
   color: white !important;
 }
 
-.rating-label {
-  background-color: rgba(255, 255, 255, 0.95);
-  padding: 4px 8px;
-  border-radius: 20px;
+.rating-display {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 0.85rem;
-  height: 26px;
-  backdrop-filter: blur(4px);
 }
 
-.stars {
-  color: #FFD700 !important; /* Étoiles en jaune */
-  font-size: 12px;
+.rating-star {
+  font-size: 20px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 }
 
-.stars.green {
-  color: rgb(79, 214, 117);
+.rating-star.filled {
+  color: #FFA500;
+}
+
+.rating-star.outlined {
+  color: #FFA500;
+  opacity: 0.7;
+}
+
+.rating-value {
+  margin-left: 6px;
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.rating-label {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 6px 10px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .favorites-rating-container {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  right: 12px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
   display: flex;
   justify-content: space-between;
   z-index: 2;

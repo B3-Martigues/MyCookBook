@@ -11,7 +11,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
-  padding: 20px 0 40px 0;
+  padding: 25px 0 125px 0;
   gap: 16px;
 }
 
@@ -157,16 +157,18 @@
 }
 
 .chat-input-container {
-  padding: 16px 0;
+  padding: 16px;
   background: white;
   border-top: 1px solid #e2e8f0;
   display: flex;
   gap: 12px;
   align-items: center;
-  position: sticky;
+  position: absolute;
   bottom: 0;
   left: 0;
   z-index: 10;
+  width: -webkit-fill-available;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
 }
 
 textarea {

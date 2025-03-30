@@ -33,6 +33,16 @@ const DetailsRecipe = ({
   const [activeTab, setActiveTab] = useState('ingredients');
   const [ingredientsData, setIngredientsData] = useState(null);
 
+  // Bloquer/débloquer le scroll quand la modal s'ouvre/se ferme
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    
+    // Cleanup function pour rétablir le scroll quand la modal se ferme
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Hook useEffect récupère les données des ingrédients au chargement du composant
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -79,6 +89,12 @@ const DetailsRecipe = ({
       onRequestClose={onClose}
       className="recipe-modal"
       overlayClassName="recipe-modal-overlay"
+      style={{
+        overlay: {
+          position: 'fixed',
+          overflow: 'hidden'
+        }
+      }}
     >
       <div className="modal-container">
         <div className="modal-header">

@@ -85,17 +85,17 @@ const ListRecipes = () => {
 
   // Calcul de la nombre des étoiles pour la note moyenne
   const renderStars = (rating) => {
-    const fullStars = Math.round(rating);
     return (
-      <div>
+      <div className="rating-display">
         {[1, 2, 3, 4, 5].map((star) => (
           <span
             key={star}
-            className={`stars  ${star <= fullStars ? "green" : ""}`}
+            className={`rating-star ${star <= rating ? "filled" : "outlined"}`}
           >
-            <FontAwesomeIcon icon={faStar} />
+            {star <= rating ? "★" : "☆"}
           </span>
         ))}
+        <span className="rating-value">{rating ? rating.toFixed(1) : "0.0"}</span>
       </div>
     );
   };
@@ -136,20 +136,10 @@ const ListRecipes = () => {
           <div className="img-container" key={recipe._id}>
             <div className="favorites-rating-container">
               <div className="rating-label">
-                {ratingsData[recipe._id] ? (
-                  <>
-                    {/* Affichage des étoiles selon la note moyenne */}
-                    {renderStars(ratingsData[recipe._id])}
-                    <span>{ratingsData[recipe._id].toFixed(1)}</span>
-                  </>
-                ) : (
-                  "Aucune note"
-                )}
+                {renderStars(ratingsData[recipe._id] || 0)}
               </div>
-              {/* Gestion des favoris avec un bouton d'action */}
               <div className="fav-list">
                 <ManageMyFavorites
-                  // Les props permettent l'echange des données
                   recipeId={recipe._id}
                   favorites={favorites}
                   setFavorites={setFavorites}
