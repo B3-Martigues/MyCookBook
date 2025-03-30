@@ -135,9 +135,11 @@ const ListRecipes = () => {
         {currentRecipes.map((recipe) => (
           <div className="img-container" key={recipe._id}>
             <div className="favorites-rating-container">
-              <div className="rating-label">
-                {renderStars(ratingsData[recipe._id] || 0)}
-              </div>
+              {ratingsData[recipe._id] > 0 && (
+                <div className="rating-label">
+                  {renderStars(ratingsData[recipe._id])}
+                </div>
+              )}
               <div className="fav-list">
                 <ManageMyFavorites
                   recipeId={recipe._id}
