@@ -144,8 +144,8 @@
 
 /* Style pour le lien actif */
 .nav-active {
-  background: rgba(79, 214, 117, 0.1);
-  color: #4fd675;
+  background: #43be66;
+  color: #fff;
   font-weight: 700;
 }
 

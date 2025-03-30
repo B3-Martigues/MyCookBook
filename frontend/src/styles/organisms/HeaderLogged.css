@@ -131,7 +131,7 @@
 
 /* Effet de survol des liens */
 .nav-link:hover {
-  color: #4fd675;
+  color: #217040;
 }
 
 /* Animation de la barre sous les liens */
@@ -140,7 +140,7 @@
   position: absolute;
   width: 0;
   height: 2px;
-  background-color: #4fd675;
+  background-color: #217040;
   bottom: -4px;
   left: 0;
   transition: width 0.2s ease;
@@ -334,7 +334,7 @@
 
 /* Style pour le lien actif */
 .nav-active {
-  background: rgba(79, 214, 117, 0.1);
+  background: #43be66;
   font-weight: 700;
 }
 
@@ -346,7 +346,7 @@
   transform: translateX(-50%);
   width: 30%;
   height: 3px;
-  background: #4fd675;
+  background: #217040;
   border-radius: 2px;
 }
 
