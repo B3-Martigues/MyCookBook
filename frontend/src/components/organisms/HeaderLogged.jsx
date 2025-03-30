@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes, faUser, faCaretDown } from "@fortawesome/free-solid-svg-icons";
@@ -15,9 +15,10 @@ import SearchBar from "./SearchBar";
 const HeaderLogged = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const location = useLocation();
   const isSearchPage = location.pathname === "/search";
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Fonction pour vérifier si le lien est actif
   const isActive = (path) => location.pathname === path;
@@ -55,6 +56,20 @@ const HeaderLogged = () => {
   useEffect(() => {
     setIsProfileOpen(false);
   }, [location.pathname]);
+
+  // Gestionnaire de clic à l'extérieur
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <header className={`main-header ${isScrolled ? 'scrolled' : ''}`}>
@@ -109,7 +124,7 @@ const HeaderLogged = () => {
             Mes favoris
           </Link>
           
-          <div className="profile-dropdown">
+          <div className="profile-dropdown" ref={dropdownRef}>
             <button 
               className={`profile-button ${isProfileOpen ? 'active' : ''}`} 
               onClick={toggleProfile}
