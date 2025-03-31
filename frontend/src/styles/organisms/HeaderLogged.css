@@ -85,29 +85,7 @@
 /* ---------------------------------- */
 /* Barre de recherche                 */
 /* ---------------------------------- */
-.search-container {
-  flex: 1;
-  margin: 0 2rem;
-}
 
-.search-bar {
-  width: 100%;
-}
-
-.search-bar input {
-  width: 100%;
-  padding: 0.5rem 1rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: all 0.2s ease;
-}
-
-.search-bar input:focus {
-  border-color: #4fd675;
-  /* Effet de focus subtil */
-  outline: none;
-}
 
 /* ---------------------------------- */
 /* Navigation principale              */
@@ -177,6 +155,14 @@
     order: 4;
     width: 100%;
     margin: 0;
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    overflow: visible;
   }
 
   .nav-links {

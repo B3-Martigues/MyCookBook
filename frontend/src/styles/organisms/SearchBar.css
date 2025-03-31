@@ -9,6 +9,7 @@
   border-radius: 8px;
   border: 1px solid #e0e0e0;
   overflow: visible;
+  transition: all 0.2s ease;
 }
 
 .search-bar-container input {

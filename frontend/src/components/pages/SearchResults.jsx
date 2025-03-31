@@ -3,6 +3,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { searchRecipes } from "../../api/recipesApi";
 import DetailsRecipe from "./DetailsRecipe"; // Importation du composant DetailsRecipe
 import "../../styles/organisms/SearchResultRecipes.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortUp, faSortDown } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const SearchResults = () => {
   const location = useLocation();
@@ -215,7 +219,7 @@ const SearchResults = () => {
     <div className="search-main">
     <div className="search-results-page">
       {/* Barre de recherche simple sans autocomplétion */}
-      <div className="search-container">
+      <div className="search-bar">
         <form onSubmit={handleSearchSubmit} className="search-form">
           <input
             type="text"
@@ -223,9 +227,27 @@ const SearchResults = () => {
             value={searchTerm}
             onChange={handleSearchChange}
           />
-          <button type="submit">Rechercher</button>
+          <div className="sort-direction">
+            <button 
+            type="button" 
+            onClick={toggleSortDirection}
+            style={{ position: 'relative' }}
+          >
+            {parseInt(Object.values(sort)[0]) === 1 ? 
+              <FontAwesomeIcon icon={faSortUp} /> :
+              <FontAwesomeIcon icon={faSortDown} />
+            }
+            <span 
+              className="tooltip"
+            >
+              {parseInt(Object.values(sort)[0]) === 1 ? 'Croissant' : 'Décroissant'}
+            </span>
+          </button>
+          </div>
         </form>
+        
       </div>
+      
 
       {/* Outils de filtre et tri */}
       <div className="filters-and-sort">
@@ -234,6 +256,7 @@ const SearchResults = () => {
           <select 
             value={filters.category}
             onChange={(e) => handleFilterChange("category", e.target.value)}
+            className="select-search-page"
           >
             <option value="">Toutes</option>
             <option value="Entrée">Entrée</option>
@@ -254,6 +277,7 @@ const SearchResults = () => {
           <select 
             value={filters.difficulty}
             onChange={(e) => handleFilterChange("difficulty", e.target.value)}
+            className="select-search-page"
           >
             <option value="">Toutes</option>
             <option value="Facile">Facile</option>
@@ -267,6 +291,7 @@ const SearchResults = () => {
           <select 
             value={filters.cost}
             onChange={(e) => handleFilterChange("cost", e.target.value)}
+            className="select-search-page"
           >
             <option value="">Tous</option>
             <option value="Faible">Faible</option>
@@ -275,57 +300,29 @@ const SearchResults = () => {
           </select>
         </label>
 
-        <div className="sort-container" style={{ display: 'flex' }}>
           <label>
             Trier par :
             <select 
               value={Object.keys(sort)[0]}
               onChange={handleSortChange}
+              className="select-search-page"
             >
               <option value="name">Nom</option>
               <option value="difficulty">Difficulté</option>
               <option value="cost">Coût</option>
             </select>
           </label>
-          <div className="sort-direction" style={{ marginLeft: '10px', display: 'flex', alignItems: 'flex-end' }}>
-            <button 
-              type="button" 
-              onClick={toggleSortDirection}
-            >
-              {parseInt(Object.values(sort)[0]) === 1 ? '↑' : '↓'}
-              <span 
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: 'rgba(0,0,0,0.75)',
-                  color: 'white',
-                  padding: '5px 10px',
-                  borderRadius: '5px',
-                  fontSize: '12px',
-                  whiteSpace: 'nowrap',
-                  opacity: 0,
-                  visibility: 'hidden',
-                  transition: 'opacity 0.2s, visibility 0.2s'
-                }}
-              >
-                {getSortDirectionText()}
-              </span>
-            </button>
+          
 
-          </div>
-        </div>
       </div>
 
       {/* État de chargement */}
-      {loading && <div className="loading">Chargement des résultats...</div>}
+      {loading && <div className="loading"></div>}
 
       {/* Résultats */}
       <div className="results">   
       <div className="results-terms">
           <span>{searchTerm}</span>
-          {getActiveFiltersText()}
           <div>
             {results.length > 0 ? `${results.length} résultat(s)` : 'Aucune recette trouvée'}
           </div>
@@ -333,27 +330,28 @@ const SearchResults = () => {
       <div className="results-container">
         {results.length > 0 ? (
           results.map((recipe) => (
-            <div 
-              key={recipe._id} 
-              className="result-item"
-              onClick={() => openModal(recipe)} // Ajout de l'événement de clic pour ouvrir la modale
-              style={{ cursor: 'pointer' }} // Ajout d'un style pour indiquer que c'est cliquable
-            >
-              <img 
-                src={recipe.picture.startsWith('http') ? recipe.picture : `http://localhost:8080/${recipe.picture}`} 
-                alt={recipe.name} 
-                onError={(e) => {e.target.onerror = null; e.target.src = "./public/images/placeholder.jpg"}}
-              />
-              <div className="recipe-card-details">
-                <h3>{recipe.name}</h3>
-                <p>Catégorie : {recipe.category}</p>
-                <p>Difficulté : {recipe.difficulty}</p>
-                {recipe.cost && <p>Coût : {recipe.cost}</p>}
-                <div className="ingredients-list">
-                  <p>Ingrédients : {recipe.ingredients_and_quantities.map(ing => ing.name).join(', ')}</p>
-                </div>
-              </div>
-            </div>
+      <div 
+        key={recipe._id} 
+        className="img-container" // Ajout des nouvelles classes
+        onClick={() => openModal(recipe)} // Ajout de l'événement de clic pour ouvrir la modale
+      >
+        <div className="img-items">
+          <img 
+            src={recipe.picture.startsWith('http') ? recipe.picture : `http://localhost:8080/${recipe.picture}`} 
+            alt={recipe.name} 
+            onError={(e) => {e.target.onerror = null; e.target.src = "./public/images/placeholder.jpg"}}
+          />
+        </div>
+        <div className="recipe-card-details">
+          <h3>{recipe.name}</h3>
+          <p><strong>Catégorie : </strong>{recipe.category}</p>
+          <p><strong>Difficulté : </strong>{recipe.difficulty}</p>
+          {recipe.cost && <p><strong>Coût </strong>: {recipe.cost}</p>}
+          <div className="ingredients-list">
+            <p><strong>Ingrédients : </strong>{recipe.ingredients_and_quantities.map(ing => ing.name).join(', ')}</p>
+          </div>
+        </div>
+      </div>
           ))
         ) : (
           <p className="no-results">
