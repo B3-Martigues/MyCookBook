@@ -24,19 +24,19 @@
 .user-form label {
   display: flex;
   flex-direction: column;
-  width: clamp(250px, 20vw, 500px) !important;
+  width: clamp(250px, 20vw, 500px);
   font-size: clamp(14px, 2vw, 18px);
   margin-top: 40px;
 }
-
-/* input {
-  padding: 12px !important;
-} */
+.user-form label > h2 {
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 300;
+}
 
 input::placeholder {
   font-style: italic;
-  font-weight: 200 !important;
-  font-size: 16px !important;
+  font-weight: 200;
+  font-size: 16px;
   color: rgb(187, 184, 184);
   font-family: "Times New Roman", Times, serif;
 }
@@ -50,6 +50,6 @@ input::placeholder {
   letter-spacing: 2px;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  padding: 15px;
+  padding: 10px !important;
   margin-top: 50px;
 }

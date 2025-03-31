@@ -10,13 +10,13 @@ const ProfileForm = ({
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de modifier ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
   return (
-    <div className="profil-main-container">
+    <>
       <form className="profile-form" onSubmit={formik.handleSubmit}>
         <h1>Mon Profil</h1>
         <div className="profile-container">
           {/* htmlFor associe un label à un champ de formulaire */}
           <label htmlFor="name">
-            Nom
+            <h2>Nom</h2>
             <input
               type="text"
               name="name"
@@ -32,7 +32,8 @@ const ProfileForm = ({
             ) : null}
           </label>
           <label htmlFor="email">
-            Email
+            <h2>Nom</h2>
+
             <input
               type="email"
               name="email"
@@ -46,7 +47,8 @@ const ProfileForm = ({
             ) : null}
           </label>
           <label htmlFor="password">
-            Nouveau mot de passe
+            <h2>Nouveau mot de passe</h2>
+
             <input
               type="password"
               name="password"
@@ -61,7 +63,8 @@ const ProfileForm = ({
             ) : null}
           </label>
           <label htmlFor="repeatPassword" id="repeatPasswordLabel">
-            Confirmez le mot de passe
+            <h2>Confirmez le mot de passe</h2>
+
             <input
               type="password"
               name="repeatPassword"
@@ -140,7 +143,7 @@ const ProfileForm = ({
           </div>
         )}
       </span>
-    </div>
+    </>
   );
 };
 

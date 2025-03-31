@@ -8,7 +8,7 @@ const RegisterForm = ({ formik, errorMessage }) => (
     <h2>Veuillez créer vos identifiants</h2>
     {/* htmlFor associe un label à un champ de formulaire */}
     <label htmlFor="name">
-      Nom:
+      <h2>Nom:</h2>
       <input
         type="text"
         name="name"
@@ -24,7 +24,7 @@ const RegisterForm = ({ formik, errorMessage }) => (
     </label>
 
     <label htmlFor="email">
-      Email:
+      <h2>Email:</h2>
       <input
         type="email"
         name="email"
@@ -39,7 +39,7 @@ const RegisterForm = ({ formik, errorMessage }) => (
       ) : null}
     </label>
     <label htmlFor="password">
-      Le mot de passe:
+      <h2>Le mot de passe:</h2>
       <input
         type="password"
         name="password"
@@ -54,7 +54,7 @@ const RegisterForm = ({ formik, errorMessage }) => (
       ) : null}
     </label>
     <label htmlFor="repeatPassword">
-      Confirmez le mot de passe:
+      <h2>Confirmez le mot de passe:</h2>
       <input
         type="password"
         name="repeatPassword"

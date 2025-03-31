@@ -305,5 +305,5 @@
   display: flex;
   flex-direction: column;
   max-height: calc(90vh - 40px); /* Hauteur maximale moins les marges */
-  overflow: hidden;              /* Cache le débordement */
+  overflow: hidden; /* Cache le débordement */
 }

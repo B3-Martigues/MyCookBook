@@ -7,7 +7,7 @@ import { getRatings } from "../../api/ratingApi";
 import DetailsRecipe from "../pages/DetailsRecipe";
 import "../../styles/organisms/Recommendation.css";
 import { useNavigate } from "react-router-dom";
-import Card from '../molecules/Card';
+import Card from "../molecules/Card";
 
 const Recommendation = ({ favorites, setFavorites }) => {
   const [recipes, setRecipes] = useState([]);
@@ -23,15 +23,20 @@ const Recommendation = ({ favorites, setFavorites }) => {
         const response = await getAllRecipes();
         if (response.success) {
           // Créer un Set des IDs des favoris pour une recherche plus rapide
-          const favoriteIds = new Set(favorites.map(fav => fav._id));
-          
+          const favoriteIds = new Set(favorites.map((fav) => fav._id));
+
           // Filtrer strictement les recettes qui ne sont PAS dans les favoris
-          const nonFavoriteRecipes = response.recipes.filter(recipe => !favoriteIds.has(recipe._id));
-          
+          const nonFavoriteRecipes = response.recipes.filter(
+            (recipe) => !favoriteIds.has(recipe._id)
+          );
+
           // Si on a des recettes non favorites, on en prend 3 aléatoirement
           if (nonFavoriteRecipes.length > 0) {
             const shuffled = nonFavoriteRecipes.sort(() => 0.5 - Math.random());
-            const recommendedRecipes = shuffled.slice(0, Math.min(3, nonFavoriteRecipes.length));
+            const recommendedRecipes = shuffled.slice(
+              0,
+              Math.min(3, nonFavoriteRecipes.length)
+            );
             setRecipes(recommendedRecipes);
           } else {
             // Si toutes les recettes sont en favoris, on met un tableau vide
@@ -75,7 +80,9 @@ const Recommendation = ({ favorites, setFavorites }) => {
             {star <= rating ? "★" : "☆"}
           </span>
         ))}
-        <span className="rating-value">{rating ? rating.toFixed(1) : "0.0"}</span>
+        <span className="rating-value">
+          {rating ? rating.toFixed(1) : "0.0"}
+        </span>
       </div>
     );
   };
@@ -87,9 +94,11 @@ const Recommendation = ({ favorites, setFavorites }) => {
 
   const handleFavoriteUpdate = async (recipeId, newFavorites) => {
     setFavorites(newFavorites);
-    
+
     // Retirer immédiatement la recette des recommandations
-    setRecipes(prevRecipes => prevRecipes.filter(recipe => recipe._id !== recipeId));
+    setRecipes((prevRecipes) =>
+      prevRecipes.filter((recipe) => recipe._id !== recipeId)
+    );
   };
 
   return (
@@ -133,4 +142,4 @@ const Recommendation = ({ favorites, setFavorites }) => {
   );
 };
 
-export default Recommendation; 
+export default Recommendation;

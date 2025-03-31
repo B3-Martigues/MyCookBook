@@ -1,25 +1,29 @@
 .profile-form {
   display: flex;
-  justify-content: flex-start;
-  box-shadow: none !important;
-  background-color: #fdfdfd;
-  padding: 0;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgb(253, 253, 253);
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: clamp(280px, 70vw, 900px);
+  margin: 4vw auto;
+  padding: 2vw;
 }
 
 .profile-form h1 {
   margin: 0;
   padding: 10px 0;
-  margin-top: 3svh;
-  margin-bottom: 3svh;
+  margin: 3svh auto;
   border-radius: 10px;
   padding: 0.5rem;
   font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: 200%;
+  letter-spacing: 4px;
+  font-size: clamp(20px, 3vw, 36px);
 }
 
-.error {
-  display: block;
+.profile-form h2 {
+  font-size: clamp(16px, 3vw, 22px);
 }
 
 .profile-container {
@@ -28,7 +32,10 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+}
+
+.error {
+  display: block;
 }
 
 .profile-container input {
@@ -38,13 +45,14 @@
   border-right: none;
   background-color: #fdfdfd;
   border-radius: 0;
+  width: clamp(200px, 20vw, 500px);
+  font-size: clamp(16px, 3vw, 22px) !important;
 }
 
 .profile-container label {
   margin: 0 0 8svh 0;
-  width: 25% !important;
   color: rgb(70, 189, 104);
-  font-size: 120%;
+  width: clamp(250px, 20vw, 500px);
 }
 
 .profile-container input:focus {
@@ -64,4 +72,5 @@
   width: 16rem;
   display: flex;
   justify-content: space-between;
+  font-size: clamp(14px, 2vw, 16px);
 }

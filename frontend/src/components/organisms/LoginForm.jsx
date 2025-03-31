@@ -13,7 +13,7 @@ const LoginForm = ({ formik, errorMessage }) => {
       <h2>Veuillez entrer vos identifiants</h2>
       {/* htmlFor associe un label à un champ de formulaire */}
       <label htmlFor="email">
-        Email:
+        <h2>Email:</h2>
         <input
           type="email"
           name="email"
@@ -27,7 +27,7 @@ const LoginForm = ({ formik, errorMessage }) => {
         <div className="error">{formik.errors.email}</div>
       ) : null}
       <label htmlFor="password">
-        Le mot de passe:
+        <h2>Le mot de passe:</h2>
         <input
           type="password"
           name="password"

@@ -30,16 +30,16 @@ const DetailsRecipe = ({
   isAuthenticated,
   currentUser,
 }) => {
-  const [activeTab, setActiveTab] = useState('ingredients');
+  const [activeTab, setActiveTab] = useState("ingredients");
   const [ingredientsData, setIngredientsData] = useState(null);
 
   // Bloquer/débloquer le scroll quand la modal s'ouvre/se ferme
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    
+    document.body.style.overflow = "hidden";
+
     // Cleanup function pour rétablir le scroll quand la modal se ferme
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, []);
 
@@ -84,16 +84,16 @@ const DetailsRecipe = ({
     return <div>Chargement...</div>;
   }
   return (
-    <Modal 
-      isOpen={!!recipe} 
+    <Modal
+      isOpen={!!recipe}
       onRequestClose={onClose}
       className="recipe-modal"
       overlayClassName="recipe-modal-overlay"
       style={{
         overlay: {
-          position: 'fixed',
-          overflow: 'hidden'
-        }
+          position: "fixed",
+          overflow: "hidden",
+        },
       }}
     >
       <div className="modal-container">
@@ -120,7 +120,7 @@ const DetailsRecipe = ({
             alt={recipe.name}
           />
           <h2>{recipe.name}</h2>
-          
+
           <div className="recipe-meta">
             <div className="meta-item">
               <FontAwesomeIcon icon={faUtensils} />
@@ -129,49 +129,52 @@ const DetailsRecipe = ({
             <div className="meta-item">
               <FontAwesomeIcon icon={faHourglass2} />
               <span>
-                {recipe.preparation_time.hours > 0 ? `${recipe.preparation_time.hours}h ` : ''}
+                {recipe.preparation_time.hours > 0
+                  ? `${recipe.preparation_time.hours}h `
+                  : ""}
                 {recipe.preparation_time.minutes}min
               </span>
             </div>
             <div className="meta-item rating">
-              <Rating
-                recipeId={recipe._id}
-                updateRating={updateRating}
-              />
+              <Rating recipeId={recipe._id} updateRating={updateRating} />
             </div>
           </div>
         </div>
 
         <div className="modal-tabs">
-          <button 
-            className={`tab-button ${activeTab === 'ingredients' ? 'active' : ''}`}
-            onClick={() => setActiveTab('ingredients')}
+          <button
+            className={`tab-button ${
+              activeTab === "ingredients" ? "active" : ""
+            }`}
+            onClick={() => setActiveTab("ingredients")}
           >
             Ingrédients
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'steps' ? 'active' : ''}`}
-            onClick={() => setActiveTab('steps')}
+          <button
+            className={`tab-button ${activeTab === "steps" ? "active" : ""}`}
+            onClick={() => setActiveTab("steps")}
           >
             Préparation
           </button>
-          <button 
-            className={`tab-button ${activeTab === 'comments' ? 'active' : ''}`}
-            onClick={() => setActiveTab('comments')}
+          <button
+            className={`tab-button ${activeTab === "comments" ? "active" : ""}`}
+            onClick={() => setActiveTab("comments")}
           >
             Commentaires
           </button>
         </div>
 
         <div className="modal-content">
-          {activeTab === 'ingredients' && (
+          {activeTab === "ingredients" && (
             <div className="ingredients-section">
               <ul className="ingredients-list">
                 {recipe.ingredients_and_quantities.map((ingredient) => {
                   const ingredientData = ingredientsData.find(
-                    (item) => item.name.toLowerCase() === ingredient.name.toLowerCase()
+                    (item) =>
+                      item.name.toLowerCase() === ingredient.name.toLowerCase()
                   );
-                  const ingredientImageUrl = ingredientData?.image || "/images/placeholder.jpg";
+                  const ingredientImageUrl =
+                    ingredientData?.image || "/images/placeholder.jpg";
 
                   return (
                     <li key={ingredient._id} className="ingredient-item">
@@ -179,11 +182,17 @@ const DetailsRecipe = ({
                         className="ingredient-image"
                         src={ingredientImageUrl}
                         alt={ingredient.name}
-                        onError={(e) => {e.target.src = "/images/placeholder.jpg"}}
+                        onError={(e) => {
+                          e.target.src = "/images/placeholder.jpg";
+                        }}
                       />
                       <div className="ingredient-details">
-                        <span className="ingredient-name">{ingredient.name}</span>
-                        <span className="ingredient-quantity">{ingredient.quantity}</span>
+                        <span className="ingredient-name">
+                          {ingredient.name}
+                        </span>
+                        <span className="ingredient-quantity">
+                          {ingredient.quantity}
+                        </span>
                       </div>
                     </li>
                   );
@@ -192,7 +201,7 @@ const DetailsRecipe = ({
             </div>
           )}
 
-          {activeTab === 'steps' && (
+          {activeTab === "steps" && (
             <div className="steps-section">
               <ol className="steps-list">
                 {recipe.steps.map((step) => (
@@ -205,7 +214,7 @@ const DetailsRecipe = ({
             </div>
           )}
 
-          {activeTab === 'comments' && (
+          {activeTab === "comments" && (
             <div className="comments-section">
               <Comment
                 recipeId={recipe._id}

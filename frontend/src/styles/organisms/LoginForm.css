@@ -13,6 +13,7 @@
   margin: 4vw auto;
   padding: 2vw;
 }
+
 .user-form > h1 {
   font-family: "Plus Jakarta Sans", sans-serif;
   letter-spacing: 4px;
@@ -20,63 +21,54 @@
 }
 
 .user-form > h2 {
-  font-size: clamp(16px, 3vw, 22px);
+  font-size: clamp(16px, 4vw, 22px);
   color: rgb(79, 214, 117);
 }
 
 .user-form label {
   display: flex;
   flex-direction: column;
-  width: clamp(250px, 20vw, 500px) !important;
+  width: clamp(250px, 20vw, 500px);
   font-size: clamp(14px, 2vw, 18px);
   margin-top: 40px;
 }
 
-.forminput {
-  border-bottom:solid 2px rgb(79, 214, 117);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  background-color: #fdfdfd;
-  border-radius: 0;
-}
-
 input::placeholder {
   font-style: italic;
-  font-weight: 200 !important;
-  font-size: 14px;
+  font-weight: 200;
+  font-size: clamp(14px, 2vw, 16px);
   color: rgb(187, 184, 184);
   font-family: "Times New Roman", Times, serif;
 }
 .user-btn {
-  width: clamp(120px, 40vw, 200px);
-  background-color: rgb(79, 214, 117) !important;
-  color: white !important;
+  width: clamp(140px, 40vw, 200px) !important;
+  background-color: rgb(79, 214, 117);
+  color: white;
   font-weight: bold;
-  font-size: clamp(16px, 2vw, 20px);
+  font-size: clamp(14px, 2vw, 20px);
   letter-spacing: 2px;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  padding: 15px;
+  padding: 10px !important;
   margin-top: 50px;
 }
 .user-form > strong {
-  margin-top: 1vw;
+  margin-top: 2vw;
 }
 
 .register-icon {
-  color: rgb(79, 214, 117) !important;
+  color: rgb(79, 214, 117);
   font-size: 25px;
   margin-top: 20px;
 }
 
 .register-icon:hover {
-  transform: scale(1.1) !important;
+  transform: scale(1.1);
 }
 
 .error {
-  color: rgb(235, 63, 6) !important;
-  font-size: 15px !important;
+  color: rgb(235, 63, 6);
+  font-size: 15px;
   font-family: monospace;
 }
 
