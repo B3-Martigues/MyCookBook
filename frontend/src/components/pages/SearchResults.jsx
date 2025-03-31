@@ -212,6 +212,7 @@ const SearchResults = () => {
   };
 
   return (
+    <div className="search-main">
     <div className="search-results-page">
       {/* Barre de recherche simple sans autocomplétion */}
       <div className="search-container">
@@ -225,25 +226,6 @@ const SearchResults = () => {
           <button type="submit">Rechercher</button>
         </form>
       </div>
-
-      {/* Affichage du terme de recherche en cours */}
-      {searchTerm && (
-        <div className="current-search-term" style={{
-          margin: '20px 0',
-          padding: '10px 15px',
-          backgroundColor: '#7fb584',
-          borderRadius: '4px',
-          borderLeft: '4px solidrgb(70, 180, 92)',
-          fontSize: '16px',
-          fontWeight: 'bold'
-        }}>
-          Résultats pour : <span style={{ color: 'white' }}>{searchTerm}</span>
-          {getActiveFiltersText()}
-          <div style={{ fontSize: '14px', fontWeight: 'normal', marginTop: '5px' }}>
-            {results.length > 0 ? `${results.length} recette(s) trouvée(s)` : 'Aucune recette trouvée'}
-          </div>
-        </div>
-      )}
 
       {/* Outils de filtre et tri */}
       <div className="filters-and-sort">
@@ -293,7 +275,7 @@ const SearchResults = () => {
           </select>
         </label>
 
-        <div className="sort-container" style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="sort-container" style={{ display: 'flex' }}>
           <label>
             Trier par :
             <select 
@@ -305,21 +287,33 @@ const SearchResults = () => {
               <option value="cost">Coût</option>
             </select>
           </label>
-          <div className="sort-direction" style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
-            <span>{getSortDirectionText()}</span>
+          <div className="sort-direction" style={{ marginLeft: '10px', display: 'flex', alignItems: 'flex-end' }}>
             <button 
               type="button" 
               onClick={toggleSortDirection}
-              style={{ 
-                marginLeft: '5px', 
-                border: 'none', 
-                background: 'none', 
-                cursor: 'pointer',
-                fontSize: '18px'
-              }}
             >
               {parseInt(Object.values(sort)[0]) === 1 ? '↑' : '↓'}
+              <span 
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  backgroundColor: 'rgba(0,0,0,0.75)',
+                  color: 'white',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  fontSize: '12px',
+                  whiteSpace: 'nowrap',
+                  opacity: 0,
+                  visibility: 'hidden',
+                  transition: 'opacity 0.2s, visibility 0.2s'
+                }}
+              >
+                {getSortDirectionText()}
+              </span>
             </button>
+
           </div>
         </div>
       </div>
@@ -328,6 +322,14 @@ const SearchResults = () => {
       {loading && <div className="loading">Chargement des résultats...</div>}
 
       {/* Résultats */}
+      <div className="results">   
+      <div className="results-terms">
+          <span>{searchTerm}</span>
+          {getActiveFiltersText()}
+          <div>
+            {results.length > 0 ? `${results.length} résultat(s)` : 'Aucune recette trouvée'}
+          </div>
+        </div>
       <div className="results-container">
         {results.length > 0 ? (
           results.map((recipe) => (
@@ -362,6 +364,8 @@ const SearchResults = () => {
 
       {/* Ajout du composant DetailsRecipe uniquement lorsqu'une recette est sélectionnée */}
       {selectedRecipe && <DetailsRecipe recipe={selectedRecipe} onClose={closeModal} />}
+    </div>
+    </div>
     </div>
   );
 };

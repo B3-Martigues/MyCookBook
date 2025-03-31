@@ -19,7 +19,7 @@ main{
   padding: 0 !important;
 }
 
-form {
+.user-form {
   display: flex;
   justify-content: flex-start;
   box-shadow: none !important;
@@ -29,7 +29,7 @@ form {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-label {
+.user-form label {
   display: flex;
   flex-direction: column;
   width: 30% !important;
@@ -40,7 +40,7 @@ label {
   margin-top: 40px;
 }
 
-forminput {
+input {
   border-bottom:solid 2px rgb(79, 214, 117);
   border-top: none;
   border-left: none;

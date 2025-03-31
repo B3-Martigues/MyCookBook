@@ -4,7 +4,8 @@ h1 {
   font-family: "Bree Serif", serif;
   letter-spacing: 4px;
 }
-form {
+
+.user-form {
   display: flex !important;
   justify-content: center;
   align-items: center;
@@ -16,7 +17,7 @@ form {
   min-width: 700px;
 }
 
-label {
+.user-form label {
   display: flex;
   flex-direction: column;
   width: 40% !important;
