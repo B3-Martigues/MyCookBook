@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignIn } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/organisms/HeaderUnlogged.css";
 import SearchBar from "./SearchBar";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const HeaderUnlogged = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,10 +20,10 @@ const HeaderUnlogged = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -31,7 +31,7 @@ const HeaderUnlogged = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <header className={`main-header ${isScrolled ? 'scrolled' : ''}`}>
+    <header className={`main-header ${isScrolled ? "scrolled" : ""}`}>
       <nav className="header-container">
         <div className="top-header">
           <Link to="/" className="logo-link">
@@ -39,9 +39,11 @@ const HeaderUnlogged = () => {
           </Link>
           {/* Version mobile/tablet */}
           <div className="nav-links-unlogged-mobile">
-            <Link 
-              to="/login" 
-              className={`nav-link nav-page ${isActive('/login') ? 'nav-active' : ''}`}
+            <Link
+              to="/login"
+              className={`nav-link nav-page ${
+                isActive("/login") ? "nav-active" : ""
+              }`}
             >
               <FontAwesomeIcon icon={faSignIn} />
               <span>Connexion</span>
@@ -53,16 +55,16 @@ const HeaderUnlogged = () => {
 
         {/* Version desktop */}
         <div className="nav-links">
-          <Link 
-            to="/login" 
-            className={`nav-link nav-page ${isActive('/login') ? 'nav-active' : ''}`}
+          <Link
+            to="/login"
+            className={`nav-link nav-page ${
+              isActive("/login") ? "nav-active" : ""
+            }`}
           >
             <FontAwesomeIcon icon={faSignIn} />
             <span>Connexion</span>
           </Link>
         </div>
-
-        
       </nav>
     </header>
   );

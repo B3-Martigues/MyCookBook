@@ -3,7 +3,7 @@ import "../../styles/organisms/RegisterForm.css";
 const RegisterForm = ({ formik, errorMessage }) => (
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de saisir ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
-  <form onSubmit={formik.handleSubmit}>
+  <form className="user-form" onSubmit={formik.handleSubmit}>
     <h1>Bienvenue sur MyCookBook !</h1>
     <h2>Veuillez créer vos identifiants</h2>
     {/* htmlFor associe un label à un champ de formulaire */}
@@ -71,7 +71,7 @@ const RegisterForm = ({ formik, errorMessage }) => (
     {/* Affichage des erreurs du formik et du backend */}
     {formik.errors.api && <div>{formik.errors.api}</div>}
     {errorMessage && <div className="error-message">{errorMessage}</div>}
-    <button className="login-btn" type="submit" disabled={formik.isSubmitting}>
+    <button className="user-btn" type="submit" disabled={formik.isSubmitting}>
       S'inscrire
     </button>
   </form>

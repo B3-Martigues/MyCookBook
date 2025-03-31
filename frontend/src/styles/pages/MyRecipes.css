@@ -1,4 +1,4 @@
-form {
+.form-my-recipes {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -170,7 +170,7 @@ button {
     "Lucida Sans", Arial, sans-serif;
 }
 button:hover {
-  transform: scale(1.00);
+  transform: scale(1);
 }
 .next {
   margin-left: 70%;
@@ -240,7 +240,7 @@ hr {
 }
 
 .empty-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.5rem;
   color: #2c3e50;
   margin: 0;
@@ -248,7 +248,7 @@ hr {
 }
 
 .empty-description {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.1rem;
   color: #64748b;
   line-height: 1.6;
@@ -265,7 +265,7 @@ hr {
   padding: 14px 28px;
   border-radius: 12px;
   border: none;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
@@ -305,4 +305,3 @@ hr {
     font-size: 1rem;
   }
 }
-

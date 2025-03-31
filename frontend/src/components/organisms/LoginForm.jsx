@@ -8,7 +8,7 @@ import { Tooltip } from "react-tooltip";
 //Formik suit les résultats des inputs dynamiquement et informe l'utilisateur en cas d'erreurs.
 const LoginForm = ({ formik, errorMessage }) => {
   return (
-    <form onSubmit={formik.handleSubmit} className="login-form">
+    <form onSubmit={formik.handleSubmit} className="user-form">
       <h1>Bienvenue sur MyCookBook !</h1>
       <h2>Veuillez entrer vos identifiants</h2>
       {/* htmlFor associe un label à un champ de formulaire */}
@@ -43,11 +43,7 @@ const LoginForm = ({ formik, errorMessage }) => {
       {/* Affichage des erreurs du formik et du backend */}
       {formik.errors.api && <div className="error">{formik.errors.api}</div>}
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <button
-        className="login-btn"
-        type="submit"
-        disabled={formik.isSubmitting}
-      >
+      <button className="user-btn" type="submit" disabled={formik.isSubmitting}>
         Se connecter
       </button>
 

@@ -1,5 +1,5 @@
 /* Importer les styles de base partagés */
-@import './HeaderBase.css';
+@import "./HeaderBase.css";
 
 /* Styles for Navbar component */
 .header-container2 {
@@ -179,24 +179,24 @@
 
 /* Styles de base */
 .nav-links-unlogged-mobile {
-  display: none;  /* Caché par défaut (desktop) */
+  display: none; /* Caché par défaut (desktop) */
 }
 
 .nav-links {
-  display: flex;  /* Visible par défaut (desktop) */
+  display: flex; /* Visible par défaut (desktop) */
   align-items: center;
 }
 
 /* Media query pour tablet et mobile */
 @media screen and (max-width: 768px) {
   .nav-links {
-    display: none;  /* Cache la version desktop */
+    display: none; /* Cache la version desktop */
   }
 
   .nav-links-unlogged-mobile {
-    display: flex;  /* Affiche la version mobile */
+    display: flex; /* Affiche la version mobile */
     align-items: center;
-    margin-left: auto;  /* Aligne à droite avec le logo */
+    margin-left: auto; /* Aligne à droite avec le logo */
   }
 
   .header-container {
@@ -219,7 +219,7 @@
   }
 
   .nav-links-unlogged-mobile .nav-link span {
-    display: inline;  /* Assure que le texte est visible */
+    display: inline; /* Assure que le texte est visible */
     font-size: 1rem;
   }
 }

@@ -1,26 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap");
-
-h1 {
-  font-family: "Bree Serif", serif;
-  letter-spacing: 4px;
-}
-form {
-  display: flex !important;
+.user-form {
+  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column !important;
-  padding: 50px;
+  flex-direction: column;
   background-color: rgb(253, 253, 253);
   border-radius: 5px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  min-width: 700px;
+  width: clamp(280px, 70vw, 900px);
+  margin: 4vw auto;
+  padding: 2vw;
+}
+.user-form > h1 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  letter-spacing: 4px;
+  font-size: clamp(20px, 3vw, 36px);
 }
 
-label {
+.user-form > h2 {
+  font-size: clamp(16px, 3vw, 22px);
+  color: rgb(79, 214, 117);
+}
+
+.user-form label {
   display: flex;
   flex-direction: column;
-  width: 40% !important;
-  font-size: 20px;
+  width: clamp(250px, 20vw, 500px) !important;
+  font-size: clamp(14px, 2vw, 18px);
   margin-top: 40px;
 }
 
@@ -36,12 +41,12 @@ input::placeholder {
   font-family: "Times New Roman", Times, serif;
 }
 
-.login-btn {
-  width: 200px;
+.user-btn {
+  width: clamp(120px, 40vw, 200px);
   background-color: rgb(79, 214, 117) !important;
   color: white !important;
   font-weight: bold;
-  font-size: 25px;
+  font-size: clamp(16px, 2vw, 20px);
   letter-spacing: 2px;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);

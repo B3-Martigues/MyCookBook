@@ -11,13 +11,19 @@ const Footer = () => {
           </Link>
           <p>Partagez et découvrez des recettes délicieuses</p>
         </div>
-        
+
         <div className="footer-section">
           <h4>Navigation</h4>
           <ul>
-            <li><Link to="/">Accueil</Link></li>
-            <li><Link to="/my-recipes">Mes Recettes</Link></li>
-            <li><Link to="/my-favorites">Favoris</Link></li>
+            <li>
+              <Link to="/">Accueil</Link>
+            </li>
+            <li>
+              <Link to="/my-recipes">Mes Recettes</Link>
+            </li>
+            <li>
+              <Link to="/my-favorites">Favoris</Link>
+            </li>
           </ul>
         </div>
 

@@ -81,20 +81,21 @@ const ProfileForm = ({
           </label>
           {/* Ajout d'un bouton de soumission pour envoyer le formulaire*/}
           <div className="button-container">
-          <button
-            type="button"
-            className="delete-account-parent-button" // Affiche la confirmation de suppression
-            onClick={confirmDelete}
-          >
-            Supprimer
-          </button>
-            <button type="submit" className="update-account-parent-button">Mettre à jour</button>
-        </div>
+            <button
+              type="button"
+              className="delete-account-parent-button" // Affiche la confirmation de suppression
+              onClick={confirmDelete}
+            >
+              Supprimer
+            </button>
+            <button type="submit" className="update-account-parent-button">
+              Mettre à jour
+            </button>
+          </div>
         </div>
       </form>
       {/* Section pour supprimer le compte de l'utilisateur */}
       <span>
-
         {showDeleteModal && (
           <div className="modal">
             <h4>
