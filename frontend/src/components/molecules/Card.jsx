@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglass2, faUtensils, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faHourglass2, faUtensils, faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
 import { RecipeCardPlaceholder } from "../organisms/Placeholder";
 import "../../styles/molecules/Card.css";
@@ -15,7 +15,9 @@ const Card = ({
   loading = false,
   showFavoriteButton = true,
   showDeleteButton = false,
-  onDelete
+  onDelete,
+  showEditButton = false,
+  onEdit
 }) => {
   if (loading) {
     return <RecipeCardPlaceholder />;
@@ -43,6 +45,14 @@ const Card = ({
               setFavorites={setFavorites}
             />
           </div>
+        )}
+        {showEditButton && (
+          <button 
+            className="edit-btn"
+            onClick={(e) => onEdit(recipe._id, e)}
+          >
+            <FontAwesomeIcon icon={faPencil} />
+          </button>
         )}
         {showDeleteButton && (
           <button 

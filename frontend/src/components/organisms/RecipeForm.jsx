@@ -413,7 +413,10 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form 
+      onSubmit={handleSubmit}
+      className="recipe-edit-form"
+    >
       <h1>{isEditing ? "Modifier la recette" : "Ajouter une recette"}</h1>
 
       {/* Affichage des messages d'erreur ou de succès */}
