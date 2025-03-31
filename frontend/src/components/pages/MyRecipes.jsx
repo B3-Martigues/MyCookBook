@@ -101,6 +101,7 @@ const MyRecipes = () => {
 
       if (data.success) {
         setShowForm(false);
+        toast.success("Nouvelle recette ajoutée avec succès !");
         
         setTimeout(async () => {
           try {
@@ -138,10 +139,10 @@ const MyRecipes = () => {
           recipe._id === updatedRecipe._id ? updatedRecipe : recipe
         )
       );
-      setMessage("Recette modifiée avec succès");
+      toast.success("Recette modifiée avec succès");
     } else {
       setRecipes(prevRecipes => [updatedRecipe, ...prevRecipes]);
-      setMessage("Nouvelle recette ajoutée avec succès");
+      toast.success("Nouvelle recette ajoutée avec succès");
     }
   };
 
@@ -228,19 +229,7 @@ const MyRecipes = () => {
             setShowForm(false);
             setEditingRecipeId(null);
           }}
-          onSuccess={(updatedRecipe) => {
-            setShowForm(false);
-            setTimeout(async () => {
-              try {
-                const response = await getUserRecipes();
-                if (response.success) {
-                  setRecipes(response.recipes);
-                }
-              } catch (err) {
-                console.error("Erreur lors de l'actualisation des recettes:", err);
-              }
-            }, 300);
-          }}
+          onSuccess={handleRecipeFormSuccess}
         />
       </Modal>
 
