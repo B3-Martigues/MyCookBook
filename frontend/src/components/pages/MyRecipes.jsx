@@ -163,6 +163,13 @@ const MyRecipes = () => {
   const handleDelete = async (recipeId, event) => {
     event.stopPropagation();
     try {
+      const recipeElement = document.querySelector(`[data-recipe-id="${recipeId}"]`);
+      if (recipeElement) {
+        recipeElement.classList.add('deleting');
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       const response = await deleteRecipe(recipeId);
       if (response.success) {
         setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
@@ -262,6 +269,7 @@ const MyRecipes = () => {
           {recipes.map(recipe => (
             <div 
               key={recipe._id}
+              data-recipe-id={recipe._id}
               className={`recipe-wrapper ${recipe._id === newRecipeId ? 'new-recipe' : ''}`}
             >
               {recipe._id === newRecipeId && (
