@@ -1,43 +1,49 @@
 import { useState, useEffect } from "react";
 import RecipeForm from "../organisms/RecipeForm";
-import RecipeCard from "../organisms/RecipeCard";
+import Card from "../molecules/Card";
 import DetailsRecipe from "../pages/DetailsRecipe";
 import { getUserRecipes, deleteRecipe } from "../../api/recipesApi";
+import Modal from 'react-modal';
 import "../../styles/pages/MyRecipes.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowLeft, faShare, faStar, faHeart, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faArrowLeft, faShare, faStar, faHeart, faUtensils, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const MyRecipes = () => {
   const [showForm, setShowForm] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null); // Nouveau state pour les messages de succès
+  const [message, setMessage] = useState(null);
   const [editingRecipeId, setEditingRecipeId] = useState(null);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isEditingIngredients, setIsEditingIngredients] = useState(false);
+  const [ratingsData, setRatingsData] = useState({});
+  const [newRecipeId, setNewRecipeId] = useState(null);
 
-  // Fonction pour charger les recettes de l'utilisateur
   const loadUserRecipes = async () => {
     try {
       setLoading(true);
       const response = await getUserRecipes();
-      setRecipes(response.recipes);
-      setError(null);
+      if (response.success) {
+        setRecipes(response.recipes);
+        setError(null);
+      } else {
+        throw new Error(response.error || "Erreur lors du chargement des recettes");
+      }
     } catch (err) {
       setError("Impossible de charger vos recettes. Veuillez réessayer.");
+      toast.error("Erreur lors du chargement des recettes");
       console.error("Erreur lors du chargement des recettes:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Charger les recettes au chargement de la page
   useEffect(() => {
     loadUserRecipes();
   }, []);
 
-  // Effet pour effacer le message après 5 secondes
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -47,74 +53,135 @@ const MyRecipes = () => {
     }
   }, [message]);
 
-  // Fonction pour gérer la suppression d'une recette
   const handleDeleteRecipe = async (recipeId) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette recette ?")) {
-      try {
-        // Appel API pour supprimer la recette
-        await deleteRecipe(recipeId);
-        
-        // Si la suppression est réussie, mettez à jour la liste des recettes
+    try {
+      const response = await deleteRecipe(recipeId);
+      if (response.success) {
         setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
-        setMessage("Recette supprimée avec succès");
-      } catch (err) {
-        setError("Erreur lors de la suppression de la recette");
-        console.error("Erreur de suppression:", err);
+        toast.success("Recette supprimée avec succès");
+      } else {
+        throw new Error(response.error || "Erreur lors de la suppression");
       }
+    } catch (err) {
+      toast.error("Erreur lors de la suppression de la recette");
+      console.error("Erreur lors de la suppression:", err);
     }
   };
 
-  // Fonction pour gérer l'édition d'une recette
   const handleEditRecipe = (recipeId) => {
     setEditingRecipeId(recipeId);
     setShowForm(true);
   };
 
-  // Fonction pour gérer l'ajout d'une nouvelle recette
-  const handleAddRecipe = () => {
-    setEditingRecipeId(null);
-    setShowForm(true);
+  const handleAddRecipe = async (newRecipe) => {
+    try {
+      const formData = new FormData();
+      
+      Object.keys(newRecipe).forEach(key => {
+        if (key === 'picture') {
+          if (newRecipe.picture instanceof File) {
+            formData.append('picture', newRecipe.picture);
+          }
+        } else if (key === 'preparation_time') {
+          formData.append('preparation_time', JSON.stringify(newRecipe.preparation_time));
+        } else if (key === 'ingredients') {
+          formData.append('ingredients', JSON.stringify(newRecipe.ingredients));
+        } else {
+          formData.append(key, newRecipe[key]);
+        }
+      });
+
+      const response = await fetch('http://localhost:8080/api/recipes', {
+        method: 'POST',
+        credentials: 'include',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setShowForm(false);
+        toast.success("Nouvelle recette ajoutée avec succès !");
+        
+        setTimeout(async () => {
+          try {
+            const response = await getUserRecipes();
+            if (response.success) {
+              setRecipes(response.recipes);
+              setNewRecipeId(data.recipe._id);
+              setTimeout(() => {
+                setNewRecipeId(null);
+              }, 750);
+            }
+          } catch (err) {
+            console.error("Erreur lors de l'actualisation des recettes:", err);
+          }
+        }, 300);
+      } else {
+        throw new Error(data.error || "Erreur lors de l'ajout de la recette");
+      }
+    } catch (err) {
+      toast.error(err.message || "Erreur lors de l'ajout de la recette");
+    }
   };
 
   const handleIngredientEditStart = () => {
     setIsEditingIngredients(true);
   };
 
-  // Fonction appelée après l'ajout ou l'édition d'une recette
   const handleRecipeFormSuccess = (updatedRecipe, isEdit) => {
-    // Fermer la modale après l'ajout ou la modification
     setShowForm(false);
     setIsEditingIngredients(false);
   
-    // Mettre à jour les recettes sans appel API
     if (isEdit) {
-      // Mise à jour de la recette existante
       setRecipes(prevRecipes =>
         prevRecipes.map(recipe =>
           recipe._id === updatedRecipe._id ? updatedRecipe : recipe
         )
       );
-      setMessage("Recette modifiée avec succès");
+      toast.success("Recette modifiée avec succès");
     } else {
-      // Ajout de la nouvelle recette en haut de la liste
       setRecipes(prevRecipes => [updatedRecipe, ...prevRecipes]);
-      setMessage("Nouvelle recette ajoutée avec succès");
+      toast.success("Nouvelle recette ajoutée avec succès");
     }
   };
 
-  // Fonction pour gérer le clic sur une recette
   const handleRecipeClick = (recipe) => {
     setSelectedRecipe(recipe);
   };
 
-  // Fonction pour fermer le modal de détails
   const handleCloseDetails = () => {
     setSelectedRecipe(null);
   };
 
+  const handleEdit = (recipeId, event) => {
+    event.stopPropagation();
+    setEditingRecipeId(recipeId);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (recipeId, event) => {
+    event.stopPropagation();
+    try {
+      const recipeElement = document.querySelector(`[data-recipe-id="${recipeId}"]`);
+      if (recipeElement) {
+        recipeElement.classList.add('deleting');
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const response = await deleteRecipe(recipeId);
+      if (response.success) {
+        setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
+        toast.success("Recette supprimée avec succès");
+      }
+    } catch (err) {
+      toast.error("Erreur lors de la suppression de la recette");
+    }
+  };
+
   return (
     <div className="my-recipes-container">
-      {/* Affichage du message de succès */}
       {message && (
         <div className="success-message" style={{
           position: "fixed",
@@ -131,71 +198,104 @@ const MyRecipes = () => {
         </div>
       )}
 
-      {!showForm ? (
-        <>
-          <button className="add-recipe-button" onClick={handleAddRecipe}>
-            <FontAwesomeIcon icon={faPlus} className="plus-icon" /> Ajouter une recette
+      <div className="my-recipes-header">
+        <div className="header-content">
+          <h1>Mes Recettes</h1>
+          <p className="header-subtitle">Gérez votre collection de recettes personnelles</p>
+        </div>
+        {recipes.length > 0 && (
+          <button 
+            className="add-recipe-btn"
+            onClick={() => setShowForm(true)}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            <span>Nouvelle Recette</span>
           </button>
-          <h1 className="page-title">Mes recettes</h1>
+        )}
+      </div>
 
-          {loading ? (
-            <div className="loading-message">Chargement de vos recettes...</div>
-          ) : error ? (
-            <div className="error-message">{error}</div>
-          ) : recipes.length === 0 ? (
-            <div className="recipes-empty">
-              <img 
-                src="/images/illustration/empty-recipes.svg" 
-                alt="Aucune recette" 
-                className="empty-illustration"
-              />
-              <div className="empty-content">
-                <h2 className="empty-title">
-                  Commencez votre collection de recettes
-                </h2>
-                <p className="empty-description">
-                  Partagez vos meilleures recettes avec la communauté et gardez-les précieusement à portée de main.
-                </p>
-                <button className="create-recipe-button" onClick={handleAddRecipe}>
-                  <FontAwesomeIcon icon={faPlus} />
-                  Créer ma première recette
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="recipes-list">
-              {recipes.map((recipe) => (
-                <RecipeCard
-                  key={recipe._id}
-                  recipe={recipe}
-                  onEdit={handleEditRecipe}
-                  onDelete={handleDeleteRecipe}
-                  onClick={handleRecipeClick}
-                />
-              ))}
-            </div>
-          )}
-        </>
-      ) : (
-        <div>
-          <button className="back-button" onClick={() => {
+      <Modal
+        isOpen={showForm}
+        onRequestClose={() => {
+          setShowForm(false);
+          setEditingRecipeId(null);
+        }}
+        className="recipe-form-modal"
+        overlayClassName="recipe-modal-overlay"
+        style={{
+          overlay: {
+            position: 'fixed',
+            overflow: 'hidden'
+          }
+        }}
+      >
+        <RecipeForm
+          recipeId={editingRecipeId}
+          onSubmit={handleAddRecipe}
+          onCancel={() => {
             setShowForm(false);
             setEditingRecipeId(null);
-          }}>
-            <FontAwesomeIcon icon={faArrowLeft} className="back-icon" /> Retour
+          }}
+          onSuccess={handleRecipeFormSuccess}
+        />
+      </Modal>
+
+      {loading ? (
+        <div className="recipes-grid">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Card key={index} loading={true} />
+          ))}
+        </div>
+      ) : error ? (
+        <div className="error-container">
+          <FontAwesomeIcon icon={faUtensils} size="2x" />
+          <p>{error}</p>
+        </div>
+      ) : recipes.length === 0 ? (
+        <div className="empty-recipes">
+          <FontAwesomeIcon icon={faUtensils} size="3x" />
+          <h2>Vous n'avez pas encore de recettes</h2>
+          <p>Commencez à partager vos délicieuses recettes !</p>
+          <button 
+            className="start-cooking-btn"
+            onClick={() => setShowForm(true)}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+            Créer ma première recette
           </button>
-          <RecipeForm 
-            recipeId={editingRecipeId} 
-            onSuccess={handleRecipeFormSuccess} 
-            onIngredientChange={handleIngredientEditStart}
-          />
+        </div>
+      ) : (
+        <div className="recipes-grid">
+          {recipes.map(recipe => (
+            <div 
+              key={recipe._id}
+              data-recipe-id={recipe._id}
+              className={`recipe-wrapper ${recipe._id === newRecipeId ? 'new-recipe' : ''}`}
+            >
+              {recipe._id === newRecipeId && (
+                <div className="new-recipe-badge">
+                  Nouvelle recette ajoutée !
+                </div>
+              )}
+              <Card
+                recipe={recipe}
+                ratingsData={ratingsData}
+                onCardClick={(recipe) => setSelectedRecipe(recipe)}
+                showFavoriteButton={false}
+                showDeleteButton={true}
+                onDelete={handleDelete}
+                showEditButton={true}
+                onEdit={handleEdit}
+              />
+            </div>
+          ))}
         </div>
       )}
 
       {selectedRecipe && (
         <DetailsRecipe
           recipe={selectedRecipe}
-          onClose={handleCloseDetails}
+          onClose={() => setSelectedRecipe(null)}
         />
       )}
     </div>

@@ -93,4 +93,34 @@
 
 .delete-btn:hover svg {
   color: #dc3545;
+}
+
+.edit-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  margin-bottom: 8px;
+}
+
+.edit-btn svg {
+  color: #4CAF50;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.edit-btn:hover svg {
+  color: #45a049;
 } 
