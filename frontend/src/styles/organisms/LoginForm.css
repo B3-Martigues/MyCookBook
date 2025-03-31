@@ -32,12 +32,8 @@
   margin-top: 40px;
 }
 
-main {
-  padding: 0 !important;
-}
-
 .forminput {
-  border-bottom: solid 2px rgb(79, 214, 117);
+  border-bottom:solid 2px rgb(79, 214, 117);
   border-top: none;
   border-left: none;
   border-right: none;

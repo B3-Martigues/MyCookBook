@@ -72,6 +72,7 @@
   color: #2c3e50;
   margin: 0;
   line-height: 1.5;
+  text-align: left;
 }
 
 .suggestion-text strong {
@@ -186,8 +187,8 @@
 
 .delete-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 0;
+  left: 0;
   width: 32px;
   height: 32px;
   border-radius: 50%;

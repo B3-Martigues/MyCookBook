@@ -147,7 +147,6 @@ h1 {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .recipe-info h3 {

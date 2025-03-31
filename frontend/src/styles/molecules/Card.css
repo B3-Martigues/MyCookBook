@@ -1,0 +1,126 @@
+.img-container {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.img-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.favorites-rating-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  z-index: 2;
+}
+
+.img-items {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.img-items img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-info {
+  padding: 15px;
+}
+
+.recipe-info h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.recipe-info p {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.recipe-details {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.recipe-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.delete-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.delete-btn svg {
+  color: #ff3b30;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.delete-btn:hover svg {
+  color: #dc3545;
+}
+
+.edit-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  margin-bottom: 8px;
+}
+
+.edit-btn svg {
+  color: #4CAF50;
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+.edit-btn:hover {
+  background: white;
+  transform: scale(1.05);
+}
+
+.edit-btn:hover svg {
+  color: #45a049;
+} 

@@ -3,7 +3,7 @@ import "../../styles/organisms/RegisterForm.css";
 const RegisterForm = ({ formik, errorMessage }) => (
   //Ce fragment de code crée des champs du formulaire permettant à l'utilisateur de saisir ses données d'inscription
   //Formik suit l'utilisateur et gère les éventuelles erreurs
-  <form className="user-form" onSubmit={formik.handleSubmit}>
+  <form onSubmit={formik.handleSubmit} className="user-form">
     <h1>Bienvenue sur MyCookBook !</h1>
     <h2>Veuillez créer vos identifiants</h2>
     {/* htmlFor associe un label à un champ de formulaire */}
