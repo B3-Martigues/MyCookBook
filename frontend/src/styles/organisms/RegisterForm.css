@@ -32,6 +32,12 @@
   font-size: clamp(16px, 3vw, 20px);
   font-weight: 300;
 }
+.user-form input {
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid rgb(79, 214, 117);
+}
 
 input::placeholder {
   font-style: italic;

@@ -47,6 +47,7 @@
   border-radius: 0;
   width: clamp(200px, 20vw, 500px);
   font-size: clamp(16px, 3vw, 22px) !important;
+  text-align: center;
 }
 
 .profile-container label {
@@ -69,8 +70,9 @@
 }
 
 .button-container {
-  width: 16rem;
+  width: clamp(280px, 5vw, 600px);
   display: flex;
   justify-content: space-between;
+  gap: 4%;
   font-size: clamp(14px, 2vw, 16px);
 }
