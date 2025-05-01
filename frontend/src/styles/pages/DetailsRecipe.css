@@ -7,11 +7,13 @@
   padding: 0;
   width: 90%;
   max-width: 800px;
-  max-height: 90vh;
+  max-height: none;
+  height: auto;
   margin: 20px auto;
   outline: none;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 }
 
 .recipe-modal-overlay {
@@ -22,8 +24,9 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  overflow-y: auto !important;
   z-index: 1000;
 }
 
@@ -94,6 +97,7 @@
 
 .modal-tabs {
   display: flex;
+  flex-wrap: wrap;
   padding: 0 24px;
   border-bottom: 1px solid #eee;
   flex-shrink: 0;
@@ -117,8 +121,6 @@
 
 .modal-content {
   padding: 24px;
-  overflow-y: auto;
-  flex: 1;
 }
 
 /* Styles pour la section ingrédients */
@@ -166,6 +168,7 @@
   padding: 0;
   list-style: none;
   counter-reset: step;
+  height: auto;
 }
 
 .step-item {
@@ -192,6 +195,7 @@
   margin: 0;
   color: #2c3e50;
   line-height: 1.6;
+  flex: 1;
 }
 
 /* Styles pour la section commentaires */
@@ -304,6 +308,5 @@
 .modal-container {
   display: flex;
   flex-direction: column;
-  max-height: calc(90vh - 40px); /* Hauteur maximale moins les marges */
   overflow: hidden; /* Cache le débordement */
 }

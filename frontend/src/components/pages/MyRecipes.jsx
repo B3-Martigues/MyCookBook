@@ -3,10 +3,18 @@ import RecipeForm from "../organisms/RecipeForm";
 import Card from "../molecules/Card";
 import DetailsRecipe from "../pages/DetailsRecipe";
 import { getUserRecipes, deleteRecipe } from "../../api/recipesApi";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import "../../styles/pages/MyRecipes.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faArrowLeft, faShare, faStar, faHeart, faUtensils, faPencil } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faArrowLeft,
+  faShare,
+  faStar,
+  faHeart,
+  faUtensils,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 const MyRecipes = () => {
@@ -29,7 +37,9 @@ const MyRecipes = () => {
         setRecipes(response.recipes);
         setError(null);
       } else {
-        throw new Error(response.error || "Erreur lors du chargement des recettes");
+        throw new Error(
+          response.error || "Erreur lors du chargement des recettes"
+        );
       }
     } catch (err) {
       setError("Impossible de charger vos recettes. Veuillez réessayer.");
@@ -57,7 +67,7 @@ const MyRecipes = () => {
     try {
       const response = await deleteRecipe(recipeId);
       if (response.success) {
-        setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
+        setRecipes(recipes.filter((recipe) => recipe._id !== recipeId));
         toast.success("Recette supprimée avec succès");
       } else {
         throw new Error(response.error || "Erreur lors de la suppression");
@@ -76,25 +86,28 @@ const MyRecipes = () => {
   const handleAddRecipe = async (newRecipe) => {
     try {
       const formData = new FormData();
-      
-      Object.keys(newRecipe).forEach(key => {
-        if (key === 'picture') {
+
+      Object.keys(newRecipe).forEach((key) => {
+        if (key === "picture") {
           if (newRecipe.picture instanceof File) {
-            formData.append('picture', newRecipe.picture);
+            formData.append("picture", newRecipe.picture);
           }
-        } else if (key === 'preparation_time') {
-          formData.append('preparation_time', JSON.stringify(newRecipe.preparation_time));
-        } else if (key === 'ingredients') {
-          formData.append('ingredients', JSON.stringify(newRecipe.ingredients));
+        } else if (key === "preparation_time") {
+          formData.append(
+            "preparation_time",
+            JSON.stringify(newRecipe.preparation_time)
+          );
+        } else if (key === "ingredients") {
+          formData.append("ingredients", JSON.stringify(newRecipe.ingredients));
         } else {
           formData.append(key, newRecipe[key]);
         }
       });
 
-      const response = await fetch('http://localhost:8080/api/recipes', {
-        method: 'POST',
-        credentials: 'include',
-        body: formData
+      const response = await fetch("http://localhost:8080/api/recipes", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
       });
 
       const data = await response.json();
@@ -102,7 +115,7 @@ const MyRecipes = () => {
       if (data.success) {
         setShowForm(false);
         toast.success("Nouvelle recette ajoutée avec succès !");
-        
+
         setTimeout(async () => {
           try {
             const response = await getUserRecipes();
@@ -132,16 +145,16 @@ const MyRecipes = () => {
   const handleRecipeFormSuccess = (updatedRecipe, isEdit) => {
     setShowForm(false);
     setIsEditingIngredients(false);
-  
+
     if (isEdit) {
-      setRecipes(prevRecipes =>
-        prevRecipes.map(recipe =>
+      setRecipes((prevRecipes) =>
+        prevRecipes.map((recipe) =>
           recipe._id === updatedRecipe._id ? updatedRecipe : recipe
         )
       );
       toast.success("Recette modifiée avec succès");
     } else {
-      setRecipes(prevRecipes => [updatedRecipe, ...prevRecipes]);
+      setRecipes((prevRecipes) => [updatedRecipe, ...prevRecipes]);
       toast.success("Nouvelle recette ajoutée avec succès");
     }
   };
@@ -154,6 +167,25 @@ const MyRecipes = () => {
     setSelectedRecipe(null);
   };
 
+  // Fonction pour afficher les étoiles (même fonction que dans ListRecipes)
+  const renderStars = (rating) => {
+    return (
+      <div className="rating-display">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <span
+            key={star}
+            className={`rating-star ${star <= rating ? "filled" : "outlined"}`}
+          >
+            {star <= rating ? "★" : "☆"}
+          </span>
+        ))}
+        <span className="rating-value">
+          {rating ? rating.toFixed(1) : "0.0"}
+        </span>
+      </div>
+    );
+  };
+
   const handleEdit = (recipeId, event) => {
     event.stopPropagation();
     setEditingRecipeId(recipeId);
@@ -163,16 +195,18 @@ const MyRecipes = () => {
   const handleDelete = async (recipeId, event) => {
     event.stopPropagation();
     try {
-      const recipeElement = document.querySelector(`[data-recipe-id="${recipeId}"]`);
+      const recipeElement = document.querySelector(
+        `[data-recipe-id="${recipeId}"]`
+      );
       if (recipeElement) {
-        recipeElement.classList.add('deleting');
+        recipeElement.classList.add("deleting");
       }
 
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
       const response = await deleteRecipe(recipeId);
       if (response.success) {
-        setRecipes(recipes.filter(recipe => recipe._id !== recipeId));
+        setRecipes(recipes.filter((recipe) => recipe._id !== recipeId));
         toast.success("Recette supprimée avec succès");
       }
     } catch (err) {
@@ -183,17 +217,20 @@ const MyRecipes = () => {
   return (
     <div className="my-recipes-container">
       {message && (
-        <div className="success-message" style={{
-          position: "fixed",
-          top: "20px",
-          right: "20px",
-          padding: "10px 20px",
-          backgroundColor: "#4CAF50",
-          color: "white",
-          borderRadius: "5px",
-          zIndex: 1000,
-          boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
-        }}>
+        <div
+          className="success-message"
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            padding: "10px 20px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            borderRadius: "5px",
+            zIndex: 1000,
+            boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+          }}
+        >
           {message}
         </div>
       )}
@@ -201,13 +238,12 @@ const MyRecipes = () => {
       <div className="my-recipes-header">
         <div className="header-content">
           <h1>Mes Recettes</h1>
-          <p className="header-subtitle">Gérez votre collection de recettes personnelles</p>
+          <p className="header-subtitle">
+            Gérez votre collection de recettes personnelles
+          </p>
         </div>
         {recipes.length > 0 && (
-          <button 
-            className="add-recipe-btn"
-            onClick={() => setShowForm(true)}
-          >
+          <button className="add-recipe-btn" onClick={() => setShowForm(true)}>
             <FontAwesomeIcon icon={faPlus} />
             <span>Nouvelle Recette</span>
           </button>
@@ -224,9 +260,9 @@ const MyRecipes = () => {
         overlayClassName="recipe-modal-overlay"
         style={{
           overlay: {
-            position: 'fixed',
-            overflow: 'hidden'
-          }
+            position: "fixed",
+            overflow: "hidden",
+          },
         }}
       >
         <RecipeForm
@@ -256,7 +292,7 @@ const MyRecipes = () => {
           <FontAwesomeIcon icon={faUtensils} size="3x" />
           <h2>Vous n'avez pas encore de recettes</h2>
           <p>Commencez à partager vos délicieuses recettes !</p>
-          <button 
+          <button
             className="start-cooking-btn"
             onClick={() => setShowForm(true)}
           >
@@ -266,11 +302,13 @@ const MyRecipes = () => {
         </div>
       ) : (
         <div className="recipes-grid">
-          {recipes.map(recipe => (
-            <div 
+          {recipes.map((recipe) => (
+            <div
               key={recipe._id}
               data-recipe-id={recipe._id}
-              className={`recipe-wrapper ${recipe._id === newRecipeId ? 'new-recipe' : ''}`}
+              className={`recipe-wrapper ${
+                recipe._id === newRecipeId ? "new-recipe" : ""
+              }`}
             >
               {recipe._id === newRecipeId && (
                 <div className="new-recipe-badge">
@@ -278,8 +316,10 @@ const MyRecipes = () => {
                 </div>
               )}
               <Card
+                key={recipe._id}
                 recipe={recipe}
                 ratingsData={ratingsData}
+                renderStars={renderStars}
                 onCardClick={(recipe) => setSelectedRecipe(recipe)}
                 showFavoriteButton={false}
                 showDeleteButton={true}
@@ -296,6 +336,13 @@ const MyRecipes = () => {
         <DetailsRecipe
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
+          ratingsData={ratingsData}
+          updateRating={(recipeId, newRating) => {
+            setRatingsData((prevRatings) => ({
+              ...prevRatings,
+              [recipeId]: newRating,
+            }));
+          }}
         />
       )}
     </div>

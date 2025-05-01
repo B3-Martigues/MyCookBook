@@ -70,7 +70,7 @@
 }
 
 .button-container {
-  width: clamp(280px, 5vw, 600px);
+  width: clamp(280px, 60vw, 600px);
   display: flex;
   justify-content: space-between;
   gap: 4%;

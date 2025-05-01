@@ -6,7 +6,7 @@
   margin-top: 40px;
   border-radius: 5px;
   font-size: larger;
-  padding: 2svh;
+  padding: 1svh;
   background-color: rgb(243, 0, 0) !important;
   width: clamp(120px, 20vw, 200px);
 }
@@ -14,11 +14,10 @@
 .update-account-parent-button {
   border-bottom-width: 1px;
   color: white !important;
-  font-size: smaller;
+  font-size: larger;
   margin-top: 40px;
   border-radius: 5px;
-  font-size: clamp(12px, 2vw, 18px);
-  padding: 2svh;
+  padding: 1svh;
   background-color: rgb(79, 214, 117) !important;
   width: clamp(120px, 20vw, 200px);
 }

@@ -25,20 +25,20 @@ const addRecipe = async (formData) => {
 export const getRecipeById = async (recipeId) => {
   try {
     const response = await fetch(`http://localhost:8080/recipes/${recipeId}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
+        "Content-Type": "application/json",
       },
     });
-    
-    
+
     const data = await response.json();
-    
+
     if (!response.ok) {
-      throw new Error(data.error || 'Erreur lors de la récupération de la recette');
+      throw new Error(
+        data.error || "Erreur lors de la récupération de la recette"
+      );
     }
-    
+
     return data;
   } catch (error) {
     console.error("Erreur lors de la récupération de la recette:", error);
@@ -49,20 +49,22 @@ export const getRecipeById = async (recipeId) => {
 // Mettre à jour une recette
 export const updateRecipe = async (recipeId, formData) => {
   try {
-    const response = await fetchWithRefresh(`http://localhost:8080/recipes/${recipeId}`, {
-      method: 'PUT',
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-    });
-    
+    const response = await fetchWithRefresh(
+      `http://localhost:8080/recipes/${recipeId}`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
+
     const data = await response.json();
-    
+
     if (!response.ok) {
-      throw new Error(data.error || 'Erreur lors de la mise à jour de la recette');
+      throw new Error(
+        data.error || "Erreur lors de la mise à jour de la recette"
+      );
     }
-    
+
     return data;
   } catch (error) {
     console.error("Erreur lors de la mise à jour de la recette:", error);
@@ -74,13 +76,16 @@ export const updateRecipe = async (recipeId, formData) => {
 
 export const getUserRecipes = async () => {
   try {
-    const response = await fetchWithRefresh('http://localhost:8080/user-recipes', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
+    const response = await fetchWithRefresh(
+      "http://localhost:8080/user-recipes",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Erreur ${response.status}: ${response.statusText}`);
@@ -98,18 +103,23 @@ export const getUserRecipes = async () => {
 
 const deleteRecipe = async (recipeId) => {
   try {
-    const response = await fetchWithRefresh(`http://localhost:8080/recipes/${recipeId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
+    const response = await fetchWithRefresh(
+      `http://localhost:8080/recipes/${recipeId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'Erreur lors de la suppression de la recette');
+      throw new Error(
+        data.error || "Erreur lors de la suppression de la recette"
+      );
     }
 
     return data;
@@ -122,7 +132,7 @@ const deleteRecipe = async (recipeId) => {
 export const searchRecipes = async (query, filters = {}, sort = {}) => {
   try {
     console.log("Envoi de la recherche:", { query, filters, sort });
-    
+
     const request = await fetch("http://localhost:8080/search-recipes", {
       method: "POST",
       headers: {

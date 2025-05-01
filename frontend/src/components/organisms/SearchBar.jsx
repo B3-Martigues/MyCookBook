@@ -13,6 +13,7 @@ const SearchBar = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null); // Nouvel état pour la recette sélectionnée
   const searchTimeoutRef = useRef(null);
   const navigate = useNavigate();
+  const [ratingsData, setRatingsData] = useState({}); // Ajout de l'état pour les notes
 
   // Fonction pour obtenir des suggestions d'autocomplétion
   const getSuggestions = async (term) => {
@@ -20,34 +21,39 @@ const SearchBar = () => {
       setSuggestions([]);
       return;
     }
-    
+
     try {
       const data = await searchRecipes(term, {}, { name: 1 });
-      
+
       // Extraire des suggestions uniques basées sur les noms de recettes
-      const recipeSuggestions = data.recipes.map(recipe => ({
-        type: 'recipe',
+      const recipeSuggestions = data.recipes.map((recipe) => ({
+        type: "recipe",
         name: recipe.name,
         image: recipe.picture,
-        fullRecipe: recipe // Stocker l'objet recette complet pour l'utiliser dans la modal
+        fullRecipe: recipe, // Stocker l'objet recette complet pour l'utiliser dans la modal
       }));
-      
+
       // Extraire des suggestions uniques basées sur les ingrédients
       const ingredientSuggestions = data.recipes
-        .flatMap(recipe => recipe.ingredients_and_quantities.map(ing => ing.name))
+        .flatMap((recipe) =>
+          recipe.ingredients_and_quantities.map((ing) => ing.name)
+        )
         .filter((value, index, self) => self.indexOf(value) === index)
-        .map(ingredient => ({
-          type: 'ingredient',
-          name: ingredient
+        .map((ingredient) => ({
+          type: "ingredient",
+          name: ingredient,
         }));
-      
+
       // Combiner et limiter les suggestions
-      const combinedSuggestions = [...recipeSuggestions, ...ingredientSuggestions]
-        .filter(suggestion => 
+      const combinedSuggestions = [
+        ...recipeSuggestions,
+        ...ingredientSuggestions,
+      ]
+        .filter((suggestion) =>
           suggestion.name.toLowerCase().includes(term.toLowerCase())
         )
         .slice(0, 8); // Limiter à 8 suggestions
-      
+
       setSuggestions(combinedSuggestions);
       setShowSuggestions(combinedSuggestions.length > 0);
     } catch (err) {
@@ -60,19 +66,19 @@ const SearchBar = () => {
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    
+
     // Réinitialiser le délai précédent
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
-    
+
     // Si la valeur est vide, on peut afficher les résultats vides immédiatement
     if (value.length === 0) {
       setSuggestions([]);
       setShowSuggestions(false);
       return;
     }
-    
+
     // Récupérer les suggestions immédiatement (autocomplétion)
     if (value.length >= 2) {
       getSuggestions(value);
@@ -83,7 +89,7 @@ const SearchBar = () => {
   };
 
   const handleSuggestionClick = (suggestion) => {
-    if (suggestion.type === 'recipe') {
+    if (suggestion.type === "recipe") {
       // Si c'est une recette, ouvrir la modal de détails
       setSelectedRecipe(suggestion.fullRecipe);
       setShowSuggestions(false);
@@ -117,31 +123,31 @@ const SearchBar = () => {
   // Ajouter un gestionnaire pour les clics en-dehors de la liste de suggestions
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (!event.target.closest('.search-bar-container')) {
+      if (!event.target.closest(".search-bar-container")) {
         setShowSuggestions(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   // Fonction pour obtenir l'URL de l'image
   const getImageUrl = (suggestion) => {
-    if (suggestion.type === 'recipe' && suggestion.image) {
-      return suggestion.image.startsWith('http') 
-        ? suggestion.image 
+    if (suggestion.type === "recipe" && suggestion.image) {
+      return suggestion.image.startsWith("http")
+        ? suggestion.image
         : `http://localhost:8080/${suggestion.image}`;
-    } else if (suggestion.type === 'ingredient') {
+    } else if (suggestion.type === "ingredient") {
       return `/images/${suggestion.name.toLowerCase()}.jpg`;
     }
     return "./public/images/placeholder.jpg"; // Image par défaut si aucune image n'est trouvée
   };
 
   return (
-    <div className="search-bar-container" style={{ position: 'relative' }}>
+    <div className="search-bar-container" style={{ position: "relative" }}>
       <input
         type="text"
         placeholder="Rechercher une recette ou un ingrédient"
@@ -153,7 +159,7 @@ const SearchBar = () => {
       <button onClick={handleSearch}>
         <FontAwesomeIcon icon={faSearch} className="search-icon" />
       </button>
-      
+
       {/* Liste de suggestions */}
       {showSuggestions && suggestions.length > 0 && (
         <ul className="suggestions-list">
@@ -161,23 +167,34 @@ const SearchBar = () => {
             <li
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
-              style={{ cursor: 'pointer' }}
-              className={suggestion.type === 'recipe' ? 'recipe-suggestion' : 'ingredient-suggestion'}
+              style={{ cursor: "pointer" }}
+              className={
+                suggestion.type === "recipe"
+                  ? "recipe-suggestion"
+                  : "ingredient-suggestion"
+              }
             >
-              <img 
+              <img
                 src={getImageUrl(suggestion)}
-                onError={(e) => {e.target.onerror = null; e.target.src = "./public/images/placeholder.jpg"}}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "./public/images/placeholder.jpg";
+                }}
                 alt={suggestion.name}
                 style={{
-                  width: '30px',
-                  height: '30px',
-                  marginRight: '10px',
-                  objectFit: 'cover',
-                  borderRadius: '4px'
+                  width: "30px",
+                  height: "30px",
+                  marginRight: "10px",
+                  objectFit: "cover",
+                  borderRadius: "4px",
                 }}
               />
               <span>
-                {suggestion.type === 'recipe' ? <strong>Recette: </strong> : <strong>Ingrédient: </strong>}
+                {suggestion.type === "recipe" ? (
+                  <strong>Recette: </strong>
+                ) : (
+                  <strong>Ingrédient: </strong>
+                )}
                 {suggestion.name}
               </span>
             </li>
@@ -186,7 +203,18 @@ const SearchBar = () => {
       )}
 
       {/* Ajout du composant DetailsRecipe uniquement lorsqu'une recette est sélectionnée */}
-      {selectedRecipe && <DetailsRecipe recipe={selectedRecipe} onClose={closeModal} />}
+      {selectedRecipe && (
+        <DetailsRecipe
+          recipe={selectedRecipe}
+          onClose={closeModal}
+          updateRating={(recipeId, newRating) => {
+            setRatingsData((prevRatings) => ({
+              ...prevRatings,
+              [recipeId]: newRating,
+            }));
+          }}
+        />
+      )}
     </div>
   );
 };

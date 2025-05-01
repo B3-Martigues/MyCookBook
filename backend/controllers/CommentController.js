@@ -14,7 +14,7 @@ class CommentController {
       const recipeExists = await Recipe.findById(recipeId);
       if (!recipeExists) {
         return res.status(404).json({
-          error: "Recette non trouvée"
+          error: "Recette non trouvée",
         });
       }
 
@@ -22,7 +22,7 @@ class CommentController {
       const newComment = new Comment({
         user_id: userId,
         recipe_id: recipeId,
-        content
+        content,
       });
 
       await newComment.save();
@@ -36,13 +36,13 @@ class CommentController {
         message: "Commentaire ajouté avec succès",
         comment: {
           ...newComment.toObject(),
-          username: user.username
-        }
+          username: user.username,
+        },
       });
     } catch (err) {
       console.error(err);
       res.status(500).json({
-        error: "Erreur interne du serveur"
+        error: "Erreur interne du serveur",
       });
     }
   };
@@ -56,25 +56,27 @@ class CommentController {
       const comments = await Comment.find({ recipe_id: recipeId })
         .sort({ createdAt: -1 }) // Trier par date de création (plus récent en premier)
         .populate("user_id", "name"); // Récupérer le nom d'utilisateur
-
+      console.log("Raw comments:", comments);
       // Formatage des commentaires pour inclure le nom d'utilisateur
-      const formattedComments = comments.map(comment => ({
-        _id: comment._id,
-        content: comment.content,
-        username: comment.user_id.name,
-        user_id: comment.user_id._id,
-        createdAt: comment.createdAt,
-        updatedAt: comment.updatedAt
-      }));
-
+      const formattedComments = comments
+        .filter((c) => c && c.user_id && c.user_id.name)
+        .map((comment) => ({
+          _id: comment._id,
+          content: comment.content,
+          username: comment.user_id.name,
+          user_id: comment.user_id._id,
+          createdAt: comment.createdAt,
+          updatedAt: comment.updatedAt,
+        }));
+      console.log("Formatted comments to send:", formattedComments);
       res.status(200).json({
         success: true,
-        comments: formattedComments
+        comments: formattedComments,
       });
     } catch (err) {
       console.error(err);
       res.status(500).json({
-        error: "Erreur interne du serveur"
+        error: "Erreur interne du serveur",
       });
     }
   };
@@ -88,17 +90,17 @@ class CommentController {
     try {
       // Recherche du commentaire à modifier
       const comment = await Comment.findById(commentId);
-      
+
       if (!comment) {
         return res.status(404).json({
-          error: "Commentaire non trouvé"
+          error: "Commentaire non trouvé",
         });
       }
 
       // Vérification que l'utilisateur est bien l'auteur du commentaire
       if (comment.user_id.toString() !== userId) {
         return res.status(403).json({
-          error: "Vous n'êtes pas autorisé à modifier ce commentaire"
+          error: "Vous n'êtes pas autorisé à modifier ce commentaire",
         });
       }
 
@@ -110,12 +112,12 @@ class CommentController {
       res.status(200).json({
         success: true,
         message: "Commentaire mis à jour avec succès",
-        comment
+        comment,
       });
     } catch (err) {
       console.error(err);
       res.status(500).json({
-        error: "Erreur interne du serveur"
+        error: "Erreur interne du serveur",
       });
     }
   };
@@ -128,17 +130,17 @@ class CommentController {
     try {
       // Recherche du commentaire à supprimer
       const comment = await Comment.findById(commentId);
-      
+
       if (!comment) {
         return res.status(404).json({
-          error: "Commentaire non trouvé"
+          error: "Commentaire non trouvé",
         });
       }
 
       // Vérification que l'utilisateur est bien l'auteur du commentaire
       if (comment.user_id.toString() !== userId) {
         return res.status(403).json({
-          error: "Vous n'êtes pas autorisé à supprimer ce commentaire"
+          error: "Vous n'êtes pas autorisé à supprimer ce commentaire",
         });
       }
 
@@ -147,12 +149,12 @@ class CommentController {
 
       res.status(200).json({
         success: true,
-        message: "Commentaire supprimé avec succès"
+        message: "Commentaire supprimé avec succès",
       });
     } catch (err) {
       console.error(err);
       res.status(500).json({
-        error: "Erreur interne du serveur"
+        error: "Erreur interne du serveur",
       });
     }
   };

@@ -10,13 +10,11 @@
   min-width: 800px;
 }
 .form-page {
-  width: 60%;
+  width: 100%;
 }
 
-
-
 .recipe-name {
-  width: 400px;
+  width: clamp(300px, 10vw, 400px);
   font-size: small;
 }
 
@@ -24,8 +22,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: row;
-  display: flex;
+  flex-wrap: wrap;
+
   gap: 40px;
   margin-bottom: 100px;
 }
@@ -106,7 +104,16 @@ h3 {
 }
 .ingred-container-child {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
+}
+.ingred-container-child > input {
+  max-width: 150px;
+}
+.button-cont {
+  display: flex;
+  flex-direction: row;
 }
 .ingred-list {
   display: flex;
@@ -130,6 +137,7 @@ li {
   flex-direction: row;
   justify-content: center;
   align-items: start;
+  min-width: 350px;
 }
 
 .steps-list li {
@@ -139,14 +147,19 @@ li {
 .prep-time {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  gap: 40px;
-  min-width: 180px;
+  align-items: center;
+  gap: 2%;
+  width: clamp(300px, 2vw, 400px);
 }
 
-button {
+button:hover {
+  transform: scale(1);
+}
+.next {
+  margin-left: 60%;
+  min-width: 250px;
   color: rgb(79, 214, 117) !important;
-  background-color: rgb(253, 253, 253) !important;
+  background-color: #fff;
   font-size: larger;
   border-color: rgb(255, 255, 255);
   border-width: 0px;
@@ -157,14 +170,20 @@ button {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
 }
-button:hover {
-  transform: scale(1);
-}
-.next {
-  margin-left: 70%;
-}
-.prev {
-  margin-right: 60%;
+.previous {
+  margin-right: 58%;
+  min-width: 250px;
+  color: rgb(79, 214, 117) !important;
+  background-color: #fff;
+  font-size: larger;
+  border-color: rgb(255, 255, 255);
+  border-width: 0px;
+  font-weight: normal;
+  box-shadow: none;
+  cursor: pointer;
+  font-style: inherit;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
 }
 .narrow {
   font-weight: bolder;
@@ -174,28 +193,38 @@ button:hover {
 ul button,
 ol button {
   font-weight: bolder;
+  background-color: white;
+  border-radius: 5px;
+  font-size: x-large;
+  padding: 0 8px;
+  margin: 5px;
+  color: #4fd675;
+  cursor: pointer;
 }
 
-.add-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin-left: 15px !important;
-  margin-top: 10px;
+.add-btn,
+.cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 15px;
   padding: 10px;
   border-width: 1px;
-  border-radius: 4px;
+  border-radius: 8px;
   box-shadow: none;
-  border-color: #0a1d11 !important;
-  height: 44px;
-  background-color: rgb(253, 253, 253);
+  border-color: #b9c0bc;
+  max-height: 40px;
+  background-color: #4fd675;
+  color: white;
+  cursor: pointer;
 }
 .add-recipe-btn {
   border-width: 1px;
   border-color: #000000;
   border-radius: 5px;
-  padding: 0 10px !important;
+  padding: 10px;
   margin-bottom: 20px;
+  color: white;
 }
 
 hr {
@@ -269,6 +298,21 @@ hr {
 .create-recipe-button svg {
   font-size: 1.2rem;
 }
+.submit-div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+.submit {
+  color: white !important;
+  background-color: #4fd675 !important;
+  border-radius: 10px !important;
+  padding: 10px;
+}
+.submit > p {
+  margin: 0 !important;
+}
 
 @media (max-width: 768px) {
   .recipes-empty {
@@ -310,7 +354,7 @@ hr {
 }
 
 .header-content h1 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 2.5rem;
   font-weight: 700;
   color: #1a1a1a;
@@ -319,7 +363,7 @@ hr {
 }
 
 .header-subtitle {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 1.1rem;
   color: #666;
   margin: 0;
@@ -334,7 +378,7 @@ hr {
   border: none;
   padding: 12px 24px;
   border-radius: 12px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
@@ -348,14 +392,18 @@ hr {
 
 .recipes-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 
 .empty-recipes {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, rgba(79, 214, 117, 0.05) 0%, rgba(33, 112, 64, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(79, 214, 117, 0.05) 0%,
+    rgba(33, 112, 64, 0.05) 100%
+  );
   border-radius: 16px;
 }
 
@@ -365,7 +413,7 @@ hr {
 }
 
 .empty-recipes h2 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 1.5rem;
   color: #2c3e50;
   margin-bottom: 12px;
@@ -439,6 +487,7 @@ hr {
   }
 
   .recipes-grid {
+    grid-template-columns: 1fr;
     gap: 20px;
   }
 }
@@ -461,9 +510,15 @@ hr {
   max-width: 800px;
   margin: 0 auto;
 }
+.recipe-edit-form > div {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
 
 .recipe-edit-form h1 {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-size: 1.8rem;
   color: #2c3e50;
   margin-bottom: 24px;
@@ -473,11 +528,11 @@ hr {
 .recipe-edit-form input,
 .recipe-edit-form select,
 .recipe-edit-form textarea {
-  width: 100%;
+  width: 80%;
   padding: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .recipe-edit-form label {
@@ -547,7 +602,7 @@ hr {
 
 /* Ajout d'un effet de surbrillance */
 .new-recipe::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -585,4 +640,3 @@ hr {
 .recipe-wrapper.deleting {
   animation: fadeOutScale 0.5s ease forwards;
 }
-

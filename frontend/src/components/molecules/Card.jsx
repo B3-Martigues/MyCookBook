@@ -1,15 +1,20 @@
-import React from 'react';
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHourglass2, faUtensils, faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHourglass2,
+  faUtensils,
+  faTrash,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 import ManageMyFavorites from "../organisms/ManageMyFavorites";
 import { RecipeCardPlaceholder } from "../organisms/Placeholder";
 import "../../styles/molecules/Card.css";
 
-const Card = ({ 
-  recipe, 
-  favorites, 
-  setFavorites, 
-  ratingsData, 
+const Card = ({
+  recipe,
+  favorites,
+  setFavorites,
+  ratingsData,
   onCardClick,
   renderStars,
   loading = false,
@@ -17,18 +22,15 @@ const Card = ({
   showDeleteButton = false,
   onDelete,
   showEditButton = false,
-  onEdit
+  onEdit,
 }) => {
   if (loading) {
     return <RecipeCardPlaceholder />;
   }
 
   return (
-    <div 
-      className="img-container" 
-      onClick={() => onCardClick(recipe)}
-    >
-      <div 
+    <div className="img-container" onClick={() => onCardClick(recipe)}>
+      <div
         className="favorites-rating-container"
         onClick={(e) => e.stopPropagation()}
       >
@@ -47,15 +49,12 @@ const Card = ({
           </div>
         )}
         {showEditButton && (
-          <button 
-            className="edit-btn"
-            onClick={(e) => onEdit(recipe._id, e)}
-          >
+          <button className="edit-btn" onClick={(e) => onEdit(recipe._id, e)}>
             <FontAwesomeIcon icon={faPencil} />
           </button>
         )}
         {showDeleteButton && (
-          <button 
+          <button
             className="delete-btn"
             onClick={(e) => {
               e.stopPropagation();
@@ -83,14 +82,18 @@ const Card = ({
           <div className="recipe-detail-item">
             <FontAwesomeIcon icon={faHourglass2} />
             <span>
-              {recipe.preparation_time ? (
-                `${recipe.preparation_time.hours > 0 ? `${recipe.preparation_time.hours}h ` : ''}${recipe.preparation_time.minutes}min`
-              ) : 'N/A'}
+              {recipe.preparation_time
+                ? `${
+                    recipe.preparation_time.hours > 0
+                      ? `${recipe.preparation_time.hours}h `
+                      : ""
+                  }${recipe.preparation_time.minutes}min`
+                : "N/A"}
             </span>
           </div>
           <div className="recipe-detail-item">
             <FontAwesomeIcon icon={faUtensils} />
-            <span>{recipe.difficulty || 'Facile'}</span>
+            <span>{recipe.difficulty || "Facile"}</span>
           </div>
         </div>
       </div>
@@ -98,4 +101,4 @@ const Card = ({
   );
 };
 
-export default Card; 
+export default Card;

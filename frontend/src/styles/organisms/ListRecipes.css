@@ -28,7 +28,7 @@ h1 {
 .img-items {
   width: 100%;
   height: 0;
-  padding-bottom: 65%; /* Ratio légèrement plus grand pour mieux voir l'image */
+  padding-bottom: 55%; /* Ratio légèrement plus grand pour mieux voir l'image */
   position: relative;
   overflow: hidden;
 }
@@ -83,11 +83,11 @@ h1 {
 }
 
 .rating-star.filled {
-  color: #FFA500;
+  color: #ffa500;
 }
 
 .rating-star.outlined {
-  color: #FFA500;
+  color: #ffa500;
   opacity: 0.7;
 }
 
@@ -188,15 +188,16 @@ h1 {
 }
 
 /* Media Queries pour le responsive de tablet */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1224px) {
   .main-container {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
     padding: 0;
   }
 }
+
 /* Media Queries pour le responsive de tablet */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .main-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
@@ -205,7 +206,7 @@ h1 {
 }
 
 /* Media Queries pour le responsive de mobile */
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 640px) {
   .main-container {
     grid-template-columns: 1fr;
     gap: 20px;

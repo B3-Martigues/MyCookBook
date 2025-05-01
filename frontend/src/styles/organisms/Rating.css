@@ -4,11 +4,11 @@
   cursor: pointer;
   font-size: 22px;
   transition: color 0.2s;
-  color: #e2dbdb;  /* Couleur grise pour les étoiles non sélectionnées */
+  color: #e2dbdb; /* Couleur grise pour les étoiles non sélectionnées */
 }
 
 .star.yellow {
-  color: #FFD700;  /* Couleur dorée pour les étoiles sélectionnées/survolées */
+  color: #ffd700; /* Couleur dorée pour les étoiles sélectionnées/survolées */
 }
 
 .rating {
@@ -29,7 +29,7 @@
 
 .thumb-icon:hover {
   transform: scale(1.1);
-  color: #3fb861;  /* Une teinte légèrement plus foncée au survol */
+  color: #3fb861; /* Une teinte légèrement plus foncée au survol */
 }
 
 /* Animation subtile pour le hover des étoiles */
@@ -45,7 +45,7 @@
 /* Style pour toutes les étoiles précédentes jusqu'à celle survolée */
 .rating:hover .star:hover,
 .rating:hover .star:hover ~ .star {
-  color: #FFA500;  /* Orange plus foncé pour le hover */
+  color: #ffa500; /* Orange plus foncé pour le hover */
 }
 
 #rating-tooltip {
@@ -86,11 +86,11 @@
   cursor: pointer;
   font-size: 22px;
   padding: 0;
-  color: #e2dbdb;
+  color: #4fd675;
   transition: all 0.2s ease;
 }
 
 .rating-btn.active {
-  color: #FFD700;
+  color: #ffd700;
   transform: scale(1.1);
 }

@@ -445,307 +445,309 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="recipe-edit-form">
-      <h1>{isEditing ? "Modifier la recette" : "Ajouter une recette"}</h1>
+    <>
+      <form onSubmit={handleSubmit} className="recipe-edit-form">
+        <h1>{isEditing ? "Modifier la recette" : "Ajouter une recette"}</h1>
 
-      {/* Affichage des messages d'erreur ou de succès */}
-      {error && <div className="error-message">{error}</div>}
-      {successMessage && (
-        <div className="success-message">{successMessage}</div>
-      )}
+        {/* Affichage des messages d'erreur ou de succès */}
+        {error && <div className="error-message">{error}</div>}
+        {successMessage && (
+          <div className="success-message">{successMessage}</div>
+        )}
 
-      {/* Première page du formulaire */}
-      {currentPage === 1 && (
-        <div>
-          <h3>Nom de la recette</h3>
-          <input
-            className="recipe-name"
-            type="text"
-            name="name"
-            placeholder="ex: Tartiflette facile et rapide"
-            value={recipe.name}
-            onChange={handleChange}
-            required
-          />
-          <div className="selections">
-            <div className="select-kids">
-              <h3>Catégorie</h3>
-              <CustomSelect
-                options={[
-                  "Entrée",
-                  "Soupe",
-                  "Plat principal",
-                  "Dessert",
-                  "Accompagnement",
-                  "Boisson",
-                  "Amuse-gueule",
-                  "Confiserie",
-                  "Sauce",
-                  "Autre",
-                ]}
-                value={recipe.category}
-                onChange={(value) => handleSelectChange("category", value)}
-                placeholder="⇩ &nbsp; options &nbsp; ⇩"
-              />
-            </div>
-            <div className="select-kids">
-              <h3>Difficulté </h3>
-              <CustomSelect
-                options={["Facile", "Moyen", "Difficile"]}
-                value={recipe.difficulty}
-                onChange={(value) => handleSelectChange("difficulty", value)}
-                placeholder="⇩ &nbsp; options &nbsp; ⇩"
-              />
-            </div>
-            <div className="select-kids">
-              <h3>Coût</h3>
-              <CustomSelect
-                options={["Faible", "Moyen", "Élevé"]}
-                value={recipe.cost}
-                onChange={(value) => handleSelectChange("cost", value)}
-                placeholder="⇩ &nbsp; options &nbsp; ⇩"
-              />
-            </div>
-          </div>
-          {/* Temps de préparation */}
-          <h3>Temps de préparation</h3>
-          <div className="prep-time">
-            {/* Champ des heures */}
+        {/* Première page du formulaire */}
+        {currentPage === 1 && (
+          <div>
+            <h3>Nom de la recette</h3>
             <input
-              type="number"
-              name="hours"
-              placeholder="Heures"
-              value={
-                recipe.preparation_time.hours === "0"
-                  ? ""
-                  : recipe.preparation_time.hours
-              } // Afficher une chaîne vide si les heures sont à 0
-              onChange={(e) => {
-                const value = e.target.value;
-                setRecipe({
-                  ...recipe,
-                  preparation_time: {
-                    ...recipe.preparation_time,
-                    hours: value === "" ? "0" : value, // Garder "0" dans l'état interne si le champ est vide
-                  },
-                });
-              }}
-              min="0" // Heures peuvent être 0
-              max="23"
+              className="recipe-name"
+              type="text"
+              name="name"
+              placeholder="ex: Tartiflette facile et rapide"
+              value={recipe.name}
+              onChange={handleChange}
+              required
             />
-
-            {/* Champ des minutes */}
-            <input
-              type="number"
-              name="minutes"
-              placeholder="Minutes"
-              value={
-                recipe.preparation_time.minutes === "0"
-                  ? ""
-                  : recipe.preparation_time.minutes
-              }
-              onChange={(e) => {
-                const value = e.target.value;
-                const hours = Number(recipe.preparation_time.hours);
-                const minutes = Number(value);
-
-                if (hours > 0 && minutes < 1) {
-                  setRecipe({
-                    ...recipe,
-                    preparation_time: {
-                      ...recipe.preparation_time,
-                      minutes: "0", // Mets les minutes à 0 si elles sont inférieures à 1 et les heures > 0
-                    },
-                  });
-                } else {
-                  setRecipe({
-                    ...recipe,
-                    preparation_time: {
-                      ...recipe.preparation_time,
-                      minutes: value === "" ? "0" : value,
-                    },
-                  });
-                }
-              }}
-              min="0"
-              max="59"
-            />
-
-            {/* Avertissement visuel (optionnel) */}
-            <p
-              style={{ color: "gray", fontSize: "0.8em", marginTop: "5px" }}
-            ></p>
-          </div>
-          <h3>
-            Ajout d'une image{" "}
-            {isEditing ? "(facultatif pour la modification)" : ""}
-          </h3>
-          {/* Affichage de l'image actuelle si elle existe */}
-          {isEditing && currentImageUrl && (
-            <div className="current-image">
-              <h3>Image actuelle</h3>
-              <img
-                src={currentImageUrl}
-                alt="Image actuelle de la recette"
-                style={{ maxWidth: "200px", maxHeight: "200px" }}
-              />
+            <div className="selections">
+              <div className="select-kids">
+                <h3>Catégorie</h3>
+                <CustomSelect
+                  options={[
+                    "Entrée",
+                    "Soupe",
+                    "Plat principal",
+                    "Dessert",
+                    "Accompagnement",
+                    "Boisson",
+                    "Amuse-gueule",
+                    "Confiserie",
+                    "Sauce",
+                    "Autre",
+                  ]}
+                  value={recipe.category}
+                  onChange={(value) => handleSelectChange("category", value)}
+                  placeholder="⇩ &nbsp; options &nbsp; ⇩"
+                />
+              </div>
+              <div className="select-kids">
+                <h3>Difficulté </h3>
+                <CustomSelect
+                  options={["Facile", "Moyen", "Difficile"]}
+                  value={recipe.difficulty}
+                  onChange={(value) => handleSelectChange("difficulty", value)}
+                  placeholder="⇩ &nbsp; options &nbsp; ⇩"
+                />
+              </div>
+              <div className="select-kids">
+                <h3>Coût</h3>
+                <CustomSelect
+                  options={["Faible", "Moyen", "Élevé"]}
+                  value={recipe.cost}
+                  onChange={(value) => handleSelectChange("cost", value)}
+                  placeholder="⇩ &nbsp; options &nbsp; ⇩"
+                />
+              </div>
             </div>
-          )}
-
-          {/* Aperçu de l'image sélectionnée */}
-          {previewImageUrl && (
-            <div className="image-preview">
-              <img
-                src={previewImageUrl}
-                alt="Aperçu de l'image sélectionnée"
-                style={{
-                  maxWidth: "200px",
-                  maxHeight: "200px",
-                  marginBottom: "10px",
-                }}
-              />
-            </div>
-          )}
-
-          {/* Ajout d'une image */}
-          <input
-            type="file"
-            className="file-input"
-            id="file"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                const imageUrl = URL.createObjectURL(file);
-                setPreviewImageUrl(imageUrl);
-                setRecipe({ ...recipe, picture: file });
-              } else {
-                setPreviewImageUrl("");
-                setRecipe({ ...recipe, picture: "" });
-              }
-            }}
-          />
-          <label htmlFor="file" className="file-label">
-            <i className="fas fa-camera"></i> Choisir un fichier
-          </label>
-          <button
-            className="next"
-            type="button"
-            onClick={() => setCurrentPage(2)}
-          >
-            <p>
-              Étape suivante <strong>⇨</strong>
-            </p>
-          </button>
-          <hr></hr>
-        </div>
-      )}
-
-      {/* Deuxième page du formulaire */}
-      {currentPage === 2 && (
-        <div className="form-page">
-          <h3>Ingrédients</h3>
-          <IngredientInput
-            onAddIngredient={addIngredient}
-            editingIngredient={editingIngredient}
-            onCancelEdit={cancelIngredientEdit}
-          />
-
-          <div className="ingred-list">
-            <ul>
-              {recipe.ingredients_and_quantities.map((ingred, index) => (
-                <li key={index} className="ingredient-item">
-                  <img
-                    src={ingred.image || "/images/placeholder.jpg"}
-                    alt={ingred.name}
-                    style={{
-                      width: "50px",
-                      marginRight: "10px",
-                      objectFit: "cover",
-                      borderRadius: "5px",
-                    }}
-                  />
-                  <span>
-                    {ingred.name} - {ingred.quantity}
-                  </span>
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => loadIngredientForEdit(index)}
-                    >
-                      &#9998;
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => deleteIngredient(index)}
-                    >
-                      &#x1F5D1;
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <h3>Préparation</h3>
-          <div className="steps-parent">
-            <div className="steps-child">
+            {/* Temps de préparation */}
+            <h3>Temps de préparation</h3>
+            <div className="prep-time">
+              {/* Champ des heures */}
               <input
-                type="text"
-                name="steps"
-                placeholder={
-                  editingStepIndex !== null
-                    ? `Modifier l'étape ${editingStepIndex + 1}`
-                    : "Nouvelle étape"
-                }
-                value={step}
-                onChange={(e) => setStep(e.target.value)}
+                type="number"
+                name="hours"
+                placeholder="Heures"
+                value={
+                  recipe.preparation_time.hours === "0"
+                    ? ""
+                    : recipe.preparation_time.hours
+                } // Afficher une chaîne vide si les heures sont à 0
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setRecipe({
+                    ...recipe,
+                    preparation_time: {
+                      ...recipe.preparation_time,
+                      hours: value === "" ? "0" : value, // Garder "0" dans l'état interne si le champ est vide
+                    },
+                  });
+                }}
+                min="0" // Heures peuvent être 0
+                max="23"
               />
-              <button type="button" onClick={addStep} className="add-step-btn">
-                {editingStepIndex !== null
-                  ? "Modifier l'étape"
-                  : "Ajouter l'étape"}
-              </button>
-            </div>
-          </div>
-          <div className="steps-list">
-            <ol>
-              {recipe.steps.map((step, index) => (
-                <li key={index}>
-                  {step.description}
-                  <div>
-                    <button
-                      type="button"
-                      onClick={() => loadStepForEdit(index)}
-                    >
-                      &#9998;
-                    </button>
-                    <button type="button" onClick={() => deleteStep(index)}>
-                      &#x1F5D1;
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
 
-          <div className="form-nav-buttons">
+              {/* Champ des minutes */}
+              <input
+                type="number"
+                name="minutes"
+                placeholder="Minutes"
+                value={
+                  recipe.preparation_time.minutes === "0"
+                    ? ""
+                    : recipe.preparation_time.minutes
+                }
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const hours = Number(recipe.preparation_time.hours);
+                  const minutes = Number(value);
+
+                  if (hours > 0 && minutes < 1) {
+                    setRecipe({
+                      ...recipe,
+                      preparation_time: {
+                        ...recipe.preparation_time,
+                        minutes: "0", // Mets les minutes à 0 si elles sont inférieures à 1 et les heures > 0
+                      },
+                    });
+                  } else {
+                    setRecipe({
+                      ...recipe,
+                      preparation_time: {
+                        ...recipe.preparation_time,
+                        minutes: value === "" ? "0" : value,
+                      },
+                    });
+                  }
+                }}
+                min="0"
+                max="59"
+              />
+
+              {/* Avertissement visuel (optionnel) */}
+              <p
+                style={{ color: "gray", fontSize: "0.8em", marginTop: "5px" }}
+              ></p>
+            </div>
+            <h3>
+              Ajout d'une image{" "}
+              {isEditing ? "(facultatif pour la modification)" : ""}
+            </h3>
+            {/* Affichage de l'image actuelle si elle existe */}
+            {isEditing && currentImageUrl && (
+              <div className="current-image">
+                <h3>Image actuelle</h3>
+                <img
+                  src={currentImageUrl}
+                  alt="Image actuelle de la recette"
+                  style={{ maxWidth: "200px", maxHeight: "200px" }}
+                />
+              </div>
+            )}
+
+            {/* Aperçu de l'image sélectionnée */}
+            {previewImageUrl && (
+              <div className="image-preview">
+                <img
+                  src={previewImageUrl}
+                  alt="Aperçu de l'image sélectionnée"
+                  style={{
+                    maxWidth: "200px",
+                    maxHeight: "200px",
+                    marginBottom: "10px",
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Ajout d'une image */}
+            <input
+              type="file"
+              className="file-input"
+              id="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const imageUrl = URL.createObjectURL(file);
+                  setPreviewImageUrl(imageUrl);
+                  setRecipe({ ...recipe, picture: file });
+                } else {
+                  setPreviewImageUrl("");
+                  setRecipe({ ...recipe, picture: "" });
+                }
+              }}
+            />
+            <label htmlFor="file" className="file-label">
+              <i className="fas fa-camera"></i> Choisir un fichier
+            </label>
             <button
-              className="previous"
+              className="next"
               type="button"
-              onClick={() => setCurrentPage(1)}
+              onClick={() => setCurrentPage(2)}
             >
               <p>
-                <strong>⇦</strong> Étape précédente
+                Étape suivante <strong>⇨</strong>
               </p>
             </button>
-            <button className="submit" type="submit" onClick={handleSubmit}>
-              <p>{isEditing ? "Modifier la recette" : "Ajouter la recette"}</p>
-            </button>
           </div>
-        </div>
-      )}
-    </form>
+        )}
+
+        {/* Deuxième page du formulaire */}
+        {currentPage === 2 && (
+          <div className="form-page">
+            <h3>Ingrédients</h3>
+            <IngredientInput
+              onAddIngredient={addIngredient}
+              editingIngredient={editingIngredient}
+              onCancelEdit={cancelIngredientEdit}
+            />
+
+            <div className="ingred-list">
+              <ul>
+                {recipe.ingredients_and_quantities.map((ingred, index) => (
+                  <li key={index} className="ingredient-item">
+                    <img
+                      src={ingred.image || "/images/placeholder.jpg"}
+                      alt={ingred.name}
+                      style={{
+                        width: "50px",
+                        marginRight: "10px",
+                        objectFit: "cover",
+                        borderRadius: "5px",
+                      }}
+                    />
+                    <span>
+                      {ingred.name} - {ingred.quantity}
+                    </span>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => loadIngredientForEdit(index)}
+                      >
+                        &#9998;
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => deleteIngredient(index)}
+                      >
+                        &#x1F5D1;
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <h3>Préparation</h3>
+            <div className="steps-parent">
+              <div className="steps-child">
+                <input
+                  type="text"
+                  name="steps"
+                  placeholder={
+                    editingStepIndex !== null
+                      ? `Modifier l'étape ${editingStepIndex + 1}`
+                      : "Nouvelle étape"
+                  }
+                  value={step}
+                  onChange={(e) => setStep(e.target.value)}
+                />
+                <button type="button" onClick={addStep} className="add-btn">
+                  <h2>{editingStepIndex !== null ? "✓" : "✚"}</h2>
+                </button>
+              </div>
+            </div>
+            <div className="steps-list">
+              <ol>
+                {recipe.steps.map((step, index) => (
+                  <li key={index}>
+                    {step.description}
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => loadStepForEdit(index)}
+                      >
+                        &#9998;
+                      </button>
+                      <button type="button" onClick={() => deleteStep(index)}>
+                        &#x1F5D1;
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="submit-div">
+              {" "}
+              <button className="submit" type="submit" onClick={handleSubmit}>
+                <p>
+                  {isEditing ? "Modifier la recette" : "Ajouter la recette"}
+                </p>
+              </button>
+            </div>
+              <button
+                className="previous"
+                type="button"
+                onClick={() => setCurrentPage(1)}
+              >
+                <p>
+                  <strong>⇦</strong> Étape précédente
+                </p>
+              </button>
+          </div>
+        )}
+      </form>
+      <hr></hr>
+    </>
   );
 };
 

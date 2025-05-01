@@ -7,9 +7,16 @@ import DetailsRecipe from "../pages/DetailsRecipe";
 import Card from "../molecules/Card";
 import "../../styles/pages/MyFavorites.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faSearch, faHeart, faUtensils, faArrowRight, faHourglass2 } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faSearch,
+  faHeart,
+  faUtensils,
+  faArrowRight,
+  faHourglass2,
+} from "@fortawesome/free-solid-svg-icons";
 import { Tooltip } from "react-tooltip";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import Recommendation from "../organisms/Recommendation";
 
 const MyFavorites = () => {
@@ -34,7 +41,9 @@ const MyFavorites = () => {
             {star <= rating ? "★" : "☆"}
           </span>
         ))}
-        <span className="rating-value">{rating ? rating.toFixed(1) : "0.0"}</span>
+        <span className="rating-value">
+          {rating ? rating.toFixed(1) : "0.0"}
+        </span>
       </div>
     );
   };
@@ -94,9 +103,9 @@ const MyFavorites = () => {
           <div className="suggestion-content">
             <p className="suggestion-text">
               <strong>Envie de plus ?</strong>
-              {isMobile ? 
-                "Découvrez de nouvelles recettes" : 
-                " Explorez notre collection et ajoutez de nouvelles recettes à vos favoris"}
+              {isMobile
+                ? "Découvrez de nouvelles recettes"
+                : " Explorez notre collection et ajoutez de nouvelles recettes à vos favoris"}
             </p>
           </div>
           <Link to="/" className="explore-button">
@@ -108,16 +117,18 @@ const MyFavorites = () => {
 
       {favorites.length === 0 && !loading ? (
         <div className="favorites-empty">
-          <img 
-            src="/images/illustration/empty-favorites.svg" 
-            alt="Aucun favori" 
+          <img
+            src="/images/illustration/empty-favorites.svg"
+            alt="Aucun favori"
             className="empty-illustration"
           />
           <h2 className="empty-title">
             Vous n'avez pas encore de recettes favorites
           </h2>
           <p className="empty-description">
-            Explorez notre collection de délicieuses recettes et ajoutez vos préférées à vos favoris en cliquant sur le cœur <FontAwesomeIcon icon={faHeart} style={{ color: '#ff3b30' }} />
+            Explorez notre collection de délicieuses recettes et ajoutez vos
+            préférées à vos favoris en cliquant sur le cœur{" "}
+            <FontAwesomeIcon icon={faHeart} style={{ color: "#ff3b30" }} />
           </p>
           <Link to="/" className="explore-button">
             <FontAwesomeIcon icon={faUtensils} />
@@ -126,26 +137,24 @@ const MyFavorites = () => {
         </div>
       ) : (
         <div className="favorites-grid">
-          {loading ? (
-            Array.from({ length: 6 }).map((_, index) => (
-              <Card key={index} loading={true} />
-            ))
-          ) : (
-            favorites.map((recipe) => (
-              <Card
-                key={recipe._id}
-                recipe={recipe}
-                favorites={favorites}
-                setFavorites={setFavorites}
-                ratingsData={ratingsData}
-                onCardClick={(recipe) => setSelectedRecipe(recipe)}
-                renderStars={renderStars}
-                showFavoriteButton={false} // Désactive le bouton favoris
-                showDeleteButton={true} // Active le bouton de suppression
-                onDelete={removeFavorite} // Passe la fonction de suppression
-              />
-            ))
-          )}
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <Card key={index} loading={true} />
+              ))
+            : favorites.map((recipe) => (
+                <Card
+                  key={recipe._id}
+                  recipe={recipe}
+                  favorites={favorites}
+                  setFavorites={setFavorites}
+                  ratingsData={ratingsData}
+                  onCardClick={(recipe) => setSelectedRecipe(recipe)}
+                  renderStars={renderStars}
+                  showFavoriteButton={false} // Désactive le bouton favoris
+                  showDeleteButton={true} // Active le bouton de suppression
+                  onDelete={removeFavorite} // Passe la fonction de suppression
+                />
+              ))}
         </div>
       )}
       {/* Si une recette est sélectionnée, afficher les détails */}
@@ -164,7 +173,7 @@ const MyFavorites = () => {
         />
       )}
 
-      <Recommendation 
+      <Recommendation
         favorites={favorites}
         setFavorites={(newFavorites) => {
           setFavorites(newFavorites);

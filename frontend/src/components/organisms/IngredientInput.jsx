@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import ingredients from "../../../public/ingredients.json"; // Import des ingrédients depuis un fichier JSON
 
-const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) => {
+const IngredientInput = ({
+  onAddIngredient,
+  editingIngredient,
+  onCancelEdit,
+}) => {
   // États pour gérer les valeurs et suggestions
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -13,11 +17,28 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
 
   // Liste des unités disponibles
   const units = [
-    "gramme", "kilogramme", "millilitre", "litre",
-    "cuillère à café", "cuillère à soupe", "verre",
-    "tasse", "pincée", "boîte", "morceau", "tranche",
-    "barquette", "sachet", "gousse", "brin", "bouquet",
-    "rouleau", "filet", "pot", "brique", "bocal"
+    "gramme",
+    "kilogramme",
+    "millilitre",
+    "litre",
+    "cuillère à café",
+    "cuillère à soupe",
+    "verre",
+    "tasse",
+    "pincée",
+    "boîte",
+    "morceau",
+    "tranche",
+    "barquette",
+    "sachet",
+    "gousse",
+    "brin",
+    "bouquet",
+    "rouleau",
+    "filet",
+    "pot",
+    "brique",
+    "bocal",
   ];
 
   // Effect pour charger les valeurs de l'ingrédient à éditer
@@ -26,7 +47,7 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
       setIsEditing(true);
       setEditIndex(editingIngredient.index);
       setInputValue(editingIngredient.name);
-      
+
       // Extraire la quantité et l'unité de la chaîne quantity
       const quantityString = editingIngredient.quantity;
       if (quantityString) {
@@ -51,13 +72,20 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
       const plurals = {
         "cuillère à café": "cuillères à café",
         "cuillère à soupe": "cuillères à soupe",
-        verre: "verres", tasse: "tasses",
-        morceau: "morceaux", tranche: "tranches",
-        barquette: "barquettes", sachet: "sachets",
-        gousse: "gousses", brin: "brins",
-        bouquet: "bouquets", rouleau: "rouleaux",
-        filet: "filets", pot: "pots",
-        brique: "briques", bocal: "bocaux",
+        verre: "verres",
+        tasse: "tasses",
+        morceau: "morceaux",
+        tranche: "tranches",
+        barquette: "barquettes",
+        sachet: "sachets",
+        gousse: "gousses",
+        brin: "brins",
+        bouquet: "bouquets",
+        rouleau: "rouleaux",
+        filet: "filets",
+        pot: "pots",
+        brique: "briques",
+        bocal: "bocaux",
       };
       return plurals[unit] || `${unit}s`; // Par défaut, ajoute "s" si l'unité n'est pas dans les cas spécifiques
     }
@@ -68,21 +96,25 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
   const handleInputChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
-  
+
     // Ne pas afficher les suggestions si on est en mode édition
     if (!isEditing) {
       setSuggestions(
-        value ? ingredients.filter((ing) =>
-          ing.name.toLowerCase().includes(value.toLowerCase())
-        ) : []
+        value
+          ? ingredients.filter((ing) =>
+              ing.name.toLowerCase().includes(value.toLowerCase())
+            )
+          : []
       );
     }
 
     // Filtre les ingrédients en fonction de la recherche
     setSuggestions(
-      value ? ingredients.filter((ing) =>
-        ing.name.toLowerCase().includes(value.toLowerCase())
-      ) : []
+      value
+        ? ingredients.filter((ing) =>
+            ing.name.toLowerCase().includes(value.toLowerCase())
+          )
+        : []
     );
   };
 
@@ -99,9 +131,9 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
 
     // Filtre les unités en fonction de la recherche
     setUnitSuggestions(
-      value ? units.filter((u) =>
-        u.toLowerCase().includes(value.toLowerCase())
-      ) : []
+      value
+        ? units.filter((u) => u.toLowerCase().includes(value.toLowerCase()))
+        : []
     );
   };
 
@@ -130,25 +162,27 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
         (ing) => ing.name.toLowerCase() === inputValue.toLowerCase()
       );
       const pluralUnit = unit ? getPluralUnit(quantity, unit) : "";
-  
+
       const newIngredient = {
         name: inputValue,
         quantity: `${quantity} ${pluralUnit}`.trim(),
-        image: existingIngredient ? existingIngredient.image : "/images/placeholder.jpg",
+        image: existingIngredient
+          ? existingIngredient.image
+          : "/images/placeholder.jpg",
       };
-      
+
       // Si nous sommes en mode édition, ajouter l'index
       if (isEditing && editIndex !== null) {
         newIngredient.index = editIndex;
       }
-  
+
       onAddIngredient(newIngredient); // Callback local uniquement
-      
+
       // Réinitialiser le formulaire après l'ajout ou la modification
       resetForm();
     }
   };
-  
+
   // Annuler l'édition
   const handleCancel = () => {
     resetForm();
@@ -192,7 +226,7 @@ const IngredientInput = ({ onAddIngredient, editingIngredient, onCancelEdit }) =
           onChange={handleInputChange}
         />
       </div>
-      <div className="button-container">
+      <div className="button-cont">
         {/* Bouton pour ajouter/modifier l'ingrédient */}
         <button className="add-btn" onClick={handleAdd} type="button">
           <h2>{isEditing ? "✓" : "✚"}</h2>

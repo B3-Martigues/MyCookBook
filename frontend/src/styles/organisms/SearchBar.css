@@ -19,6 +19,7 @@
   color: #333333;
   text-align: left;
   vertical-align: middle;
+  padding-left: 10px;
 }
 
 .search-bar-container input:focus {
@@ -28,8 +29,8 @@
 
 .search-bar-container button {
   height: 100%;
-  width: 30px;
-  padding: 0;
+  width: 40px;
+  padding: 0 10px;
   background: #4fd675;
   border: none;
   color: white;
@@ -38,7 +39,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 8px;
 }
 
 .search-bar-container button:hover {
@@ -52,14 +53,14 @@
 /* Liste des suggestions */
 .suggestions-list {
   position: absolute;
-  top: 100%;
+  top: 50%;
   left: 0;
   width: 100%;
   padding: 0;
   overflow-y: auto;
   background: white;
   border-radius: 0 0 8px 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000;
   margin-top: 5px;
   border: 1px solid #e0e0e0;
@@ -166,10 +167,8 @@
   margin-top: 10px;
 }
 
-
 /* Media Queries pour 425px */
 @media screen and (max-width: 425px) {
-
   .top-header {
     display: flex;
     justify-content: space-between;
@@ -177,7 +176,7 @@
     width: 100%;
     margin-bottom: 0px;
   }
-  
+
   .search-bar-container {
     width: 100%;
     max-width: 100%;
