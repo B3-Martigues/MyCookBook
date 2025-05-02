@@ -157,12 +157,12 @@ button:hover {
 }
 .next {
   margin-left: 60%;
-  min-width: 250px;
-  color: rgb(79, 214, 117) !important;
-  background-color: #fff;
-  font-size: larger;
-  border-color: rgb(255, 255, 255);
-  border-width: 0px;
+  margin-top: 10%;
+  min-width: 150px;
+  border-radius: 5px;
+  color: #fff !important;
+  background-color: rgb(79, 214, 117);
+  font-size: 14px;
   font-weight: normal;
   box-shadow: none;
   cursor: pointer;
@@ -170,20 +170,26 @@ button:hover {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
 }
+.next > p {
+  margin: 8px auto;
+}
 .previous {
   margin-right: 58%;
-  min-width: 250px;
-  color: rgb(79, 214, 117) !important;
-  background-color: #fff;
-  font-size: larger;
-  border-color: rgb(255, 255, 255);
-  border-width: 0px;
+  margin-top: 10%;
+  min-width: 150px;
+  border-radius: 5px;
+  color: #fff !important;
+  background-color: rgb(79, 214, 117);
+  font-size: 14px;
   font-weight: normal;
   box-shadow: none;
   cursor: pointer;
   font-style: inherit;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
+}
+.previous > p {
+  margin: 8px auto;
 }
 .narrow {
   font-weight: bolder;
@@ -309,6 +315,7 @@ hr {
   background-color: #4fd675 !important;
   border-radius: 10px !important;
   padding: 10px;
+  cursor: pointer;
 }
 .submit > p {
   margin: 0 !important;
@@ -346,11 +353,37 @@ hr {
 
 .my-recipes-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 18px;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.add-recipe-header {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 214, 117, 0.08) 0%,
+    rgba(33, 112, 64, 0.05) 100%
+  );
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.add-recipe-text {
+  flex: 1;
+  margin: 0;
+}
+
+.add-recipe-header p {
+  font-family: "Inter", sans-serif;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.5;
+  text-align: left;
 }
 
 .header-content h1 {
@@ -375,14 +408,16 @@ hr {
   gap: 8px;
   background: linear-gradient(to right, #4fd675, #217040);
   color: white;
-  border: none;
   padding: 12px 24px;
   border-radius: 12px;
+  border: none;
   font-family: "Inter", sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin: 0;
 }
 
 .add-recipe-btn:hover {
@@ -392,7 +427,7 @@ hr {
 
 .recipes-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
 
@@ -473,7 +508,7 @@ hr {
 @media screen and (max-width: 768px) {
   .my-recipes-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 16px;
   }
 
@@ -481,9 +516,30 @@ hr {
     font-size: 2rem;
   }
 
+  .add-recipe-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .add-recipe-text {
+    line-height: 1.4;
+  }
+
+  .add-recipe-text p {
+    font-size: 0.9rem;
+  }
+
+  .add-recipe-text strong {
+    display: block;
+  }
+
   .add-recipe-btn {
-    width: 100%;
-    justify-content: center;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    min-width: auto;
+    flex-shrink: 0;
   }
 
   .recipes-grid {
@@ -572,6 +628,10 @@ hr {
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(79, 214, 117, 0.2);
   animation: fadeInDown 0.75s ease;
+}
+
+.next {
+  margin-top: 20%;
 }
 
 @keyframes fadeInScale {

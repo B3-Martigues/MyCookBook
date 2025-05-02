@@ -236,18 +236,31 @@ const MyRecipes = () => {
       )}
 
       <div className="my-recipes-header">
-        <div className="header-content">
-          <h1>Mes Recettes</h1>
+        <h1>Mes Recettes</h1>
+        <div>
           <p className="header-subtitle">
             Gérez votre collection de recettes personnelles
           </p>
         </div>
-        {recipes.length > 0 && (
-          <button className="add-recipe-btn" onClick={() => setShowForm(true)}>
-            <FontAwesomeIcon icon={faPlus} />
-            <span>Nouvelle Recette</span>
-          </button>
-        )}
+      </div>
+      <div className="add-recipe-header">
+        <div className="add-recipe-text">
+          <p>
+            <strong>Envie de plus ?</strong> Partager vos idées culinaires avec
+            nous !{" "}
+          </p>
+        </div>
+        <div>
+          {recipes.length > 0 && (
+            <button
+              className="add-recipe-btn"
+              onClick={() => setShowForm(true)}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+              <span>Nouvelle Recette</span>
+            </button>
+          )}
+        </div>
       </div>
 
       <Modal

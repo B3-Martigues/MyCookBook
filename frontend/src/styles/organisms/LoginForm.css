@@ -51,6 +51,7 @@ input::placeholder {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   padding: 10px !important;
   margin-top: 50px;
+  cursor: pointer;
 }
 .user-form > strong {
   margin-top: 2vw;
