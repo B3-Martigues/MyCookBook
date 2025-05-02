@@ -32,7 +32,7 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
       });
       return;
     }
-    
+
     setError(null);
     try {
       if (isFavorite) {
@@ -40,11 +40,13 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
         await deleteFavoriteRecipe(recipeId);
         setFavorites((prev) => prev.filter((fav) => fav._id !== recipeId));
         setIsFavorite(false);
+        toast("La recette a été retirée de vos favoris.");
       } else {
         // Si la recette n'est pas dans les favoris, on l'ajoute
         await addRecipeToFavorites(recipeId);
         setFavorites((prev) => [...prev, { _id: recipeId }]); // Ajoute un nouvel objet à la liste des favoris
         setIsFavorite(true);
+        toast("La recette a été ajoutée à vos favoris.");
       }
     } catch (err) {
       setError(`Une erreur est survenue: ${err.message}`);
@@ -53,8 +55,8 @@ const ManageMyFavorites = ({ recipeId, favorites = [], setFavorites }) => {
 
   // Rendu du bouton qui permet d'ajouter ou de supprimer la recette de favoris
   return (
-    <div 
-      className={`fav-list ${isFavorite ? 'active' : ''}`}
+    <div
+      className={`fav-list ${isFavorite ? "active" : ""}`}
       onClick={toggleFavorite}
     >
       <FontAwesomeIcon icon={faHeart} />

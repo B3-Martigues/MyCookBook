@@ -627,7 +627,7 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
               }}
             />
             <label htmlFor="file" className="file-label">
-              <i className="fas fa-camera"></i> Choisir un fichier
+              Choisir un fichier
             </label>
             <button
               className="next"
@@ -734,15 +734,15 @@ const RecipeForm = ({ recipeId = null, onSuccess, onIngredientChange }) => {
                 </p>
               </button>
             </div>
-              <button
-                className="previous"
-                type="button"
-                onClick={() => setCurrentPage(1)}
-              >
-                <p>
-                  <strong>⇦</strong> Étape précédente
-                </p>
-              </button>
+            <button
+              className="previous"
+              type="button"
+              onClick={() => setCurrentPage(1)}
+            >
+              <p>
+                <strong>⇦</strong> Étape précédente
+              </p>
+            </button>
           </div>
         )}
       </form>
