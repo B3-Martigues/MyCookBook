@@ -16,7 +16,15 @@ app.use("/", router);
 
 app.use("/img", express.static(path.join(__dirname, "img")));
 
-//Démarrage du serveur sur le port 8080
-app.listen(8080, () => {
-  console.log("Le serveur écoute sur le port 8080");
+app.get("/health", (_req, res) => {
+  const databaseReady = mongoose.connection.readyState === 1;
+  res.status(databaseReady ? 200 : 503).json({
+    status: databaseReady ? "ok" : "unavailable",
+    database: databaseReady ? "connected" : "disconnected",
+  });
+});
+
+const port = Number(process.env.PORT) || 8080;
+app.listen(port, () => {
+  console.log(`Le serveur écoute sur le port ${port}`);
 });

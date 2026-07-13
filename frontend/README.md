@@ -1,8 +1,18 @@
-# React + Vite
+# Frontend MyCookBook
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Cette application React/Vite constitue l'interface de MyCookBook. Elle communique avec l'API locale disponible sur `http://localhost:8080` et doit être lancée sur `http://localhost:5173`, origine actuellement autorisée par le backend.
 
-Currently, two official plugins are available:
+La documentation complète du projet, comprenant les prérequis, l'installation, les fonctionnalités et les routes API, se trouve dans le [README principal](../README.md).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Commandes
+
+```bash
+npm install
+npm run dev
+```
+
+Autres scripts disponibles :
+
+- `npm run build` : compile l'application pour la production ;
+- `npm run preview` : prévisualise la version compilée ;
+- `npm run lint` : exécute ESLint.

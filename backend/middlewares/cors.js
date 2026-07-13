@@ -1,6 +1,14 @@
 // La gestion du CORS
 const corsMiddleware = (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173"); //            Autorise les requêtes uniquement depuis l'origine spécifiée
+  const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim());
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Vary", "Origin");
+  }
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Autorise les méthodes HTTP, CRUD et OPTIONS
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization"); //     Autorise les en-têtes spécifiques
   res.header("Access-Control-Allow-Credentials", true); //                          Permet l'envoi des cookies et des identifiants
