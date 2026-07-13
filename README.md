@@ -178,8 +178,8 @@ les deux images Docker sans les publier.
 La CD (`.github/workflows/cd.yml`) s'exécute sur `main`, sur les tags `v*` et
 manuellement. Elle publie dans GitHub Container Registry :
 
-- `ghcr.io/<owner>/<repo>/backend` ;
-- `ghcr.io/<owner>/<repo>/frontend`.
+- `ghcr.io/b3-martigues/mycookbook/backend` ;
+- `ghcr.io/b3-martigues/mycookbook/frontend`.
 
 Chaque image reçoit un tag immuable basé sur le SHA, le tag Git éventuel et
 `latest` sur la branche principale. Une attestation de provenance est également
@@ -195,10 +195,10 @@ docker compose ps
 ```
 
 En production, `compose.prod.yml` utilise les images déjà publiées. Le fichier
-`.env` du serveur doit définir `IMAGE_PREFIX` (par exemple
-`ghcr.io/owner/mycookbook`), `IMAGE_TAG`, `CORS_ORIGINS`, `JWT_SECRET` et
-`REFRESH_TOKEN_SECRET`. Le serveur doit être authentifié auprès de GHCR si le
-paquet est privé :
+`.env` du serveur peut redéfinir `IMAGE_PREFIX` (par défaut
+`ghcr.io/b3-martigues/mycookbook`) et doit définir `IMAGE_TAG`, `CORS_ORIGINS`,
+`JWT_SECRET` et `REFRESH_TOKEN_SECRET`. Le serveur doit être authentifié auprès
+de GHCR si le paquet est privé :
 
 ```bash
 docker compose -f compose.prod.yml pull

@@ -11,7 +11,7 @@ services:
       retries: 10
 
   backend:
-    image: ${IMAGE_PREFIX}/backend:${IMAGE_TAG:-latest}
+    image: ${IMAGE_PREFIX:-ghcr.io/b3-martigues/mycookbook}/backend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -29,7 +29,7 @@ services:
         condition: service_healthy
 
   frontend:
-    image: ${IMAGE_PREFIX}/frontend:${IMAGE_TAG:-latest}
+    image: ${IMAGE_PREFIX:-ghcr.io/b3-martigues/mycookbook}/frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
       - "5173:80"
